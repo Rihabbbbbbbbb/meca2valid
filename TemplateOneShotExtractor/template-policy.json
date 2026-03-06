@@ -1,0 +1,25 @@
+{
+  "profileName": "default-automotive-policy",
+  "version": "1.0",
+  "allowNotApplicableForEmpty": true,
+  "mustCanonicalTitles": [
+    "purpose",
+    "scope",
+    "requirements",
+    "architecture and design requirements",
+    "integration and validation requirements"
+  ],
+  "shouldCanonicalTitles": [
+    "quoted documents",
+    "terminology",
+    "abbreviations",
+    "product context",
+    "system overview",
+    "system functions"
+  ],
+  "optionalCanonicalTitles": [
+    "appendix",
+    "annex",
+    "references"
+  ]
+}

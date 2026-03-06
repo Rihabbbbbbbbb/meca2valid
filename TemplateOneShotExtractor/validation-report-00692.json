@@ -1,0 +1,1780 @@
+{
+  "Metadata": {
+    "Tool": "TemplateOneShotExtractor",
+    "Version": "1.2.0",
+    "StartedAtUtc": "2026-03-05T12:18:43.7245306+00:00",
+    "ValidatedAtUtc": "2026-03-05T12:18:45.7059738+00:00",
+    "DurationMs": 1981,
+    "TemplatePath": "C:\\Users\\TA29225\\Desktop\\Component_or_Part_Specification_Template.docx",
+    "TemplateBlueprintPath": "c:\\user\\ta29225\\wordprocessor\\TemplateOneShotExtractor\\template-blueprint.json",
+    "UserDocumentPath": "C:\\Users\\TA29225\\Downloads\\00692_25_01250_ASU_Technical_Specification_SPX.docx"
+  },
+  "SemanticMapping": {
+    "ProfileName": "default-automotive-template",
+    "Version": "1.0",
+    "AppliedMappings": 0,
+    "MappingEvents": []
+  },
+  "PolicyCompliance": {
+    "ProfileName": "default-automotive-policy",
+    "Version": "1.0",
+    "AllowNotApplicableForEmpty": true,
+    "TotalMustSections": 5,
+    "TotalShouldSections": 6,
+    "TotalOptionalSections": 3,
+    "MissingMustSections": [
+      "architecture and design requirements"
+    ],
+    "MissingShouldSections": [
+      "abbreviations",
+      "product context",
+      "system functions",
+      "system overview"
+    ],
+    "EmptyMustSections": [],
+    "EmptyShouldSections": [],
+    "PresentOptionalSections": []
+  },
+  "Contract": {
+    "PivotLevel": 2,
+    "TotalRequiredPivots": 18,
+    "RequiredPivotTitles": [
+      "Table of updates",
+      "PURPOSE",
+      "SCOPE",
+      "SYSTEM DEVELOPMENT CONTEXT",
+      "GENERAL DESCRIPTION OF THE SYSTEM",
+      "QUOTED DOCUMENTS",
+      "REFERENCE DOCUMENTS",
+      "APPLICABLE DOCUMENTS",
+      "TERMINOLOGY",
+      "GLOSSARY",
+      "ACRONYMS",
+      "REQUIREMENTS",
+      "FUNCTIONAL REQUIREMENTS",
+      "PERFORMANCE REQUIREMENTS",
+      "EXTERNAL INTERFACES REQUIREMENTS",
+      "OPERATIONAL REQUIREMENTS",
+      "CONSTRAINT REQUIREMENTS",
+      "INTEGRATION AND VALIDATION REQUIREMENTS"
+    ],
+    "RequiredPivotCanonicalTitles": [
+      "table of updates",
+      "purpose",
+      "scope",
+      "system development context",
+      "general description of the system",
+      "quoted documents",
+      "reference documents",
+      "applicable documents",
+      "terminology",
+      "glossary",
+      "acronyms",
+      "requirements",
+      "functional requirements",
+      "performance requirements",
+      "external interfaces requirements",
+      "operational requirements",
+      "constraint requirements",
+      "integration and validation requirements"
+    ]
+  },
+  "QualityGates": {
+    "RuleCode": "P06",
+    "RequiresNotApplicableForEmptySections": true,
+    "RedTextDetected": false,
+    "RedTextEvidence": [],
+    "EmptySectionViolations": [
+      {
+        "Order": 33,
+        "Title": "VOCABULARY SPECIFIC TO THE COMPONENT",
+        "CanonicalTitle": "vocabulary specific to the component",
+        "Requirement": "Section vide: ajouter \u0027Not applicable\u0027 ou \u0027Sans objet\u0027"
+      },
+      {
+        "Order": 91,
+        "Title": "Technical Safety Requirements (ISO26262)",
+        "CanonicalTitle": "technical safety requirements iso26262",
+        "Requirement": "Section vide: ajouter \u0027Not applicable\u0027 ou \u0027Sans objet\u0027"
+      },
+      {
+        "Order": 92,
+        "Title": "SOTIF Requirements",
+        "CanonicalTitle": "sotif requirements",
+        "Requirement": "Section vide: ajouter \u0027Not applicable\u0027 ou \u0027Sans objet\u0027"
+      },
+      {
+        "Order": 100,
+        "Title": "Data for calculation of failure occurrences",
+        "CanonicalTitle": "data for calculation of failure occurrences",
+        "Requirement": "Section vide: ajouter \u0027Not applicable\u0027 ou \u0027Sans objet\u0027"
+      },
+      {
+        "Order": 101,
+        "Title": "Confidence level for dependability requirements calculation",
+        "CanonicalTitle": "confidence level for dependability requirements calculation",
+        "Requirement": "Section vide: ajouter \u0027Not applicable\u0027 ou \u0027Sans objet\u0027"
+      }
+    ]
+  },
+  "Scores": {
+    "PivotCoveragePercent": 100,
+    "SubtitleRecallPercent": 82.5,
+    "SubtitlePrecisionPercent": 57.39,
+    "OrderScorePercent": 100,
+    "FinalScore": 93.74,
+    "ConfidenceBand": "LOW"
+  },
+  "Findings": {
+    "MissingRequiredPivots": [],
+    "ExtraUserPivots": [
+      "Version",
+      "Version",
+      "version",
+      "Generalities",
+      "Version"
+    ],
+    "PivotComparisons": [
+      {
+        "PivotTitle": "Table of updates",
+        "PivotCanonicalTitle": "table of updates",
+        "PivotOrderTemplate": 1,
+        "PivotOrderUser": 1,
+        "TemplateSubtitleCount": 0,
+        "UserSubtitleCount": 0,
+        "MatchedSubtitleCount": 0,
+        "MissingSubtitles": [],
+        "ExtraSubtitles": []
+      },
+      {
+        "PivotTitle": "PURPOSE",
+        "PivotCanonicalTitle": "purpose",
+        "PivotOrderTemplate": 2,
+        "PivotOrderUser": 2,
+        "TemplateSubtitleCount": 0,
+        "UserSubtitleCount": 0,
+        "MatchedSubtitleCount": 0,
+        "MissingSubtitles": [],
+        "ExtraSubtitles": []
+      },
+      {
+        "PivotTitle": "SCOPE",
+        "PivotCanonicalTitle": "scope",
+        "PivotOrderTemplate": 3,
+        "PivotOrderUser": 3,
+        "TemplateSubtitleCount": 0,
+        "UserSubtitleCount": 0,
+        "MatchedSubtitleCount": 0,
+        "MissingSubtitles": [],
+        "ExtraSubtitles": []
+      },
+      {
+        "PivotTitle": "SYSTEM DEVELOPMENT CONTEXT",
+        "PivotCanonicalTitle": "system development context",
+        "PivotOrderTemplate": 4,
+        "PivotOrderUser": 4,
+        "TemplateSubtitleCount": 0,
+        "UserSubtitleCount": 0,
+        "MatchedSubtitleCount": 0,
+        "MissingSubtitles": [],
+        "ExtraSubtitles": []
+      },
+      {
+        "PivotTitle": "GENERAL DESCRIPTION OF THE SYSTEM",
+        "PivotCanonicalTitle": "general description of the system",
+        "PivotOrderTemplate": 5,
+        "PivotOrderUser": 5,
+        "TemplateSubtitleCount": 5,
+        "UserSubtitleCount": 5,
+        "MatchedSubtitleCount": 2,
+        "MissingSubtitles": [
+          "system complexity",
+          "functional complexity",
+          "architecture complexity"
+        ],
+        "ExtraSubtitles": [
+          "system diversity",
+          "functional diversity",
+          "architecture diversity"
+        ]
+      },
+      {
+        "PivotTitle": "QUOTED DOCUMENTS",
+        "PivotCanonicalTitle": "quoted documents",
+        "PivotOrderTemplate": 11,
+        "PivotOrderUser": 11,
+        "TemplateSubtitleCount": 0,
+        "UserSubtitleCount": 0,
+        "MatchedSubtitleCount": 0,
+        "MissingSubtitles": [],
+        "ExtraSubtitles": []
+      },
+      {
+        "PivotTitle": "REFERENCE DOCUMENTS",
+        "PivotCanonicalTitle": "reference documents",
+        "PivotOrderTemplate": 12,
+        "PivotOrderUser": 12,
+        "TemplateSubtitleCount": 4,
+        "UserSubtitleCount": 3,
+        "MatchedSubtitleCount": 3,
+        "MissingSubtitles": [
+          "mandatory requirements"
+        ],
+        "ExtraSubtitles": []
+      },
+      {
+        "PivotTitle": "APPLICABLE DOCUMENTS",
+        "PivotCanonicalTitle": "applicable documents",
+        "PivotOrderTemplate": 17,
+        "PivotOrderUser": 18,
+        "TemplateSubtitleCount": 5,
+        "UserSubtitleCount": 0,
+        "MatchedSubtitleCount": 0,
+        "MissingSubtitles": [
+          "standards",
+          "technical specifications",
+          "technical specifications for connectors",
+          "general technical on fault finding and download",
+          "other technical specifications applicable"
+        ],
+        "ExtraSubtitles": []
+      },
+      {
+        "PivotTitle": "TERMINOLOGY",
+        "PivotCanonicalTitle": "terminology",
+        "PivotOrderTemplate": 23,
+        "PivotOrderUser": 28,
+        "TemplateSubtitleCount": 0,
+        "UserSubtitleCount": 0,
+        "MatchedSubtitleCount": 0,
+        "MissingSubtitles": [],
+        "ExtraSubtitles": []
+      },
+      {
+        "PivotTitle": "GLOSSARY",
+        "PivotCanonicalTitle": "glossary",
+        "PivotOrderTemplate": 24,
+        "PivotOrderUser": 29,
+        "TemplateSubtitleCount": 4,
+        "UserSubtitleCount": 4,
+        "MatchedSubtitleCount": 4,
+        "MissingSubtitles": [],
+        "ExtraSubtitles": []
+      },
+      {
+        "PivotTitle": "ACRONYMS",
+        "PivotCanonicalTitle": "acronyms",
+        "PivotOrderTemplate": 29,
+        "PivotOrderUser": 34,
+        "TemplateSubtitleCount": 0,
+        "UserSubtitleCount": 0,
+        "MatchedSubtitleCount": 0,
+        "MissingSubtitles": [],
+        "ExtraSubtitles": []
+      },
+      {
+        "PivotTitle": "REQUIREMENTS",
+        "PivotCanonicalTitle": "requirements",
+        "PivotOrderTemplate": 30,
+        "PivotOrderUser": 35,
+        "TemplateSubtitleCount": 0,
+        "UserSubtitleCount": 0,
+        "MatchedSubtitleCount": 0,
+        "MissingSubtitles": [],
+        "ExtraSubtitles": []
+      },
+      {
+        "PivotTitle": "FUNCTIONAL REQUIREMENTS",
+        "PivotCanonicalTitle": "functional requirements",
+        "PivotOrderTemplate": 31,
+        "PivotOrderUser": 36,
+        "TemplateSubtitleCount": 5,
+        "UserSubtitleCount": 18,
+        "MatchedSubtitleCount": 2,
+        "MissingSubtitles": [
+          "use case xxx",
+          "expression of requirements",
+          "use case yyy"
+        ],
+        "ExtraSubtitles": [
+          "functionality fct detect asu status",
+          "internal data",
+          "applicative requirements",
+          "functional state definition",
+          "timing performances",
+          "arming state",
+          "surveillance state",
+          "asu module",
+          "heart beat management",
+          "wire cutting attempt detection",
+          "battery attempt detection",
+          "active alarm state",
+          "alarm cycles management in case of battery or connection effraction",
+          "disarming state",
+          "fct transmit failure info ecu asu",
+          "transmit failure from deh slave"
+        ]
+      },
+      {
+        "PivotTitle": "PERFORMANCE REQUIREMENTS",
+        "PivotCanonicalTitle": "performance requirements",
+        "PivotOrderTemplate": 37,
+        "PivotOrderUser": 58,
+        "TemplateSubtitleCount": 0,
+        "UserSubtitleCount": 2,
+        "MatchedSubtitleCount": 0,
+        "MissingSubtitles": [],
+        "ExtraSubtitles": [
+          "asu performance requirements",
+          "time requirements"
+        ]
+      },
+      {
+        "PivotTitle": "EXTERNAL INTERFACES REQUIREMENTS",
+        "PivotCanonicalTitle": "external interfaces requirements",
+        "PivotOrderTemplate": 38,
+        "PivotOrderUser": 61,
+        "TemplateSubtitleCount": 11,
+        "UserSubtitleCount": 16,
+        "MatchedSubtitleCount": 10,
+        "MissingSubtitles": [
+          "network interfaces"
+        ],
+        "ExtraSubtitles": [
+          "lin 2 1 physical layers",
+          "lin 2 1 communication rules",
+          "lin 2 1 network life phases",
+          "heartbeat monitoring the lin connection in network standby",
+          "lin messaging system",
+          "requirement of the output flow"
+        ]
+      },
+      {
+        "PivotTitle": "OPERATIONAL REQUIREMENTS",
+        "PivotCanonicalTitle": "operational requirements",
+        "PivotOrderTemplate": 50,
+        "PivotOrderUser": 78,
+        "TemplateSubtitleCount": 31,
+        "UserSubtitleCount": 37,
+        "MatchedSubtitleCount": 30,
+        "MissingSubtitles": [
+          "quality convergence requirement in development"
+        ],
+        "ExtraSubtitles": [
+          "electronic estimated reliability",
+          "diagnostic",
+          "fault list and strategy",
+          "definition of theb technical interface with diagnostic tools",
+          "correspondence between the fault events previously defined and the fault codes of the diagnostic messaging system",
+          "defect event history",
+          "quality converrefce requirement in development"
+        ]
+      },
+      {
+        "PivotTitle": "CONSTRAINT REQUIREMENTS",
+        "PivotCanonicalTitle": "constraint requirements",
+        "PivotOrderTemplate": 82,
+        "PivotOrderUser": 116,
+        "TemplateSubtitleCount": 12,
+        "UserSubtitleCount": 12,
+        "MatchedSubtitleCount": 12,
+        "MissingSubtitles": [],
+        "ExtraSubtitles": []
+      },
+      {
+        "PivotTitle": "INTEGRATION AND VALIDATION REQUIREMENTS",
+        "PivotCanonicalTitle": "integration and validation requirements",
+        "PivotOrderTemplate": 95,
+        "PivotOrderUser": 129,
+        "TemplateSubtitleCount": 3,
+        "UserSubtitleCount": 18,
+        "MatchedSubtitleCount": 3,
+        "MissingSubtitles": [],
+        "ExtraSubtitles": [
+          "requirements for imposed environmental tests",
+          "referal information",
+          "operating class according to n40",
+          "customer impact level",
+          "referal test environment",
+          "est operating modes",
+          "electrical behavior tests n41 and n45",
+          "connections tests standard n1",
+          "mechanical resistance tests n42",
+          "physicochemical resistance tests n43",
+          "requirement validation complements not included in b21",
+          "concerning the connectors",
+          "for the failure modes with non consistent failure rates",
+          "for failure modes with constant failure rates",
+          "mechanical and climatic test queue"
+        ]
+      }
+    ]
+  },
+  "TableValidation": {
+    "Enabled": true,
+    "AdvisoryOnly": true,
+    "TemplateTableCount": 101,
+    "UserTableCount": 174,
+    "SectionsWithExpectedTables": 54,
+    "SectionsWithDetectedTables": 88,
+    "MatchedSections": 45,
+    "SectionCoveragePercent": 83.33,
+    "ExpectedHeaderSignatures": 72,
+    "MatchedHeaderSignatures": 43,
+    "HeaderRecallPercent": 59.72,
+    "HeaderPrecisionPercent": 36.75,
+    "QualityBand": "LOW",
+    "SectionComparisons": [
+      {
+        "SectionCanonicalTitle": "architecture diversity",
+        "SectionTitleTemplate": "(user-only section)",
+        "ExpectedTableCount": 0,
+        "DetectedTableCount": 1,
+        "MatchedHeaderSignatures": [],
+        "MissingHeaderSignatures": [],
+        "ExtraHeaderSignatures": [
+          "complexity criteria|variants"
+        ],
+        "PlaceholderCellCountInUser": 0,
+        "RedRunCountInUser": 0
+      },
+      {
+        "SectionCanonicalTitle": "applicable documents",
+        "SectionTitleTemplate": "(user-only section)",
+        "ExpectedTableCount": 0,
+        "DetectedTableCount": 1,
+        "MatchedHeaderSignatures": [],
+        "MissingHeaderSignatures": [],
+        "ExtraHeaderSignatures": [
+          "mark|reference|version|title"
+        ],
+        "PlaceholderCellCountInUser": 0,
+        "RedRunCountInUser": 0
+      },
+      {
+        "SectionCanonicalTitle": "measuring units",
+        "SectionTitleTemplate": "(user-only section)",
+        "ExpectedTableCount": 0,
+        "DetectedTableCount": 1,
+        "MatchedHeaderSignatures": [],
+        "MissingHeaderSignatures": [],
+        "ExtraHeaderSignatures": [
+          "m|unit of measurement for the distance in meters"
+        ],
+        "PlaceholderCellCountInUser": 0,
+        "RedRunCountInUser": 0
+      },
+      {
+        "SectionCanonicalTitle": "functional requirements",
+        "SectionTitleTemplate": "(user-only section)",
+        "ExpectedTableCount": 0,
+        "DetectedTableCount": 1,
+        "MatchedHeaderSignatures": [],
+        "MissingHeaderSignatures": [],
+        "ExtraHeaderSignatures": [
+          "requirement no v|description of the requirement|input requirement v"
+        ],
+        "PlaceholderCellCountInUser": 0,
+        "RedRunCountInUser": 0
+      },
+      {
+        "SectionCanonicalTitle": "internal data",
+        "SectionTitleTemplate": "(user-only section)",
+        "ExpectedTableCount": 0,
+        "DetectedTableCount": 2,
+        "MatchedHeaderSignatures": [],
+        "MissingHeaderSignatures": [],
+        "ExtraHeaderSignatures": [
+          "parameter name|first trial value|range value|resolution|unit|parameter description"
+        ],
+        "PlaceholderCellCountInUser": 0,
+        "RedRunCountInUser": 0
+      },
+      {
+        "SectionCanonicalTitle": "functional state definition",
+        "SectionTitleTemplate": "(user-only section)",
+        "ExpectedTableCount": 0,
+        "DetectedTableCount": 1,
+        "MatchedHeaderSignatures": [],
+        "MissingHeaderSignatures": [],
+        "ExtraHeaderSignatures": [
+          "requirement number v|description of the requirement|input requirement v"
+        ],
+        "PlaceholderCellCountInUser": 0,
+        "RedRunCountInUser": 0
+      },
+      {
+        "SectionCanonicalTitle": "timing performances",
+        "SectionTitleTemplate": "(user-only section)",
+        "ExpectedTableCount": 0,
+        "DetectedTableCount": 1,
+        "MatchedHeaderSignatures": [],
+        "MissingHeaderSignatures": [],
+        "ExtraHeaderSignatures": [
+          "requirement number v|description of the requirement|input requirement v"
+        ],
+        "PlaceholderCellCountInUser": 0,
+        "RedRunCountInUser": 0
+      },
+      {
+        "SectionCanonicalTitle": "arming state",
+        "SectionTitleTemplate": "(user-only section)",
+        "ExpectedTableCount": 0,
+        "DetectedTableCount": 1,
+        "MatchedHeaderSignatures": [],
+        "MissingHeaderSignatures": [],
+        "ExtraHeaderSignatures": [
+          "requirement number v|description of the requirement|input requirement v"
+        ],
+        "PlaceholderCellCountInUser": 0,
+        "RedRunCountInUser": 0
+      },
+      {
+        "SectionCanonicalTitle": "asu module",
+        "SectionTitleTemplate": "(user-only section)",
+        "ExpectedTableCount": 0,
+        "DetectedTableCount": 1,
+        "MatchedHeaderSignatures": [],
+        "MissingHeaderSignatures": [],
+        "ExtraHeaderSignatures": [
+          "requirement number v|description of the requirement|input requirement v"
+        ],
+        "PlaceholderCellCountInUser": 0,
+        "RedRunCountInUser": 0
+      },
+      {
+        "SectionCanonicalTitle": "heart beat management",
+        "SectionTitleTemplate": "(user-only section)",
+        "ExpectedTableCount": 0,
+        "DetectedTableCount": 1,
+        "MatchedHeaderSignatures": [],
+        "MissingHeaderSignatures": [],
+        "ExtraHeaderSignatures": [
+          "requirement number v|description of the requirement|input requirement v"
+        ],
+        "PlaceholderCellCountInUser": 0,
+        "RedRunCountInUser": 0
+      },
+      {
+        "SectionCanonicalTitle": "wire cutting attempt detection",
+        "SectionTitleTemplate": "(user-only section)",
+        "ExpectedTableCount": 0,
+        "DetectedTableCount": 1,
+        "MatchedHeaderSignatures": [],
+        "MissingHeaderSignatures": [],
+        "ExtraHeaderSignatures": [
+          "requirement number v|description of the requirement|input requirement v"
+        ],
+        "PlaceholderCellCountInUser": 0,
+        "RedRunCountInUser": 0
+      },
+      {
+        "SectionCanonicalTitle": "battery attempt detection",
+        "SectionTitleTemplate": "(user-only section)",
+        "ExpectedTableCount": 0,
+        "DetectedTableCount": 1,
+        "MatchedHeaderSignatures": [],
+        "MissingHeaderSignatures": [],
+        "ExtraHeaderSignatures": [
+          "requirement number v|description of the requirement|input requirement v"
+        ],
+        "PlaceholderCellCountInUser": 0,
+        "RedRunCountInUser": 0
+      },
+      {
+        "SectionCanonicalTitle": "active alarm state",
+        "SectionTitleTemplate": "(user-only section)",
+        "ExpectedTableCount": 0,
+        "DetectedTableCount": 1,
+        "MatchedHeaderSignatures": [],
+        "MissingHeaderSignatures": [],
+        "ExtraHeaderSignatures": [
+          "requirement number v|description of the requirement|input requirement v"
+        ],
+        "PlaceholderCellCountInUser": 0,
+        "RedRunCountInUser": 0
+      },
+      {
+        "SectionCanonicalTitle": "alarm cycles management in case of battery or connection effraction",
+        "SectionTitleTemplate": "(user-only section)",
+        "ExpectedTableCount": 0,
+        "DetectedTableCount": 1,
+        "MatchedHeaderSignatures": [],
+        "MissingHeaderSignatures": [],
+        "ExtraHeaderSignatures": [
+          "requirement number v|description of the requirement|input requirement v"
+        ],
+        "PlaceholderCellCountInUser": 0,
+        "RedRunCountInUser": 0
+      },
+      {
+        "SectionCanonicalTitle": "disarming state",
+        "SectionTitleTemplate": "(user-only section)",
+        "ExpectedTableCount": 0,
+        "DetectedTableCount": 1,
+        "MatchedHeaderSignatures": [],
+        "MissingHeaderSignatures": [],
+        "ExtraHeaderSignatures": [
+          "requirement number v|description of the requirement|input requirement v"
+        ],
+        "PlaceholderCellCountInUser": 0,
+        "RedRunCountInUser": 0
+      },
+      {
+        "SectionCanonicalTitle": "transmit failure from deh slave",
+        "SectionTitleTemplate": "(user-only section)",
+        "ExpectedTableCount": 0,
+        "DetectedTableCount": 1,
+        "MatchedHeaderSignatures": [],
+        "MissingHeaderSignatures": [],
+        "ExtraHeaderSignatures": [
+          "requirement number v|description of the requirement|input requirement v"
+        ],
+        "PlaceholderCellCountInUser": 0,
+        "RedRunCountInUser": 0
+      },
+      {
+        "SectionCanonicalTitle": "asu performance requirements",
+        "SectionTitleTemplate": "(user-only section)",
+        "ExpectedTableCount": 0,
+        "DetectedTableCount": 1,
+        "MatchedHeaderSignatures": [],
+        "MissingHeaderSignatures": [],
+        "ExtraHeaderSignatures": [
+          "requirement number v|description of the requirement|input requirement v"
+        ],
+        "PlaceholderCellCountInUser": 0,
+        "RedRunCountInUser": 0
+      },
+      {
+        "SectionCanonicalTitle": "time requirements",
+        "SectionTitleTemplate": "(user-only section)",
+        "ExpectedTableCount": 0,
+        "DetectedTableCount": 5,
+        "MatchedHeaderSignatures": [],
+        "MissingHeaderSignatures": [],
+        "ExtraHeaderSignatures": [
+          "requirement number v|description of the requirement|input requirement v",
+          "operation|max average time given for the operation"
+        ],
+        "PlaceholderCellCountInUser": 0,
+        "RedRunCountInUser": 0
+      },
+      {
+        "SectionCanonicalTitle": "lin 2 1 physical layers",
+        "SectionTitleTemplate": "(user-only section)",
+        "ExpectedTableCount": 0,
+        "DetectedTableCount": 1,
+        "MatchedHeaderSignatures": [],
+        "MissingHeaderSignatures": [],
+        "ExtraHeaderSignatures": [
+          "requirement number v|description of the requirement|input requirement v"
+        ],
+        "PlaceholderCellCountInUser": 0,
+        "RedRunCountInUser": 0
+      },
+      {
+        "SectionCanonicalTitle": "lin 2 1 communication rules",
+        "SectionTitleTemplate": "(user-only section)",
+        "ExpectedTableCount": 0,
+        "DetectedTableCount": 1,
+        "MatchedHeaderSignatures": [],
+        "MissingHeaderSignatures": [],
+        "ExtraHeaderSignatures": [
+          "requirement number v|description of the requirement|input requirement v"
+        ],
+        "PlaceholderCellCountInUser": 0,
+        "RedRunCountInUser": 0
+      },
+      {
+        "SectionCanonicalTitle": "lin 2 1 network life phases",
+        "SectionTitleTemplate": "(user-only section)",
+        "ExpectedTableCount": 0,
+        "DetectedTableCount": 1,
+        "MatchedHeaderSignatures": [],
+        "MissingHeaderSignatures": [],
+        "ExtraHeaderSignatures": [
+          "requirement number v|description of the requirement|input requirement v"
+        ],
+        "PlaceholderCellCountInUser": 0,
+        "RedRunCountInUser": 0
+      },
+      {
+        "SectionCanonicalTitle": "heartbeat monitoring the lin connection in network standby",
+        "SectionTitleTemplate": "(user-only section)",
+        "ExpectedTableCount": 0,
+        "DetectedTableCount": 8,
+        "MatchedHeaderSignatures": [],
+        "MissingHeaderSignatures": [],
+        "ExtraHeaderSignatures": [
+          "requirement number v|description of the requirement|input requirement v",
+          "parameter name|range",
+          "parameter name|range|inc|value by default",
+          "parameter name|range|step|value by default",
+          "parameter name|value"
+        ],
+        "PlaceholderCellCountInUser": 0,
+        "RedRunCountInUser": 0
+      },
+      {
+        "SectionCanonicalTitle": "lin messaging system",
+        "SectionTitleTemplate": "(user-only section)",
+        "ExpectedTableCount": 0,
+        "DetectedTableCount": 1,
+        "MatchedHeaderSignatures": [],
+        "MissingHeaderSignatures": [],
+        "ExtraHeaderSignatures": [
+          "requirement number v|description of the requirement|input requirement v"
+        ],
+        "PlaceholderCellCountInUser": 0,
+        "RedRunCountInUser": 0
+      },
+      {
+        "SectionCanonicalTitle": "requirement of the output flow",
+        "SectionTitleTemplate": "(user-only section)",
+        "ExpectedTableCount": 0,
+        "DetectedTableCount": 1,
+        "MatchedHeaderSignatures": [],
+        "MissingHeaderSignatures": [],
+        "ExtraHeaderSignatures": [
+          "n exigence v requirement no v|libell de l exigence description of the requirement|exigence amont v input requirement v"
+        ],
+        "PlaceholderCellCountInUser": 1,
+        "RedRunCountInUser": 0
+      },
+      {
+        "SectionCanonicalTitle": "mission profile",
+        "SectionTitleTemplate": "(user-only section)",
+        "ExpectedTableCount": 0,
+        "DetectedTableCount": 4,
+        "MatchedHeaderSignatures": [],
+        "MissingHeaderSignatures": [],
+        "ExtraHeaderSignatures": [
+          "requirement number v|description of the requirement|input requirement v",
+          "table pfm1 vehicle and part mission profile",
+          "table pfm2|minimum ambient temperature for severe cold climate type russia a minimum temperature of 40 c is considered",
+          "table pfm3 ambient temperatures repartition for severe hot climate ex usa persian gulf if the component is located in the passenger compartment and not exposed to direct sunlight without its self heating"
+        ],
+        "PlaceholderCellCountInUser": 0,
+        "RedRunCountInUser": 0
+      },
+      {
+        "SectionCanonicalTitle": "electronic estimated reliability",
+        "SectionTitleTemplate": "(user-only section)",
+        "ExpectedTableCount": 0,
+        "DetectedTableCount": 1,
+        "MatchedHeaderSignatures": [],
+        "MissingHeaderSignatures": [],
+        "ExtraHeaderSignatures": [
+          "requirement number v|description of the requirement|input requirement v"
+        ],
+        "PlaceholderCellCountInUser": 0,
+        "RedRunCountInUser": 0
+      },
+      {
+        "SectionCanonicalTitle": "lifetime",
+        "SectionTitleTemplate": "(user-only section)",
+        "ExpectedTableCount": 0,
+        "DetectedTableCount": 1,
+        "MatchedHeaderSignatures": [],
+        "MissingHeaderSignatures": [],
+        "ExtraHeaderSignatures": [
+          "requirement number v|description of the requirement|input requirement v"
+        ],
+        "PlaceholderCellCountInUser": 0,
+        "RedRunCountInUser": 0
+      },
+      {
+        "SectionCanonicalTitle": "safety requirements",
+        "SectionTitleTemplate": "(user-only section)",
+        "ExpectedTableCount": 0,
+        "DetectedTableCount": 1,
+        "MatchedHeaderSignatures": [],
+        "MissingHeaderSignatures": [],
+        "ExtraHeaderSignatures": [
+          "requirement number v|description of the requirement|input requirement v"
+        ],
+        "PlaceholderCellCountInUser": 0,
+        "RedRunCountInUser": 0
+      },
+      {
+        "SectionCanonicalTitle": "diagnostic",
+        "SectionTitleTemplate": "(user-only section)",
+        "ExpectedTableCount": 0,
+        "DetectedTableCount": 16,
+        "MatchedHeaderSignatures": [],
+        "MissingHeaderSignatures": [],
+        "ExtraHeaderSignatures": [
+          "requirement number v|description of the requirement|input requirement v",
+          "flow|label|detection criteria|disappearing criteria|life sequence|component",
+          "frames|data to be remote encoded by dote"
+        ],
+        "PlaceholderCellCountInUser": 22,
+        "RedRunCountInUser": 0
+      },
+      {
+        "SectionCanonicalTitle": "fault list and strategy",
+        "SectionTitleTemplate": "(user-only section)",
+        "ExpectedTableCount": 0,
+        "DetectedTableCount": 5,
+        "MatchedHeaderSignatures": [],
+        "MissingHeaderSignatures": [],
+        "ExtraHeaderSignatures": [
+          "n exigence v requirement no v|libell de l exigence description of the requirement|exigence amont v input requirement v",
+          "requirement description|appearance disappearance criteria|life phase"
+        ],
+        "PlaceholderCellCountInUser": 0,
+        "RedRunCountInUser": 0
+      },
+      {
+        "SectionCanonicalTitle": "definition of theb technical interface with diagnostic tools",
+        "SectionTitleTemplate": "(user-only section)",
+        "ExpectedTableCount": 0,
+        "DetectedTableCount": 1,
+        "MatchedHeaderSignatures": [],
+        "MissingHeaderSignatures": [],
+        "ExtraHeaderSignatures": [
+          "n exirefce v requirement no v|libell de l exirefce description of the requirement|exirefce amont v input requirement v"
+        ],
+        "PlaceholderCellCountInUser": 0,
+        "RedRunCountInUser": 0
+      },
+      {
+        "SectionCanonicalTitle": "defect event history",
+        "SectionTitleTemplate": "(user-only section)",
+        "ExpectedTableCount": 0,
+        "DetectedTableCount": 2,
+        "MatchedHeaderSignatures": [],
+        "MissingHeaderSignatures": [],
+        "ExtraHeaderSignatures": [
+          "n exirefce v requirement no v|description of the requirement|exirefce amont v input requirement v",
+          "dtc"
+        ],
+        "PlaceholderCellCountInUser": 0,
+        "RedRunCountInUser": 0
+      },
+      {
+        "SectionCanonicalTitle": "quality converrefce requirement in development",
+        "SectionTitleTemplate": "(user-only section)",
+        "ExpectedTableCount": 0,
+        "DetectedTableCount": 2,
+        "MatchedHeaderSignatures": [],
+        "MissingHeaderSignatures": [],
+        "ExtraHeaderSignatures": [
+          "requirement number v|description of the requirement|input requirement v",
+          "milestones|j3 apqp|j4 apqp|j5 apqp"
+        ],
+        "PlaceholderCellCountInUser": 5,
+        "RedRunCountInUser": 0
+      },
+      {
+        "SectionCanonicalTitle": "protection against hostility",
+        "SectionTitleTemplate": "(user-only section)",
+        "ExpectedTableCount": 0,
+        "DetectedTableCount": 1,
+        "MatchedHeaderSignatures": [],
+        "MissingHeaderSignatures": [],
+        "ExtraHeaderSignatures": [
+          "requirement number v|description of the requirement|input requirement v"
+        ],
+        "PlaceholderCellCountInUser": 0,
+        "RedRunCountInUser": 0
+      },
+      {
+        "SectionCanonicalTitle": "operating class according to n40",
+        "SectionTitleTemplate": "(user-only section)",
+        "ExpectedTableCount": 0,
+        "DetectedTableCount": 1,
+        "MatchedHeaderSignatures": [],
+        "MissingHeaderSignatures": [],
+        "ExtraHeaderSignatures": [
+          "class|definition n40|mechanical and physicochemical tests n42 n43 and specific"
+        ],
+        "PlaceholderCellCountInUser": 0,
+        "RedRunCountInUser": 0
+      },
+      {
+        "SectionCanonicalTitle": "customer impact level",
+        "SectionTitleTemplate": "(user-only section)",
+        "ExpectedTableCount": 0,
+        "DetectedTableCount": 1,
+        "MatchedHeaderSignatures": [],
+        "MissingHeaderSignatures": [],
+        "ExtraHeaderSignatures": [
+          "function|customer impact 0 dreaded events|customer impact 1 dreaded events|customer impact 2 dreaded events|customer impact 3 dreaded events"
+        ],
+        "PlaceholderCellCountInUser": 0,
+        "RedRunCountInUser": 0
+      },
+      {
+        "SectionCanonicalTitle": "referal test environment",
+        "SectionTitleTemplate": "(user-only section)",
+        "ExpectedTableCount": 0,
+        "DetectedTableCount": 3,
+        "MatchedHeaderSignatures": [],
+        "MissingHeaderSignatures": [],
+        "ExtraHeaderSignatures": [
+          "requirement number v|description of the requirement|input requirement v",
+          "test type|type of worst case section min max|justification"
+        ],
+        "PlaceholderCellCountInUser": 0,
+        "RedRunCountInUser": 0
+      },
+      {
+        "SectionCanonicalTitle": "est operating modes",
+        "SectionTitleTemplate": "(user-only section)",
+        "ExpectedTableCount": 0,
+        "DetectedTableCount": 1,
+        "MatchedHeaderSignatures": [],
+        "MissingHeaderSignatures": [],
+        "ExtraHeaderSignatures": [
+          "operating mode|est state|activated electrical functions"
+        ],
+        "PlaceholderCellCountInUser": 1,
+        "RedRunCountInUser": 0
+      },
+      {
+        "SectionCanonicalTitle": "requirement validation complements not included in b21",
+        "SectionTitleTemplate": "(user-only section)",
+        "ExpectedTableCount": 0,
+        "DetectedTableCount": 1,
+        "MatchedHeaderSignatures": [],
+        "MissingHeaderSignatures": [],
+        "ExtraHeaderSignatures": [
+          "requirement no v|description of the requirement|input requirement v"
+        ],
+        "PlaceholderCellCountInUser": 0,
+        "RedRunCountInUser": 0
+      },
+      {
+        "SectionCanonicalTitle": "concerning the connectors",
+        "SectionTitleTemplate": "(user-only section)",
+        "ExpectedTableCount": 0,
+        "DetectedTableCount": 1,
+        "MatchedHeaderSignatures": [],
+        "MissingHeaderSignatures": [],
+        "ExtraHeaderSignatures": [
+          "requirement no v|description of the requirement|input requirement v"
+        ],
+        "PlaceholderCellCountInUser": 0,
+        "RedRunCountInUser": 0
+      },
+      {
+        "SectionCanonicalTitle": "for the failure modes with non consistent failure rates",
+        "SectionTitleTemplate": "(user-only section)",
+        "ExpectedTableCount": 0,
+        "DetectedTableCount": 1,
+        "MatchedHeaderSignatures": [],
+        "MissingHeaderSignatures": [],
+        "ExtraHeaderSignatures": [
+          "requirement no v|description of the requirement|input requirement v"
+        ],
+        "PlaceholderCellCountInUser": 0,
+        "RedRunCountInUser": 0
+      },
+      {
+        "SectionCanonicalTitle": "for failure modes with constant failure rates",
+        "SectionTitleTemplate": "(user-only section)",
+        "ExpectedTableCount": 0,
+        "DetectedTableCount": 1,
+        "MatchedHeaderSignatures": [],
+        "MissingHeaderSignatures": [],
+        "ExtraHeaderSignatures": [
+          "requirement no v|description of the requirement|input requirement v"
+        ],
+        "PlaceholderCellCountInUser": 0,
+        "RedRunCountInUser": 0
+      },
+      {
+        "SectionCanonicalTitle": "mechanical and climatic test queue",
+        "SectionTitleTemplate": "(user-only section)",
+        "ExpectedTableCount": 0,
+        "DetectedTableCount": 1,
+        "MatchedHeaderSignatures": [],
+        "MissingHeaderSignatures": [],
+        "ExtraHeaderSignatures": [
+          "requirement number v|description of the requirement|input requirement v"
+        ],
+        "PlaceholderCellCountInUser": 0,
+        "RedRunCountInUser": 0
+      },
+      {
+        "SectionCanonicalTitle": "acronyms",
+        "SectionTitleTemplate": "ACRONYMS",
+        "ExpectedTableCount": 1,
+        "DetectedTableCount": 1,
+        "MatchedHeaderSignatures": [
+          "acronym|definition"
+        ],
+        "MissingHeaderSignatures": [],
+        "ExtraHeaderSignatures": [],
+        "PlaceholderCellCountInUser": 0,
+        "RedRunCountInUser": 0
+      },
+      {
+        "SectionCanonicalTitle": "architecture complexity",
+        "SectionTitleTemplate": "Architecture Complexity",
+        "ExpectedTableCount": 1,
+        "DetectedTableCount": 0,
+        "MatchedHeaderSignatures": [],
+        "MissingHeaderSignatures": [
+          "complexity criteria|variants"
+        ],
+        "ExtraHeaderSignatures": [],
+        "PlaceholderCellCountInUser": 0,
+        "RedRunCountInUser": 0
+      },
+      {
+        "SectionCanonicalTitle": "connector related requirements",
+        "SectionTitleTemplate": "Connector-related requirements",
+        "ExpectedTableCount": 1,
+        "DetectedTableCount": 1,
+        "MatchedHeaderSignatures": [
+          "requirement number v|description of the requirement|input requirement v"
+        ],
+        "MissingHeaderSignatures": [],
+        "ExtraHeaderSignatures": [],
+        "PlaceholderCellCountInUser": 5,
+        "RedRunCountInUser": 0
+      },
+      {
+        "SectionCanonicalTitle": "constraint requirements from other disciplines",
+        "SectionTitleTemplate": "CONSTRAINT REQUIREMENTS FROM OTHER DISCIPLINES",
+        "ExpectedTableCount": 1,
+        "DetectedTableCount": 1,
+        "MatchedHeaderSignatures": [],
+        "MissingHeaderSignatures": [
+          "mark|reference|title|link"
+        ],
+        "ExtraHeaderSignatures": [
+          "mark|reference|version|title"
+        ],
+        "PlaceholderCellCountInUser": 0,
+        "RedRunCountInUser": 0
+      },
+      {
+        "SectionCanonicalTitle": "demonstration of compliance with requirements",
+        "SectionTitleTemplate": "DEMONSTRATION OF COMPLIANCE WITH REQUIREMENTS",
+        "ExpectedTableCount": 1,
+        "DetectedTableCount": 1,
+        "MatchedHeaderSignatures": [
+          "requirement number v|description of the requirement|input requirement v"
+        ],
+        "MissingHeaderSignatures": [],
+        "ExtraHeaderSignatures": [],
+        "PlaceholderCellCountInUser": 1,
+        "RedRunCountInUser": 0
+      },
+      {
+        "SectionCanonicalTitle": "dependability vocabulary",
+        "SectionTitleTemplate": "DEPENDABILITY VOCABULARY",
+        "ExpectedTableCount": 6,
+        "DetectedTableCount": 6,
+        "MatchedHeaderSignatures": [
+          "term|definitions",
+          "failure mode|definition|representationthe continuous lines represent the expected state and the dotted lines the actual state",
+          "terms|definitions",
+          "level|definition|comments"
+        ],
+        "MissingHeaderSignatures": [],
+        "ExtraHeaderSignatures": [],
+        "PlaceholderCellCountInUser": 1,
+        "RedRunCountInUser": 0
+      },
+      {
+        "SectionCanonicalTitle": "document requirements",
+        "SectionTitleTemplate": "DOCUMENT REQUIREMENTS",
+        "ExpectedTableCount": 1,
+        "DetectedTableCount": 1,
+        "MatchedHeaderSignatures": [
+          "requirement number v|description of the requirement|input requirement v"
+        ],
+        "MissingHeaderSignatures": [],
+        "ExtraHeaderSignatures": [],
+        "PlaceholderCellCountInUser": 1,
+        "RedRunCountInUser": 1
+      },
+      {
+        "SectionCanonicalTitle": "dreaded events for usage threats damages",
+        "SectionTitleTemplate": "Dreaded Events for usage, threats, damages",
+        "ExpectedTableCount": 1,
+        "DetectedTableCount": 1,
+        "MatchedHeaderSignatures": [
+          "dreaded event of the supply|associated requirements|gravity"
+        ],
+        "MissingHeaderSignatures": [],
+        "ExtraHeaderSignatures": [],
+        "PlaceholderCellCountInUser": 0,
+        "RedRunCountInUser": 0
+      },
+      {
+        "SectionCanonicalTitle": "environment conditions",
+        "SectionTitleTemplate": "ENVIRONMENT CONDITIONS",
+        "ExpectedTableCount": 6,
+        "DetectedTableCount": 6,
+        "MatchedHeaderSignatures": [
+          "requirement number v|description of the requirement|input requirement v"
+        ],
+        "MissingHeaderSignatures": [],
+        "ExtraHeaderSignatures": [],
+        "PlaceholderCellCountInUser": 9,
+        "RedRunCountInUser": 1
+      },
+      {
+        "SectionCanonicalTitle": "expression of requirements",
+        "SectionTitleTemplate": "Expression of requirements",
+        "ExpectedTableCount": 1,
+        "DetectedTableCount": 0,
+        "MatchedHeaderSignatures": [],
+        "MissingHeaderSignatures": [
+          "requirement number v|description of the requirement|input requirement v"
+        ],
+        "ExtraHeaderSignatures": [],
+        "PlaceholderCellCountInUser": 0,
+        "RedRunCountInUser": 0
+      },
+      {
+        "SectionCanonicalTitle": "failure modes",
+        "SectionTitleTemplate": "Failure modes",
+        "ExpectedTableCount": 2,
+        "DetectedTableCount": 15,
+        "MatchedHeaderSignatures": [
+          "requirement no v|failure mode|unreliability|note on the failure scenario|gravity|input requirement",
+          "requirement number v|description of the requirement|input requirement v"
+        ],
+        "MissingHeaderSignatures": [],
+        "ExtraHeaderSignatures": [
+          "failure mode|physical failure mode|maximum value in ppm at the reference duration 7 years"
+        ],
+        "PlaceholderCellCountInUser": 7,
+        "RedRunCountInUser": 0
+      },
+      {
+        "SectionCanonicalTitle": "failure modes mitigation requirements",
+        "SectionTitleTemplate": "Failure modes Mitigation Requirements",
+        "ExpectedTableCount": 2,
+        "DetectedTableCount": 2,
+        "MatchedHeaderSignatures": [
+          "requirement|failure mode|failure occurrence|hw or 26262 iso occurrence|metric spfm|metric lfm|asil level|comments|for information only contributes to the vehicle dreaded event|severity|input requirement",
+          "dreaded events reference|definition"
+        ],
+        "MissingHeaderSignatures": [],
+        "ExtraHeaderSignatures": [],
+        "PlaceholderCellCountInUser": 6,
+        "RedRunCountInUser": 0
+      },
+      {
+        "SectionCanonicalTitle": "flexibility and extension",
+        "SectionTitleTemplate": "FLEXIBILITY AND EXTENSION",
+        "ExpectedTableCount": 1,
+        "DetectedTableCount": 1,
+        "MatchedHeaderSignatures": [
+          "requirement number v|description of the requirement|input requirement v"
+        ],
+        "MissingHeaderSignatures": [],
+        "ExtraHeaderSignatures": [],
+        "PlaceholderCellCountInUser": 0,
+        "RedRunCountInUser": 0
+      },
+      {
+        "SectionCanonicalTitle": "functional complexity",
+        "SectionTitleTemplate": "Functional Complexity",
+        "ExpectedTableCount": 1,
+        "DetectedTableCount": 0,
+        "MatchedHeaderSignatures": [],
+        "MissingHeaderSignatures": [
+          "complexity criteria|variants"
+        ],
+        "ExtraHeaderSignatures": [],
+        "PlaceholderCellCountInUser": 0,
+        "RedRunCountInUser": 0
+      },
+      {
+        "SectionCanonicalTitle": "general technical on fault finding and download",
+        "SectionTitleTemplate": "GENERAL TECHNICAL ON FAULT FINDING AND DOWNLOAD",
+        "ExpectedTableCount": 1,
+        "DetectedTableCount": 2,
+        "MatchedHeaderSignatures": [],
+        "MissingHeaderSignatures": [
+          "mark|reference|title|link"
+        ],
+        "ExtraHeaderSignatures": [
+          "mark|reference|version|title",
+          "25 01013"
+        ],
+        "PlaceholderCellCountInUser": 0,
+        "RedRunCountInUser": 0
+      },
+      {
+        "SectionCanonicalTitle": "human machine interfaces",
+        "SectionTitleTemplate": "HUMAN-MACHINE INTERFACES",
+        "ExpectedTableCount": 1,
+        "DetectedTableCount": 0,
+        "MatchedHeaderSignatures": [],
+        "MissingHeaderSignatures": [
+          "requirement number v|description of the requirement|input requirement v"
+        ],
+        "ExtraHeaderSignatures": [],
+        "PlaceholderCellCountInUser": 0,
+        "RedRunCountInUser": 0
+      },
+      {
+        "SectionCanonicalTitle": "integration and validation requirements",
+        "SectionTitleTemplate": "INTEGRATION AND VALIDATION REQUIREMENTS",
+        "ExpectedTableCount": 4,
+        "DetectedTableCount": 0,
+        "MatchedHeaderSignatures": [],
+        "MissingHeaderSignatures": [
+          "table functional classification of e e componentsthis is an informative table not to be included in your spec",
+          "table n component name general e e component classification",
+          "table n applicable environmental conditions",
+          "table n parametric evaluation requirement pet"
+        ],
+        "ExtraHeaderSignatures": [],
+        "PlaceholderCellCountInUser": 0,
+        "RedRunCountInUser": 0
+      },
+      {
+        "SectionCanonicalTitle": "interpretation of network data",
+        "SectionTitleTemplate": "Interpretation of \u0022network\u0022 data",
+        "ExpectedTableCount": 2,
+        "DetectedTableCount": 2,
+        "MatchedHeaderSignatures": [],
+        "MissingHeaderSignatures": [
+          "requirement n|input frames|name of the frame data|description|triggers associated",
+          "requirement n|output frames|name of the frame data|description|observables associated"
+        ],
+        "ExtraHeaderSignatures": [
+          "input frames|name of the frame data|description",
+          "output frames|name of the frame data|description"
+        ],
+        "PlaceholderCellCountInUser": 0,
+        "RedRunCountInUser": 0
+      },
+      {
+        "SectionCanonicalTitle": "ite requirements for eee",
+        "SectionTitleTemplate": "ITE Requirements for EEE",
+        "ExpectedTableCount": 2,
+        "DetectedTableCount": 2,
+        "MatchedHeaderSignatures": [
+          "requirement number v|description of the requirement|input requirement v",
+          "dreaded events reference|definition"
+        ],
+        "MissingHeaderSignatures": [],
+        "ExtraHeaderSignatures": [],
+        "PlaceholderCellCountInUser": 0,
+        "RedRunCountInUser": 0
+      },
+      {
+        "SectionCanonicalTitle": "list of i o",
+        "SectionTitleTemplate": "List of I/O",
+        "ExpectedTableCount": 1,
+        "DetectedTableCount": 4,
+        "MatchedHeaderSignatures": [],
+        "MissingHeaderSignatures": [
+          "name of the data item|description|min max resolution|default value"
+        ],
+        "ExtraHeaderSignatures": [
+          "input flow|description|functional value s|min max resolution|default value",
+          "output flow|description|functional value s|min max resolution|default value"
+        ],
+        "PlaceholderCellCountInUser": 0,
+        "RedRunCountInUser": 0
+      },
+      {
+        "SectionCanonicalTitle": "maintainability requirements",
+        "SectionTitleTemplate": "Maintainability requirements",
+        "ExpectedTableCount": 8,
+        "DetectedTableCount": 0,
+        "MatchedHeaderSignatures": [],
+        "MissingHeaderSignatures": [
+          "requirement number v|description of the requirement|input requirement v",
+          "frames|data to be remote encoded by dote"
+        ],
+        "ExtraHeaderSignatures": [],
+        "PlaceholderCellCountInUser": 0,
+        "RedRunCountInUser": 0
+      },
+      {
+        "SectionCanonicalTitle": "mandatory requirements",
+        "SectionTitleTemplate": "MANDATORY REQUIREMENTS",
+        "ExpectedTableCount": 1,
+        "DetectedTableCount": 1,
+        "MatchedHeaderSignatures": [
+          "mark|reference|title|link"
+        ],
+        "MissingHeaderSignatures": [],
+        "ExtraHeaderSignatures": [],
+        "PlaceholderCellCountInUser": 0,
+        "RedRunCountInUser": 0
+      },
+      {
+        "SectionCanonicalTitle": "manufacturing",
+        "SectionTitleTemplate": "Manufacturing",
+        "ExpectedTableCount": 1,
+        "DetectedTableCount": 1,
+        "MatchedHeaderSignatures": [
+          "requirement number v|description of the requirement|input requirement v"
+        ],
+        "MissingHeaderSignatures": [],
+        "ExtraHeaderSignatures": [],
+        "PlaceholderCellCountInUser": 1,
+        "RedRunCountInUser": 0
+      },
+      {
+        "SectionCanonicalTitle": "marking of the components or parts",
+        "SectionTitleTemplate": "Marking of the Components or Parts",
+        "ExpectedTableCount": 6,
+        "DetectedTableCount": 6,
+        "MatchedHeaderSignatures": [
+          "requirement number v|description of the requirement|input requirement v",
+          "on indelible inscription",
+          "code error correction|ecc200"
+        ],
+        "MissingHeaderSignatures": [],
+        "ExtraHeaderSignatures": [],
+        "PlaceholderCellCountInUser": 6,
+        "RedRunCountInUser": 0
+      },
+      {
+        "SectionCanonicalTitle": "materials",
+        "SectionTitleTemplate": "Materials",
+        "ExpectedTableCount": 1,
+        "DetectedTableCount": 1,
+        "MatchedHeaderSignatures": [
+          "requirement number v|description of the requirement|input requirement v"
+        ],
+        "MissingHeaderSignatures": [],
+        "ExtraHeaderSignatures": [],
+        "PlaceholderCellCountInUser": 4,
+        "RedRunCountInUser": 1
+      },
+      {
+        "SectionCanonicalTitle": "measurement of the background noise",
+        "SectionTitleTemplate": "Measurement of the background noise",
+        "ExpectedTableCount": 1,
+        "DetectedTableCount": 1,
+        "MatchedHeaderSignatures": [
+          "requirement number v|description of the requirement|input requirement v"
+        ],
+        "MissingHeaderSignatures": [],
+        "ExtraHeaderSignatures": [],
+        "PlaceholderCellCountInUser": 0,
+        "RedRunCountInUser": 0
+      },
+      {
+        "SectionCanonicalTitle": "mechanical interfaces",
+        "SectionTitleTemplate": "MECHANICAL INTERFACES",
+        "ExpectedTableCount": 1,
+        "DetectedTableCount": 1,
+        "MatchedHeaderSignatures": [
+          "requirement number v|description of the requirement|input requirement v"
+        ],
+        "MissingHeaderSignatures": [],
+        "ExtraHeaderSignatures": [],
+        "PlaceholderCellCountInUser": 0,
+        "RedRunCountInUser": 0
+      },
+      {
+        "SectionCanonicalTitle": "other generic terms",
+        "SectionTitleTemplate": "OTHER GENERIC TERMS",
+        "ExpectedTableCount": 1,
+        "DetectedTableCount": 1,
+        "MatchedHeaderSignatures": [
+          "terms|definitions"
+        ],
+        "MissingHeaderSignatures": [],
+        "ExtraHeaderSignatures": [],
+        "PlaceholderCellCountInUser": 2,
+        "RedRunCountInUser": 0
+      },
+      {
+        "SectionCanonicalTitle": "other physical interfaces",
+        "SectionTitleTemplate": "OTHER PHYSICAL INTERFACES",
+        "ExpectedTableCount": 1,
+        "DetectedTableCount": 0,
+        "MatchedHeaderSignatures": [],
+        "MissingHeaderSignatures": [
+          "requirement number v|description of the requirement|input requirement v"
+        ],
+        "ExtraHeaderSignatures": [],
+        "PlaceholderCellCountInUser": 0,
+        "RedRunCountInUser": 0
+      },
+      {
+        "SectionCanonicalTitle": "other quality requirements",
+        "SectionTitleTemplate": "Other quality requirements",
+        "ExpectedTableCount": 1,
+        "DetectedTableCount": 1,
+        "MatchedHeaderSignatures": [
+          "requirement number v|description of the requirement|input requirement v"
+        ],
+        "MissingHeaderSignatures": [],
+        "ExtraHeaderSignatures": [],
+        "PlaceholderCellCountInUser": 0,
+        "RedRunCountInUser": 0
+      },
+      {
+        "SectionCanonicalTitle": "other requirements of validation",
+        "SectionTitleTemplate": "Other requirements of validation",
+        "ExpectedTableCount": 1,
+        "DetectedTableCount": 1,
+        "MatchedHeaderSignatures": [],
+        "MissingHeaderSignatures": [
+          "requirement number v|description of the requirement|input requirement v"
+        ],
+        "ExtraHeaderSignatures": [
+          "requirement no v|description of the requirement|input requirement v"
+        ],
+        "PlaceholderCellCountInUser": 0,
+        "RedRunCountInUser": 0
+      },
+      {
+        "SectionCanonicalTitle": "other technical specifications applicable",
+        "SectionTitleTemplate": "OTHER TECHNICAL SPECIFICATIONS APPLICABLE",
+        "ExpectedTableCount": 1,
+        "DetectedTableCount": 1,
+        "MatchedHeaderSignatures": [],
+        "MissingHeaderSignatures": [
+          "mark|reference|title|link"
+        ],
+        "ExtraHeaderSignatures": [
+          "mark|reference|version|title"
+        ],
+        "PlaceholderCellCountInUser": 5,
+        "RedRunCountInUser": 0
+      },
+      {
+        "SectionCanonicalTitle": "performance requirements",
+        "SectionTitleTemplate": "PERFORMANCE REQUIREMENTS",
+        "ExpectedTableCount": 1,
+        "DetectedTableCount": 0,
+        "MatchedHeaderSignatures": [],
+        "MissingHeaderSignatures": [
+          "requirement number v|description of the requirement|input requirement v"
+        ],
+        "ExtraHeaderSignatures": [],
+        "PlaceholderCellCountInUser": 0,
+        "RedRunCountInUser": 0
+      },
+      {
+        "SectionCanonicalTitle": "power supply requirements",
+        "SectionTitleTemplate": "Power supply requirements",
+        "ExpectedTableCount": 1,
+        "DetectedTableCount": 3,
+        "MatchedHeaderSignatures": [
+          "requirement number v|description of the requirement|input requirement v"
+        ],
+        "MissingHeaderSignatures": [],
+        "ExtraHeaderSignatures": [
+          "operating mode|normal network|network in standby",
+          "u0|4v|t0"
+        ],
+        "PlaceholderCellCountInUser": 0,
+        "RedRunCountInUser": 0
+      },
+      {
+        "SectionCanonicalTitle": "quality convergence requirement in development",
+        "SectionTitleTemplate": "Quality convergence requirement in development",
+        "ExpectedTableCount": 2,
+        "DetectedTableCount": 0,
+        "MatchedHeaderSignatures": [],
+        "MissingHeaderSignatures": [
+          "requirement number v|description of the requirement|input requirement v",
+          "milestones|j3 apqp|j4 apqp|j5 apqp"
+        ],
+        "ExtraHeaderSignatures": [],
+        "PlaceholderCellCountInUser": 0,
+        "RedRunCountInUser": 0
+      },
+      {
+        "SectionCanonicalTitle": "reception and sending frames",
+        "SectionTitleTemplate": "Reception and sending frames",
+        "ExpectedTableCount": 1,
+        "DetectedTableCount": 1,
+        "MatchedHeaderSignatures": [
+          "requirement number v|description of the requirement|input requirement v"
+        ],
+        "MissingHeaderSignatures": [],
+        "ExtraHeaderSignatures": [],
+        "PlaceholderCellCountInUser": 0,
+        "RedRunCountInUser": 0
+      },
+      {
+        "SectionCanonicalTitle": "regulation and consumerism",
+        "SectionTitleTemplate": "REGULATION AND CONSUMERISM",
+        "ExpectedTableCount": 2,
+        "DetectedTableCount": 2,
+        "MatchedHeaderSignatures": [
+          "requirement number v|description of the requirement|input requirement v"
+        ],
+        "MissingHeaderSignatures": [
+          "mark|reference|title|link"
+        ],
+        "ExtraHeaderSignatures": [
+          "mark|reference|version|title"
+        ],
+        "PlaceholderCellCountInUser": 0,
+        "RedRunCountInUser": 0
+      },
+      {
+        "SectionCanonicalTitle": "reliability requirements",
+        "SectionTitleTemplate": "Reliability requirements",
+        "ExpectedTableCount": 1,
+        "DetectedTableCount": 1,
+        "MatchedHeaderSignatures": [
+          "requirement number v|description of the requirement|input requirement v"
+        ],
+        "MissingHeaderSignatures": [],
+        "ExtraHeaderSignatures": [],
+        "PlaceholderCellCountInUser": 0,
+        "RedRunCountInUser": 0
+      },
+      {
+        "SectionCanonicalTitle": "required confidence level",
+        "SectionTitleTemplate": "Required confidence level",
+        "ExpectedTableCount": 1,
+        "DetectedTableCount": 1,
+        "MatchedHeaderSignatures": [
+          "requirement number v|description of the requirement|input requirement v"
+        ],
+        "MissingHeaderSignatures": [],
+        "ExtraHeaderSignatures": [],
+        "PlaceholderCellCountInUser": 2,
+        "RedRunCountInUser": 0
+      },
+      {
+        "SectionCanonicalTitle": "requirements",
+        "SectionTitleTemplate": "REQUIREMENTS",
+        "ExpectedTableCount": 4,
+        "DetectedTableCount": 1,
+        "MatchedHeaderSignatures": [
+          "requirement no v|description of the requirement|input requirement v"
+        ],
+        "MissingHeaderSignatures": [
+          "app|generic application gen or project ex b9|max 5 characters",
+          "type of attribute|nature of requirement|particular treatment",
+          "req xxxxxx a|req name gen xxxx cd xxx 00x 0|modified dd mm yyyy"
+        ],
+        "ExtraHeaderSignatures": [],
+        "PlaceholderCellCountInUser": 0,
+        "RedRunCountInUser": 1
+      },
+      {
+        "SectionCanonicalTitle": "requirements on random noise",
+        "SectionTitleTemplate": "Requirements on \u0022random noise\u0022",
+        "ExpectedTableCount": 1,
+        "DetectedTableCount": 1,
+        "MatchedHeaderSignatures": [
+          "quotation|customer assessment|corrective action"
+        ],
+        "MissingHeaderSignatures": [],
+        "ExtraHeaderSignatures": [],
+        "PlaceholderCellCountInUser": 0,
+        "RedRunCountInUser": 0
+      },
+      {
+        "SectionCanonicalTitle": "resources reserve capacity of the system",
+        "SectionTitleTemplate": "RESOURCES RESERVE CAPACITY OF THE SYSTEM",
+        "ExpectedTableCount": 1,
+        "DetectedTableCount": 1,
+        "MatchedHeaderSignatures": [
+          "requirement number v|description of the requirement|input requirement v"
+        ],
+        "MissingHeaderSignatures": [],
+        "ExtraHeaderSignatures": [],
+        "PlaceholderCellCountInUser": 0,
+        "RedRunCountInUser": 0
+      },
+      {
+        "SectionCanonicalTitle": "standards",
+        "SectionTitleTemplate": "STANDARDS",
+        "ExpectedTableCount": 1,
+        "DetectedTableCount": 1,
+        "MatchedHeaderSignatures": [],
+        "MissingHeaderSignatures": [
+          "mark|reference|title|link"
+        ],
+        "ExtraHeaderSignatures": [
+          "mark|reference|version|title"
+        ],
+        "PlaceholderCellCountInUser": 0,
+        "RedRunCountInUser": 0
+      },
+      {
+        "SectionCanonicalTitle": "studies and or imposed solutions",
+        "SectionTitleTemplate": "Studies and/or imposed solutions",
+        "ExpectedTableCount": 2,
+        "DetectedTableCount": 2,
+        "MatchedHeaderSignatures": [
+          "requirement number v|description of the requirement|input requirement v"
+        ],
+        "MissingHeaderSignatures": [],
+        "ExtraHeaderSignatures": [],
+        "PlaceholderCellCountInUser": 0,
+        "RedRunCountInUser": 0
+      },
+      {
+        "SectionCanonicalTitle": "table of updates",
+        "SectionTitleTemplate": "Table of updates",
+        "ExpectedTableCount": 1,
+        "DetectedTableCount": 1,
+        "MatchedHeaderSignatures": [
+          "index|date|author|modification account"
+        ],
+        "MissingHeaderSignatures": [],
+        "ExtraHeaderSignatures": [],
+        "PlaceholderCellCountInUser": 0,
+        "RedRunCountInUser": 0
+      },
+      {
+        "SectionCanonicalTitle": "technical specifications",
+        "SectionTitleTemplate": "TECHNICAL SPECIFICATIONS",
+        "ExpectedTableCount": 3,
+        "DetectedTableCount": 1,
+        "MatchedHeaderSignatures": [],
+        "MissingHeaderSignatures": [
+          "mark|reference|title|link"
+        ],
+        "ExtraHeaderSignatures": [
+          "mark|reference|version|title"
+        ],
+        "PlaceholderCellCountInUser": 0,
+        "RedRunCountInUser": 0
+      },
+      {
+        "SectionCanonicalTitle": "technical specifications for connectors",
+        "SectionTitleTemplate": "TECHNICAL SPECIFICATIONS FOR CONNECTORS",
+        "ExpectedTableCount": 1,
+        "DetectedTableCount": 1,
+        "MatchedHeaderSignatures": [],
+        "MissingHeaderSignatures": [
+          "mark|reference|title|link"
+        ],
+        "ExtraHeaderSignatures": [
+          "mark|reference|version|title"
+        ],
+        "PlaceholderCellCountInUser": 0,
+        "RedRunCountInUser": 0
+      },
+      {
+        "SectionCanonicalTitle": "the listening for random noise when new and after endurance",
+        "SectionTitleTemplate": "The listening for random noise (when new and after endurance)",
+        "ExpectedTableCount": 1,
+        "DetectedTableCount": 1,
+        "MatchedHeaderSignatures": [
+          "requirement number v|description of the requirement|input requirement v"
+        ],
+        "MissingHeaderSignatures": [],
+        "ExtraHeaderSignatures": [],
+        "PlaceholderCellCountInUser": 0,
+        "RedRunCountInUser": 0
+      },
+      {
+        "SectionCanonicalTitle": "the vibratory ageing and climatic",
+        "SectionTitleTemplate": "The vibratory ageing and climatic",
+        "ExpectedTableCount": 1,
+        "DetectedTableCount": 1,
+        "MatchedHeaderSignatures": [
+          "requirement number v|description of the requirement|input requirement v"
+        ],
+        "MissingHeaderSignatures": [],
+        "ExtraHeaderSignatures": [],
+        "PlaceholderCellCountInUser": 0,
+        "RedRunCountInUser": 0
+      },
+      {
+        "SectionCanonicalTitle": "transportability storage and packaging",
+        "SectionTitleTemplate": "TRANSPORTABILITY, STORAGE, AND PACKAGING",
+        "ExpectedTableCount": 2,
+        "DetectedTableCount": 1,
+        "MatchedHeaderSignatures": [
+          "requirement number v|description of the requirement|input requirement v"
+        ],
+        "MissingHeaderSignatures": [],
+        "ExtraHeaderSignatures": [],
+        "PlaceholderCellCountInUser": 0,
+        "RedRunCountInUser": 0
+      },
+      {
+        "SectionCanonicalTitle": "upstream requirements",
+        "SectionTitleTemplate": "UPSTREAM REQUIREMENTS",
+        "ExpectedTableCount": 1,
+        "DetectedTableCount": 1,
+        "MatchedHeaderSignatures": [],
+        "MissingHeaderSignatures": [
+          "mark|reference|title|link"
+        ],
+        "ExtraHeaderSignatures": [
+          "mark|reference|version|title"
+        ],
+        "PlaceholderCellCountInUser": 0,
+        "RedRunCountInUser": 0
+      },
+      {
+        "SectionCanonicalTitle": "weight and other physical characteristics",
+        "SectionTitleTemplate": "WEIGHT AND OTHER PHYSICAL CHARACTERISTICS",
+        "ExpectedTableCount": 1,
+        "DetectedTableCount": 1,
+        "MatchedHeaderSignatures": [
+          "requirement number v|description of the requirement|input requirement v"
+        ],
+        "MissingHeaderSignatures": [],
+        "ExtraHeaderSignatures": [],
+        "PlaceholderCellCountInUser": 0,
+        "RedRunCountInUser": 0
+      },
+      {
+        "SectionCanonicalTitle": "wired connections",
+        "SectionTitleTemplate": "Wired connections",
+        "ExpectedTableCount": 2,
+        "DetectedTableCount": 1,
+        "MatchedHeaderSignatures": [
+          "requirement number v|description of the requirement|input requirement v"
+        ],
+        "MissingHeaderSignatures": [],
+        "ExtraHeaderSignatures": [],
+        "PlaceholderCellCountInUser": 0,
+        "RedRunCountInUser": 0
+      },
+      {
+        "SectionCanonicalTitle": "withdrawal",
+        "SectionTitleTemplate": "WITHDRAWAL",
+        "ExpectedTableCount": 1,
+        "DetectedTableCount": 1,
+        "MatchedHeaderSignatures": [
+          "requirement number v|description of the requirement|input requirement v"
+        ],
+        "MissingHeaderSignatures": [],
+        "ExtraHeaderSignatures": [],
+        "PlaceholderCellCountInUser": 0,
+        "RedRunCountInUser": 0
+      }
+    ],
+    "Notes": [
+      "Table validation is advisory-only (non-blocking) for current release.",
+      "Template tables=101, user tables=174",
+      "Section coverage=83,33%",
+      "Header recall=59,72%",
+      "Header precision=36,75%"
+    ]
+  },
+  "Decision": {
+    "Verdict": "FAIL",
+    "Reasons": [
+      "Section(s) vide(s) sans \u0027Not applicable\u0027/\u0027Sans objet\u0027.",
+      "Policy MUST sections missing."
+    ],
+    "ExplainabilityNotes": [
+      "Pivot coverage=100%",
+      "Subtitle recall=82,5%",
+      "Subtitle precision=57,39%",
+      "Order score=100%",
+      "Final score=93,74/100",
+      "No semantic alias/mapping was applied.",
+      "Empty section violations without Not applicable/Sans objet: 5.",
+      "Policy profile \u0027default-automotive-policy\u0027 applied (must=5, should=6).",
+      "Policy MUST violations: missing=1, empty=0."
+    ]
+  }
+}

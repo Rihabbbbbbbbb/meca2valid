@@ -1,0 +1,13 @@
+/* Basic style for validation report */
+body{font-family:Segoe UI,Arial,Helvetica,sans-serif;margin:20px;color:#222;background:#fff}
+header.report-header{border-bottom:1px solid #ddd;padding-bottom:8px;margin-bottom:12px}
+h1{font-size:22px;margin:0}
+h2{color:#1b4f72}
+dl.meta{display:grid;grid-template-columns:140px 1fr;gap:4px 12px;margin-top:8px}
+dl.meta dt{font-weight:600}
+section.summary ul{list-style:none;padding-left:0}
+section.summary li{margin:6px 0}
+table.pivottable{width:100%;border-collapse:collapse;margin-top:8px}
+table.pivottable th,table.pivottable td{border:1px solid #e5e5e5;padding:6px 8px;text-align:left;font-size:13px}
+table.pivottable thead th{background:#f5f8fa}
+.report-footer{margin-top:20px;color:#888;font-size:12px}

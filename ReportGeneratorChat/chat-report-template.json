@@ -1,0 +1,56 @@
+{
+  "metadata": {
+    "Tool": "string",
+    "Version": "string",
+    "StartedAtUtc": "ISO8601 string",
+    "ValidatedAtUtc": "ISO8601 string",
+    "DurationMs": "number",
+    "TemplatePath": "string",
+    "UserDocumentPath": "string"
+  },
+  "summary": {
+    "finalScore": 0.0,
+    "pivotCoverage": 0.0,
+    "subtitleRecall": 0.0,
+    "subtitlePrecision": 0.0,
+    "orderScore": 0.0,
+    "confidenceBand": "LOW|MEDIUM|HIGH"
+  },
+  "policyCompliance": {
+    "missingSections": ["string"],
+    "totalSections": 0
+  },
+  "qualityGates": {
+    "requiresNotApplicableForEmptySections": true,
+    "redTextDetected": false,
+    "emptySectionViolations": [
+      { "order": 0, "title": "string", "canonicalTitle": "string", "requirement": "string" }
+    ]
+  },
+  "pivotHighlights": [
+    {
+      "pivotTitle": "string",
+      "templateSubtitleCount": 0,
+      "userSubtitleCount": 0,
+      "matchedSubtitleCount": 0,
+      "orderTemplate": 0,
+      "orderUser": 0,
+      "missingSubtitles": ["string"],
+      "severity": "High|Medium|Low"
+    }
+  ],
+  "topIssues": [
+    { "type": "MissingSections|EmptySections", "count": 0, "items": ["string"], "severity": "High|Medium|Low" }
+  ],
+  "tableSummary": {
+    "Enabled": true,
+    "TemplateTableCount": 0,
+    "UserTableCount": 0,
+    "SectionCoveragePercent": 0.0,
+    "HeaderRecallPercent": 0.0,
+    "HeaderPrecisionPercent": 0.0,
+    "QualityBand": "LOW|MEDIUM|HIGH"
+  },
+  "recommendations": ["string"],
+  "humanSummary": "short user-facing summary string"
+}

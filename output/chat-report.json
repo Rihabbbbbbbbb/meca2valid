@@ -1,0 +1,66 @@
+{
+  "metadata": {
+    "Tool": "TemplateOneShotExtractor",
+    "Version": "1.2.0",
+    "StartedAtUtc": "2026-03-05T14:06:30.2843673\u002B00:00",
+    "ValidatedAtUtc": "2026-03-05T14:06:32.7674043\u002B00:00",
+    "DurationMs": "2483",
+    "TemplatePath": "C:\\Users\\TA29225\\Desktop\\Component_or_Part_Specification_Template.docx",
+    "UserDocumentPath": "C:\\Users\\TA29225\\Downloads\\00692_25_01250_ASU_Technical_Specification_SPX.docx"
+  },
+  "summary": {
+    "finalScore": 95.21,
+    "pivotCoverage": 100,
+    "confidenceBand": "LOW"
+  },
+  "policyCompliance": {
+    "missingSections": [
+      "architecture and design requirements",
+      "abbreviations",
+      "product context",
+      "system functions",
+      "system overview"
+    ],
+    "totalSections": 14
+  },
+  "pivotHighlights": [
+    {
+      "pivotTitle": "GENERAL DESCRIPTION OF THE SYSTEM",
+      "missingSubtitles": [
+        "system complexity",
+        "functional complexity",
+        "architecture complexity"
+      ],
+      "severity": "High"
+    },
+    {
+      "pivotTitle": "FUNCTIONAL REQUIREMENTS",
+      "missingSubtitles": [
+        "use case xxx",
+        "expression of requirements",
+        "use case yyy"
+      ],
+      "severity": "High"
+    },
+    {
+      "pivotTitle": "EXTERNAL INTERFACES REQUIREMENTS",
+      "missingSubtitles": [
+        "network interfaces"
+      ],
+      "severity": "High"
+    },
+    {
+      "pivotTitle": "OPERATIONAL REQUIREMENTS",
+      "missingSubtitles": [
+        "quality convergence requirement in development"
+      ],
+      "severity": "High"
+    }
+  ],
+  "recommendations": [
+    "Add the missing sections or explicitly mark them \u0027Not applicable\u0027.",
+    "Subtitle precision is low \u2014 review extra subtitles and consolidate duplicates.",
+    "Low confidence detected \u2014 manually review highlighted pivots and ambiguous sections."
+  ],
+  "humanSummary": "Overall score: 95,21%. Pivot coverage: 100%. Top issues: MissingSections, EmptySections. See \u0027pivotHighlights\u0027 for per-section details and \u0027recommendations\u0027 for next steps."
+}

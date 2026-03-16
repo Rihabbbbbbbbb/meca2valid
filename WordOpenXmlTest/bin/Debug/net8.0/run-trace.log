@@ -1,0 +1,19 @@
+[20:27:50] === WordOpenXmlTest START ===
+[20:27:50] Reading: C:\Users\TA29225\Desktop\M2_outer_handle_technical_specification__RSP-update-21072025_ (11) (1).docx
+[20:27:50] Loaded bytes: 5187830 in 14 ms
+[20:27:50] Parsing started...
+[20:27:51] Parsing done in 927 ms
+[20:27:51] Sections found: 187
+[20:27:51] [L1] B396120
+[20:27:51] [L1] Table of updates
+[20:27:51] [L1] PURPOSE AND SCOPE OF APPLICATION
+[20:27:51] [L2] Purpose
+[20:27:51] [L2] Scope
+[20:27:51] [L3] System development context
+[20:27:51] [L3] General description of the system
+[20:27:51] [L4] Bracket content
+[20:27:51] [L4] Handle content
+[20:27:51] [L4] Design constraints
+[20:27:51] ... 177 more sections not displayed
+[20:27:51] JSON exported: C:\Users\TA29225\V2_Leon_github\CDC_Stellantis\WordOpenXmlTest\bin\Debug\net8.0\sections.json
+[20:27:51] === END ===

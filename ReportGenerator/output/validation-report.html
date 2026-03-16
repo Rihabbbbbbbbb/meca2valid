@@ -1,0 +1,69 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Validation Report</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="report-header">
+  <h1>Template Validation Report</h1>
+  <dl class="meta">
+    <dt>Tool</dt><dd>TemplateOneShotExtractor</dd>
+    <dt>Tool version</dt><dd>1.2.0</dd>
+    <dt>Started</dt><dd>2026-03-05T14:06:30.2843673+00:00</dd>
+    <dt>Validated</dt><dd>2026-03-05T14:06:32.7674043+00:00</dd>
+    <dt>Template</dt><dd>C:\Users\TA29225\Desktop\Component_or_Part_Specification_Template.docx</dd>
+    <dt>User document</dt><dd>C:\Users\TA29225\Downloads\00692_25_01250_ASU_Technical_Specification_SPX.docx</dd>
+  </dl>
+</header>
+<section class="summary">
+  <h2>Summary</h2>
+  <ul>
+    <li><strong>Final score:</strong> 95,21%</li>
+    <li><strong>Pivot coverage:</strong> 100%</li>
+    <li><strong>Subtitle recall:</strong> 90%</li>
+    <li><strong>Subtitle precision:</strong> 59,5%</li>
+    <li><strong>Confidence:</strong> LOW</li>
+  </ul>
+</section>
+<section class="policy">
+  <h2>Policy Compliance</h2>
+  <ul>
+    <li><strong>Missing must sections:</strong> architecture and design requirements</li>
+    <li><strong>Missing should sections:</strong> abbreviations, product context, system functions, system overview</li>
+  </ul>
+</section>
+<section class="findings">
+  <h2>Detailed Findings</h2>
+  <div class="pivots">
+    <h3>Pivot comparisons (select highlights)</h3>
+    <table class="pivottable">
+      <thead><tr><th>Pivot</th><th>Template</th><th>User</th><th>Matched</th><th>Missing</th><th>Extra</th></tr></thead>
+      <tbody>
+      <tr><td>Table of updates</td><td>0</td><td>0</td><td>0</td><td>-</td><td>-</td></tr>
+      <tr><td>PURPOSE</td><td>0</td><td>0</td><td>0</td><td>-</td><td>-</td></tr>
+      <tr><td>SCOPE</td><td>0</td><td>0</td><td>0</td><td>-</td><td>-</td></tr>
+      <tr><td>SYSTEM DEVELOPMENT CONTEXT</td><td>0</td><td>0</td><td>0</td><td>-</td><td>-</td></tr>
+      <tr><td>GENERAL DESCRIPTION OF THE SYSTEM</td><td>5</td><td>5</td><td>2</td><td>system complexity; functional complexity; architecture complexity</td><td>system diversity; functional diversity; architecture diversity</td></tr>
+      <tr><td>QUOTED DOCUMENTS</td><td>0</td><td>0</td><td>0</td><td>-</td><td>-</td></tr>
+      <tr><td>REFERENCE DOCUMENTS</td><td>4</td><td>4</td><td>4</td><td>-</td><td>-</td></tr>
+      <tr><td>APPLICABLE DOCUMENTS</td><td>5</td><td>5</td><td>5</td><td>-</td><td>-</td></tr>
+      <tr><td>TERMINOLOGY</td><td>0</td><td>0</td><td>0</td><td>-</td><td>-</td></tr>
+      <tr><td>GLOSSARY</td><td>4</td><td>4</td><td>4</td><td>-</td><td>-</td></tr>
+      <tr><td>ACRONYMS</td><td>0</td><td>0</td><td>0</td><td>-</td><td>-</td></tr>
+      <tr><td>REQUIREMENTS</td><td>0</td><td>0</td><td>0</td><td>-</td><td>-</td></tr>
+      <tr><td>FUNCTIONAL REQUIREMENTS</td><td>5</td><td>18</td><td>2</td><td>use case xxx; expression of requirements; use case yyy</td><td>functionality fct detect asu status; internal data; applicative requirements; functional state definition; timing performances; arming state; surveillance state; asu module; heart beat management; wire cutting attempt detection; battery attempt detection; active alarm state; alarm cycles management in case of battery or connection effraction; disarming state; fct transmit failure info ecu asu; transmit failure from deh slave</td></tr>
+      <tr><td>PERFORMANCE REQUIREMENTS</td><td>0</td><td>2</td><td>0</td><td>-</td><td>asu performance requirements; time requirements</td></tr>
+      <tr><td>EXTERNAL INTERFACES REQUIREMENTS</td><td>11</td><td>16</td><td>10</td><td>network interfaces</td><td>lin 2 1 physical layers; lin 2 1 communication rules; lin 2 1 network life phases; heartbeat monitoring the lin connection in network standby; lin messaging system; requirement of the output flow</td></tr>
+      <tr><td>OPERATIONAL REQUIREMENTS</td><td>31</td><td>37</td><td>30</td><td>quality convergence requirement in development</td><td>electronic estimated reliability; diagnostic; fault list and strategy; definition of theb technical interface with diagnostic tools; correspondence between the fault events previously defined and the fault codes of the diagnostic messaging system; defect event history; quality converrefce requirement in development</td></tr>
+      <tr><td>CONSTRAINT REQUIREMENTS</td><td>12</td><td>12</td><td>12</td><td>-</td><td>-</td></tr>
+      <tr><td>INTEGRATION AND VALIDATION REQUIREMENTS</td><td>3</td><td>18</td><td>3</td><td>-</td><td>requirements for imposed environmental tests; referal information; operating class according to n40; customer impact level; referal test environment; est operating modes; electrical behavior tests n41 and n45; connections tests standard n1; mechanical resistance tests n42; physicochemical resistance tests n43; requirement validation complements not included in b21; concerning the connectors; for the failure modes with non consistent failure rates; for failure modes with constant failure rates; mechanical and climatic test queue</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+<footer class="report-footer">Generated by ReportGenerator</footer>
+</body>
+</html>

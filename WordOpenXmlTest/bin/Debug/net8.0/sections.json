@@ -1,0 +1,941 @@
+{
+  "sourceFile": "C:\\Users\\TA29225\\Desktop\\M2_outer_handle_technical_specification__RSP-update-21072025_ (11) (1).docx",
+  "sectionCount": 187,
+  "sections": [
+    {
+      "level": 1,
+      "title": "B396120",
+      "content": "Identification :\r\nRSP-0010787_2\r\nUPDATE 21/07/2025\r\nApplicable to project:\r\n$pl\r\nPart/Component Specification\r\nRSP Output Part_CD_OUTER DOOR HANDLES M2\r\nSCOPE\r\nAuthor(s)\r\nName :\r\nu054762\r\nFABIO  FOIS\r\nReport generation date :\r\n18 January 2024, 15:14:58\r\nSignature :\r\nInspector(s)\r\nName :\r\nDate :\r\nSignature :\r\nApproved By\r\nName :\r\nDate :\r\nSignature :\r\nPlease update the summary: Right click in \u201CTitle\u201D below the Summary then choose \u201CUpdate fields\u201D THEN \u201CUpdate all table\u201D  (\u201CMettre \u00E0 jour les champs\u201D\u002B \u201CMettre \u00E0 jour toute la table\u201D )\r\nTOC \\o \\h \\z \\u\r\n1Table of updates PAGEREF _Toc191904569 \\h 8\r\n2PURPOSE AND SCOPE OF APPLICATION PAGEREF _Toc191904570 \\h 9\r\n2.1Purpose PAGEREF _Toc191904571 \\h 9\r\n2.2Scope PAGEREF _Toc191904572 \\h 10\r\n2.2.1System development context PAGEREF _Toc191904573 \\h 10\r\n2.2.2General description of the system PAGEREF _Toc191904574 \\h 10\r\n2.2.2.1Bracket content PAGEREF _Toc191904575 \\h 11\r\n2.2.2.2Handle content PAGEREF _Toc191904576 \\h 11\r\n2.2.2.3Design constraints PAGEREF _Toc191904577 \\h 11\r\n2.2.2.4Functional volume PAGEREF _Toc191904578 \\h 12\r\n3QUOTED DOCUMENTS AND TERMINOLOGY PAGEREF _Toc191904579 \\h 12\r\n3.1Reference documents PAGEREF _Toc191904580 \\h 12\r\n3.2Applicable documents PAGEREF _Toc191904581 \\h 12\r\n3.2.1Regulations PAGEREF _Toc191904582 \\h 12\r\n3.2.2Standards / Norms PAGEREF _Toc191904583 \\h 13\r\n3.3Glossary PAGEREF _Toc191904584 \\h 14\r\n3.4Acronyms PAGEREF _Toc191904585 \\h 14\r\n4OPERATIONAL ANALYSIS PAGEREF _Toc191904586 \\h 15\r\n4.1Missions PAGEREF _Toc191904587 \\h 15\r\n4.2Input requirements summary PAGEREF _Toc191904588 \\h 15\r\n4.3Context diagram \u0026 external interfaces PAGEREF _Toc191904589 \\h 15\r\n4.4Lifecycle PAGEREF _Toc191904590 \\h 15\r\n4.5Uses Cases PAGEREF _Toc191904591 \\h 15\r\n4.6Operational scenarios PAGEREF _Toc191904592 \\h 15\r\n5COMPONENT ARCHITECTURE PAGEREF _Toc191904593 \\h 15\r\n5.1General design constraints PAGEREF _Toc191904594 \\h 15\r\n5.2Configuration and diversity PAGEREF _Toc191904595 \\h 15\r\n5.3Physical characteristics PAGEREF _Toc191904596 \\h 15\r\n5.4Functional architecture PAGEREF _Toc191904597 \\h 15\r\n5.4.1Static functional architecture PAGEREF _Toc191904598 \\h 15\r\n5.4.1.1Functional Breakdown Structure PAGEREF _Toc191904599 \\h 15\r\n5.4.1.2Functional interfaces PAGEREF _Toc191904600 \\h 15\r\n5.4.1.3Functional architecture PAGEREF _Toc191904601 \\h 15\r\n5.4.2Dynamic functional analysis PAGEREF _Toc191904602 \\h 15\r\n5.4.2.1Functional state machine PAGEREF _Toc191904603 \\h 15\r\n5.4.2.2Functional scenario PAGEREF _Toc191904604 \\h 15\r\n5.5Constructional architecture PAGEREF _Toc191904605 \\h 15\r\n5.5.1Product Breakdown Structure PAGEREF _Toc191904606 \\h 15\r\n5.5.2Static constructional architecture PAGEREF _Toc191904607 \\h 15\r\n5.5.3Dynamic constructional analysis PAGEREF _Toc191904608 \\h 15\r\n5.5.3.1Component state machine PAGEREF _Toc191904609 \\h 15\r\n5.5.3.2Constructional scenario PAGEREF _Toc191904610 \\h 16\r\n5.5.4Constructional interfaces PAGEREF _Toc191904611 \\h 16\r\n5.5.5Constructional architecture PAGEREF _Toc191904612 \\h 16\r\n6OUTPUT REQUIREMENTS PAGEREF _Toc191904613 \\h 16\r\n6.1Functional requirements PAGEREF _Toc191904614 \\h 16\r\n6.1.1Requirements in normal condition PAGEREF _Toc191904615 \\h 16\r\n6.1.2Requirements in accident conditions PAGEREF _Toc191904616 \\h 18\r\n6.1.2.1Requirements during a crash/accident PAGEREF _Toc191904617 \\h 18\r\n6.1.2.2Requirements after a crash/accident PAGEREF _Toc191904618 \\h 19\r\n6.1.3Requirements in generic environments PAGEREF _Toc191904619 \\h 19\r\n6.1.3.1Montage/Assembly PAGEREF _Toc191904620 \\h 19\r\n6.1.3.1.1Creation of Design fits for easy and error proof assembly PAGEREF _Toc191904621 \\h 22\r\n6.1.3.2After Sales/Service PAGEREF _Toc191904622 \\h 22\r\n6.2Performance requirements PAGEREF _Toc191904623 \\h 23\r\n6.2.1Noise PAGEREF _Toc191904624 \\h 23\r\n6.2.1.1Functional noise PAGEREF _Toc191904625 \\h 23\r\n6.2.1.1.1Snap Back noise PAGEREF _Toc191904626 \\h 23\r\n6.2.1.1.1.1Handle operation: Vibration, Squeak and Rattle PAGEREF _Toc191904627 \\h 25\r\n6.2.1.1.2Aerodynamic noise PAGEREF _Toc191904628 \\h 25\r\n6.2.1.1.2.1Acoustic sealing PAGEREF _Toc191904629 \\h 25\r\n6.2.1.1.2.2Aeroacoustics noise (Stellantis Vehicle Test) PAGEREF _Toc191904630 \\h 26\r\n6.2.1.1.3Spurious noise (STELLANTIS Testing) PAGEREF _Toc191904631 \\h 28\r\n6.2.1.2Water-tightness/retention and freeze test PAGEREF _Toc191904632 \\h 30\r\n6.2.2Fluid Compatibility PAGEREF _Toc191904633 \\h 32\r\n6.2.3Automatic Car Wash PAGEREF _Toc191904634 \\h 32\r\n6.2.4HANDLE Performance Criteria PAGEREF _Toc191904635 \\h 33\r\n6.2.4.1Drawings for test forces/directions and test requirements PAGEREF _Toc191904636 \\h 33\r\n6.2.4.2Cable Pull/travel requirement PAGEREF _Toc191904637 \\h 34\r\n6.2.4.3Conditions of increased humidity PAGEREF _Toc191904638 \\h 34\r\n6.2.4.4Rigidity and resistance PAGEREF _Toc191904639 \\h 35\r\n6.2.4.4.1Strength Test - Full Open Position PAGEREF _Toc191904640 \\h 35\r\n6.2.4.4.2Strength Test- Inertia lock manually engaged PAGEREF _Toc191904641 \\h 35\r\n6.2.4.4.3Strength Test - Horizontal Load at handle\u0027s vertex - Full open PAGEREF _Toc191904642 \\h 35\r\n6.2.4.4.4Strength Test - Longitudinal Load-Rest Position PAGEREF _Toc191904643 \\h 36\r\n6.2.4.4.5Strength Test - Longitudinal Load-Full Open Position PAGEREF _Toc191904644 \\h 36\r\n6.2.4.4.6Stiffness of the HANDLE to an horizontal load, handle at rest PAGEREF _Toc191904645 \\h 36\r\n6.2.4.4.7Resistance and rigidity of the bracket when flexed PAGEREF _Toc191904646 \\h 37\r\n6.2.4.4.7.1Load on the front of the bracket PAGEREF _Toc191904647 \\h 37\r\n6.2.4.4.7.2Load on the rear of the bracket PAGEREF _Toc191904648 \\h 38\r\n6.2.4.4.8Traction Load PAGEREF _Toc191904649 \\h 39\r\n6.2.4.4.8.1Static traction load on the handle PAGEREF _Toc191904650 \\h 39\r\n6.2.4.4.8.2Dynamic traction load on the handle PAGEREF _Toc191904651 \\h 39\r\n6.2.4.4.9Other requirements PAGEREF _Toc191904652 \\h 40\r\n6.2.4.4.9.1Function check in vibration testing PAGEREF _Toc191904653 \\h 40\r\n6.2.4.4.9.2Handle is instrumented in a position of displacement: PAGEREF _Toc191904654 \\h 40\r\n6.2.4.4.9.3Handle is not instrumented: PAGEREF _Toc191904655 \\h 40\r\n6.2.4.4.9.4Tight fit of gasket PAGEREF _Toc191904656 \\h 41\r\n6.2.4.4.9.5Performance of the tightening fixing torque PAGEREF _Toc191904657 \\h 41\r\n6.2.4.4.9.6Beauty cover performance PAGEREF _Toc191904658 \\h 41\r\n6.2.4.5Performance under small impacts PAGEREF _Toc191904659 \\h 41\r\n6.2.4.5.1Drop Test (to be performed with B21 7120 M3.3 free fall) PAGEREF _Toc191904660 \\h 41\r\n6.2.4.5.2Axis holding - To avoid the axis getting out of place. PAGEREF _Toc191904661 \\h 42\r\n6.2.4.6Performance on impact PAGEREF _Toc191904662 \\h 42\r\n6.2.4.6.1Side impact PAGEREF _Toc191904663 \\h 42\r\n6.2.4.6.2Regulation test ECER11 / FMVSS206 PAGEREF _Toc191904664 \\h 42\r\n6.2.4.6.3Acceleration PAGEREF _Toc191904665 \\h 43\r\n6.2.4.6.4Front and rear impacts PAGEREF _Toc191904666 \\h 47\r\n6.2.4.6.4.1Front and rear impact tests PAGEREF _Toc191904667 \\h 47\r\n6.2.4.7Bezel Lock Cylinder and key cylinder installation PAGEREF _Toc191904668 \\h 47\r\n6.2.4.7.1Assembly/disassembly requirements of the bezel PAGEREF _Toc191904669 \\h 47\r\n6.2.4.7.2Door cylinder and socket screw/clamp torque test PAGEREF _Toc191904670 \\h 48\r\n6.2.4.7.3Key Cylinder Retention PAGEREF _Toc191904671 \\h 49\r\n6.2.4.7.3.1Key Cylinder Twist-Out Test PAGEREF _Toc191904672 \\h 49\r\n6.2.4.7.3.2Key Cylinder Push Out Test PAGEREF _Toc191904673 \\h 49\r\n6.3External interfaces requirements PAGEREF _Toc191904674 \\h 49\r\n6.4Operational requirements PAGEREF _Toc191904675 \\h 50\r\n6.4.1Mission profile PAGEREF _Toc191904676 \\h 50\r\n6.4.2Lifetime PAGEREF _Toc191904677 \\h 50\r\n6.4.3Ergonomics and human factors PAGEREF _Toc191904678 \\h 50\r\n6.4.3.1Appearance, finish and perceptual quality PAGEREF _Toc191904679 \\h 50\r\n6.4.3.2Gap between handle cover and bezel PAGEREF _Toc191904680 \\h 50\r\n6.4.3.3Operating force in F1 PAGEREF _Toc191904681 \\h 51\r\n6.4.3.4Operating force F1 in minus temperature PAGEREF _Toc191904682 \\h 52\r\n6.4.4RAMS requirements PAGEREF _Toc191904683 \\h 52\r\n6.4.4.1Safety requirements PAGEREF _Toc191904684 \\h 52\r\n6.4.4.1.1Functional dreaded events of the component PAGEREF _Toc191904685 \\h 53\r\n6.4.4.1.2Technical Safety Requirements (TSR ISO26262) PAGEREF _Toc191904686 \\h 55\r\n6.4.4.1.3Threats and Stresses requirements PAGEREF _Toc191904687 \\h 58\r\n6.4.4.2Availability/Reliability/Durability Requirements PAGEREF _Toc191904688 \\h 59\r\n6.4.4.3Validation requirements PAGEREF _Toc191904689 \\h 61\r\n6.4.4.3.1Required confidence level PAGEREF _Toc191904690 \\h 61\r\n6.4.4.3.2Demonstration of Dependability requirements PAGEREF _Toc191904691 \\h 62\r\n6.4.4.3.3Required validation PAGEREF _Toc191904692 \\h 62\r\n6.4.5Maintainability PAGEREF _Toc191904693 \\h 62\r\n6.4.6Product quality PAGEREF _Toc191904694 \\h 62\r\n6.4.7Protection against hostility PAGEREF _Toc191904695 \\h 63\r\n6.4.7.1Axial Loading PAGEREF _Toc191904696 \\h 63\r\n6.4.7.2Push in Test PAGEREF _Toc191904697 \\h 63\r\n6.4.7.3Tong Load PAGEREF _Toc191904698 \\h 63\r\n6.4.7.4Bending Test PAGEREF _Toc191904699 \\h 64\r\n6.4.8Resources reserve capacity of the system PAGEREF _Toc191904700 \\h 64\r\n6.4.9Document requirements PAGEREF _Toc191904701 \\h 64\r\n6.5Constraint requirements PAGEREF _Toc191904702 \\h 64\r\n6.5.1Regulation and consumerism PAGEREF _Toc191904703 \\h 64\r\n6.5.2Weight and other physical characteristics PAGEREF _Toc191904704 \\h 65\r\n6.5.3Design and manufacturing PAGEREF _Toc191904705 \\h 65\r\n6.5.3.1Studies and/or imposed solutions PAGEREF _Toc191904706 \\h 65\r\n6.5.3.1.1Development of Thatcham provision PAGEREF _Toc191904707 \\h 65\r\n6.5.3.1.2Electrical connection interface PAGEREF _Toc191904708 \\h 65\r\n6.5.3.2Materials PAGEREF _Toc191904709 \\h 65\r\n6.5.3.3Manufacturing/EOL Testing PAGEREF _Toc191904710 \\h 66\r\n6.5.3.3.1Grease PAGEREF _Toc191904711 \\h 66\r\n6.5.3.4Marking of the Components or Parts PAGEREF _Toc191904712 \\h 66\r\n6.5.4Traceability and configuration PAGEREF _Toc191904713 \\h 66\r\n6.5.5Transportability, storage, and packaging PAGEREF _Toc191904714 \\h 66\r\n6.5.6Flexibility and extension PAGEREF _Toc191904715 \\h 66\r\n6.5.7Withdrawal PAGEREF _Toc191904716 \\h 67\r\n6.5.8Environment conditions PAGEREF _Toc191904717 \\h 67\r\n6.5.9Handle assembly Prototypes PAGEREF _Toc191904718 \\h 67\r\n6.6Integration and validation requirements PAGEREF _Toc191904719 \\h 67\r\n6.6.1Durability Tests PAGEREF _Toc191904720 \\h 67\r\n6.6.1.1Test condition and Setup PAGEREF _Toc191904721 \\h 67\r\n6.6.1.2Cycle testing PAGEREF _Toc191904722 \\h 67\r\n6.6.1.3Cycle Description PAGEREF _Toc191904723 \\h 69\r\n6.6.1.3.1Before start of testing: PAGEREF _Toc191904724 \\h 71\r\n6.6.1.3.2During testing: PAGEREF _Toc191904725 \\h 71\r\n6.6.1.3.3After regular cycle testing: PAGEREF _Toc191904726 \\h 71\r\n6.6.1.4Durability Test for lock/unlock function (by key) PAGEREF _Toc191904727 \\h 71\r\n6.6.1.4.1Test conditions PAGEREF _Toc191904728 \\h 71\r\n6.6.1.4.2Lock/unlock cycles testing PAGEREF _Toc191904729 \\h 72\r\n6.6.1.4.2.1Description of a cycle PAGEREF _Toc191904730 \\h 73\r\n6.6.1.4.2.2Angular deviation of lock cylinder PAGEREF _Toc191904731 \\h 73\r\n6.6.2Robustness of bracket/Release Lever PAGEREF _Toc191904732 \\h 73\r\n6.6.3Cycle testing with parts out of mass production PAGEREF _Toc191904733 \\h 74\r\n6.6.4Corrosion testing PAGEREF _Toc191904734 \\h 74\r\n6.6.5Electronic/mechanical Testing PAGEREF _Toc191904735 \\h 74\r\n7PARAMETERS PAGEREF _Toc191904736 \\h 74\r\n8TRACEABILITY MATRIX PAGEREF _Toc191904737 \\h 74\r\n9APPENDIX / ANNEX PAGEREF _Toc191904738 \\h 74\r\n9.1Appendix A - Assembly of the handle at STELLANTIS PAGEREF _Toc191904739 \\h 74\r\n9.2Appendix B - Detailed Protocol of Noise testing (example) PAGEREF _Toc191904740 \\h 75\r\n9.2.1Documents/ information necessary PAGEREF _Toc191904741 \\h 75\r\n9.2.2Methods necessary PAGEREF _Toc191904742 \\h 75\r\n9.2.3Test sequence PAGEREF _Toc191904743 \\h 75\r\n9.2.3.1Basic schema PAGEREF _Toc191904744 \\h 75\r\n9.2.3.1.1First time, acoustic characteristics of test conditions PAGEREF _Toc191904745 \\h 76\r\n9.2.3.1.2Second time, acoustic characteristics of the HANDLE body when new PAGEREF _Toc191904746 \\h 76\r\n9.2.3.1.3Third time; ageing of the HANDLE due to operation. PAGEREF _Toc191904747 \\h 76\r\n9.2.3.1.4Fourth time; HANDLE acoustic charact. after endurance operation of 3 years PAGEREF _Toc191904748 \\h 76\r\n9.2.3.1.5Fifth time; ageing of the HANDLE during driving (at ambient temperature) PAGEREF _Toc191904749 \\h 76\r\n9.2.3.1.6Sixth time; acoustic characteristics of the aged HANDLE PAGEREF _Toc191904750 \\h 77\r\n9.3Appendix C \u2013 ODH Cold Testing PAGEREF _Toc191904751 \\h 77\r\n9.3.1Principe of test PAGEREF _Toc191904752 \\h 77\r\n9.3.2Test mean PAGEREF _Toc191904753 \\h 77\r\n9.3.3Mode operational PAGEREF _Toc191904754 \\h 77"
+    },
+    {
+      "level": 1,
+      "title": "Table of updates",
+      "content": "Index\r\nDate\r\nAuthor\r\nModification account\r\nA\r\n23.03.23\r\nC.LEIRAS\r\nTS CREATION\r\nB\r\n24.07.23\r\nF.FOIS\r\nUpadted with HANNES KOSE - Documents added:\r\nSD-11401 01446_22_00407\r\nSPB-00001-04\r\nB20 0120\r\nUpadted with J.C. HANIN - Documents added:\r\n01005_19_02073 - DOC-4669902\r\nC\r\n07.09.23\r\nF.FOIS\r\nUpadted with E. FERRET - Documents added:\r\n01005_19_02073 - DOC-1630315\r\n01005_23_00065 - DOC-4101261\r\n01005_23_000468 - DOC-4334065\r\nUpadted with DELPHINE JAXEL - Documents added:\r\n01378_23_02419\r\nD\r\n12.09.23\r\nF.FOIS\r\nSGV update with S. FONFREDE\r\nE\r\n20.09.23\r\nF.FOIS\r\nRAM updated with A. MELLAL\r\nF\r\n30.05.24\r\nC. LEIRAS\r\nCreation of Design fits for easy and error proof assembly 6.1.3.1.1\r\nCreation of COE ESSAIS AU FROID/ ODH COLD TESTING 6.6.6\r\nG\r\n01.10.24\r\nF.FOIS\r\nUpdated 2.2.2 \u2013 General description of the system\r\nUpdated 2.2.2.1 \u2013 Updated bracket content\r\nUpdated 2.2.2.2 \u2013 Updated handle content\r\nUpdated 2.2.2.3 Design constraints \u2013 Patent solution\r\nUpdated 3.2.2. Standard/List:\r\n01005_23_00468 (correct standard number)\r\nPF.901106 (add docinfo reference)\r\nRemoved norms A10 2260 / B20 0110 and replaced with norms CS-11000\r\nRemoved norm B396120 and replaced with norm 00978_13_00762\r\nAdded norm B72 0200\r\nUpdated 6.1.3.1 \u2013 Update Assembly requirement of bowden cable on the bracket and assembly of handle/bracket on the door\r\nUpdated 6.2.1.1.1 Snap back noise target (was 100 \u2013 become 70)\u00A0; updated images test description\r\nUpdated 6.2.1.1.2.1 - Removed norm B396120 and replaced with norm 00978_13_00762\r\nUpdated 6.2.1.2 - Updated images test description\r\nUpdated 6.2.2 \u2013 Added test requirement\r\nUpdated 6.2.4.1 / 6.2.4.2 - Updated test description images\r\nUpdated 6.2.4.3 \u2013 Added humidity pre-condition requirements\r\nUpdated from 6.2.4.4 to 6.2.4.4.6 \u2013 Added component batches required\r\nUpdated 6.2.4.4.7 / 6.2.4.4.7.1 / 6.2.4.4.7.2 - Updated test description images and methodology\r\nUpdated 6.2.4.4.8.1 / 6.2.4.4.8.2 - Updated test description images and methodology\r\nUpdated 6.2.4.4.9.2 \u2013 Updated description point a\r\nUpdated 6.2.4.4.9.5 \u2013 Updated torque values and removed verification point \u201Cd\u201D\r\nUpdated 6.2.4.5.2 Axial holding \u2013 add max axis displacement value admitted\r\nUpdated 6.2.4.6.3 \u2013 Updated Zone B-C specification\r\nUpdated 6.2.4.7.2 \u2013 Updated torque values\r\nUpdated 6.4.3.2 \u2013 Updated test requirements (temperature/humidity range)\r\nUpdated 6.4.7.1. - Updated images test description\r\nUpdated 6.4.9 Document required \u2013 added PMR document\r\nUpdated 6.5.3.1 \u2013 Updated sheet metal thickness\r\nAdded 6.5.3.1.3 - Creation of Electrical connection interface\r\nUpdated 6.5.3.4 \u2013 Updated reference norms\r\nAdded 6.5.9 - Creation of Handle assembly Prototypes\r\nUpdated 6.6.1.2 \u2013 Updated handle version to test\r\nUpdated 6.6.1.3 \u2013 Updated images test description\r\nRemoved point 6.6.6 and created 9.3 - Appendix C - COE ESSAIS AU FROID/ ODH COLD TESTING\r\nUpdated 9.1 Appendix A \u2013 Assembly of the handle at Stellantis\r\nH\r\n01.06.25\r\nF.FOIS\r\nUpdated 2.2.2 \u2013 General description of the system\r\nUpdated 3.2.2. \u2013 Removed std. CS.00081 and replaced with CS.00251 (corrosion requirements)Updated 3.2.2. Standard/List: Removed norm B720200 and replaced with MS.90528\r\nUpdated 6.1.3.1 \u2013 Updated torque requirements\r\nUpadted 6.2.4.4.1 \u2013 Added requirement note\r\nUpdated 6.2.4.6 \u2013 Updated tests reference\r\nUpdated 6.2.4.6.2 \u2013 Updated max cable pull value admitted\r\nUpdated 6.2.4.7.2 \u2013 Removed verification point d\u2019\r\nUpdated 6.4.3.2 \u2013 Updated gap requirement\r\nUpdated 6.4.3.3 \u2013 Updated opening force requirement\r\nUpdated 6.5.3.1 \u2013 Updated points list\r\nUpdated 6.5.3.1.2 \u2013 Removed \u201Ccone development\u201D and replaced by \u201CElectrical connection interface\u201D\r\nRemoved 6.5.3.1.3\r\nUpdated 6.6.1.4.2.2 - Added test procedure\r\nUpdated 9.1 Appendix A - Assembly of the handle at Stellantis\r\nI\r\n21.07.25\r\nF.FOIS\r\nUpdated 2.2.2 \u2013 General description of the system\r\nUpdated 2.2.2.1 \u2013 Updated bracket content\r\nUpdated 6.1.3.1 \u2013 Updated RPM requirements"
+    },
+    {
+      "level": 1,
+      "title": "PURPOSE AND SCOPE OF APPLICATION",
+      "content": ""
+    },
+    {
+      "level": 2,
+      "title": "Purpose",
+      "content": "Note: In the event of conflict between the English and domestic language, the English language shall take precedence\r\nThis specification establishes the Outside Door Handle Assembly (also referred to as handle\u0027, draw style) component requirements for use in passenger cars, vans, and and other body styles engineered by Groupe STELLANTIS.  Minimum requirements for the performance, function and reliability as well as the corresponding validation tests are identified."
+    },
+    {
+      "level": 2,
+      "title": "Scope",
+      "content": ""
+    },
+    {
+      "level": 3,
+      "title": "System development context",
+      "content": "The handle is a component of the door subsystem providing the function of releasing the door (swing) for ingress/egress from the exterior of the vehicle.  Additionally, the handle is used to pull the door into the open position to allow entry/exit.  The handle may also serve as the location for passive entry system electronics, NFC (Near Field Communication) and key cylinder packaging for locking and unlocking the vehicle.  The handle shall provide these functions under various environmental conditions and above all shall meet specified safety requirements.\r\nTesting requirements noted in this specification require physical tests to be run in a defined sequence of environmental conditions, with a defined cycle count in each environment, in an attempt to approximate actual usage conditions, while balancing the supplier\u0027s (and STELLANTIS) testing time, resources, and expenses with realized benefit.\r\nHowever, the product shall function as specified, in any of the specified environments, at the time of delivery.\r\nRocking handle, called Module 2, is an external handle develop by Stellantis and the suppliers that must comply with worldwide component and vehicle standards, regulations and requirements of national governments. This includes customs requirements of any government.\r\nModule 2 external handle needs to fulfill worldwide requirements as will be sold in NA and European Country."
+    },
+    {
+      "level": 3,
+      "title": "General description of the system",
+      "content": "Following components/variants are in scope:\r\nVersion\r\nDescription\r\nComments\r\nLCR\r\nLong Cover Right\r\nFor Front and Rear Door, mirrored (means different between Left and right)\r\nLCL\r\nLong Cover Left\r\nFor Rear Door\r\nSCLLNA\r\nShort Cover Left for Lock\u002BNFC\u002BADML (with cover cap)\r\nFor Front Door - Removable cover cap\r\nLCRNA\r\nLong Cover Right \u002BNFC\u002BADML\r\nonly for front RHD version\r\nSCM\r\nShort Cover Meft (with cover cap - mecha version w/o marking)\r\nonly for front RHD version\r\nBracketRM\r\nBracket Right \u2013 Mecha (w/o slider for door lock)\r\nSame for Front and Rear Door (mirrored, means different between Left and Right). All performance criteria balanced between Mechanical and Electronic handles\r\nBracketLM-S\r\nBracket Left \u2013 Mecha (w/o Slider for door lock)\r\nfor Rear Door. All performance criteria balanced between Mechanical and Electronic handles\r\nBracketLE\r\nBracket Left - Elect.\r\nfor Front Door. All performance criteria balanced between Mechanical and Electronic handles\r\nBracketRE\r\nBracket Right - Elect.\r\nOnly for RHD Front Door. All performance criteria balanced between Mechanical and Electronic handles\r\nBracketLM\u002BS\r\nBracket Left \u2013 Mecha (with Slider for door lock)\r\nOnly for RHD Front Door. All performance criteria balanced between Mechanical and Electronic handles"
+    },
+    {
+      "level": 4,
+      "title": "Bracket content",
+      "content": "The bracket will be compatible with to different door panel material (steel and aluminum)"
+    },
+    {
+      "level": 4,
+      "title": "Handle content",
+      "content": ""
+    },
+    {
+      "level": 4,
+      "title": "Design constraints",
+      "content": "Final design to work out with Stellantis design and engineering.\r\nThe supplier have to identify if any of the solution proposed is protected by patent (for example: Inertial system\u2026).\r\nAnd additionally the supplier have to certify that is not using any third party patented solution."
+    },
+    {
+      "level": 4,
+      "title": "Functional volume",
+      "content": "The supplier proposal must fulfill the limits and interfaces of the Functional volume provided by Stellantis.\r\nThe bracket will be compatible with to different door panel material (stell and aluminium)"
+    },
+    {
+      "level": 1,
+      "title": "QUOTED DOCUMENTS AND TERMINOLOGY",
+      "content": ""
+    },
+    {
+      "level": 2,
+      "title": "Reference documents",
+      "content": "Note: Only the latest approved standards are applicable unless otherwise specified.  In the event of a conflict between the text of this specification and the documents cited herein, the text of this specification takes precedence.  Nothing in this specification, however, supersedes applicable laws and regulations unless a specific exemption has been obtained.  The order of precedence in these cases is as follows:\r\na.  National Government documents\r\nb.  State or Province level documents\r\nc.  Local level documents\r\nd.  STELLANTIS documents"
+    },
+    {
+      "level": 2,
+      "title": "Applicable documents",
+      "content": ""
+    },
+    {
+      "level": 3,
+      "title": "Regulations",
+      "content": "Suppliers must comply with worldwide component and vehicle standards and regulations where applicable.  Requirements of national governments shall apply even if not explicitly stated below.  This includes customs requirements of any government.\r\nModule 2 external handle needs to fulfill worldwide requirements as will be sold in NA and European Country.\r\nIdentification\r\nTitle\r\nLink\r\nEC/96/79\r\nFrontal collision\r\nMVSS208\r\nFrontal Collision USA\r\nCMVSS208\r\nFrontal Collision Canada\r\nEC/96/27-ECE R95.01\r\nSide Collision\r\nECE 11 / FMVSS206\r\nDoor latches and door retention components (30g requirement)\r\nFMVSS 214\r\nSide Collision USA\r\nCFMVSS 214\r\nSide Collision Canada\r\nECE 26\r\nRegulation of External Projections\r\nIIHS 140\r\nUSA Highway side crash\r\n2002/95/EC\r\nRestriction of Hazardous Substance Directive\r\nECE R32/34\r\nRear Collision\r\nFMVSS 301\r\nRear Collision USA\r\nTHATCHAM\r\nThe British Insurance Industry\u0027s Criteria for Vehicle Security"
+    },
+    {
+      "level": 3,
+      "title": "Standards / Norms",
+      "content": "The HANDLE corresponds to general STELLANTIS specifications (approved materials, resistance to humidity, frost, temperature, salty mist, dust, light, minimum radius, corrosion, ...), and to the norms of Electronic Technical Specifications.\r\nThe coating of each part is set out on the drawing and the coating is checked by following the specific methods mentioned in the respective norms for each type of coating.\r\nThe general instructions for product supply must conform to norm CS-11000. The specific responsibilities of the supplier towards STELLANTIS are described in norm CS-11000 \u201CSupply of products and parts - general instructions\u201D \u00A7 B \u201CSupplier responsibilities\u201D.\r\nIdentification\r\nTitle\r\nLink\r\nA10 0250\r\nTechnical Specification Safety regulation\r\nA32 4140\r\nUnspecified Tolerances Plastic Parts\r\nA32 4250\r\nUnspecified Tolerances Aluminum and Die Castings\r\nB20 0120\r\nFournitures serie prescriptions generales apr\u00E8s-vente\r\nGlobal supplier serviceability requirements\r\nB20 1315\r\nSupply of Plastic Parts, Identification Marking of Material for recycling purposes\r\nB20 1415\r\nSupply of Rubber Parts, Identification Marking of Material for recycling purposes\r\nB28 4185-009\r\nBack Opening Tailgate and Trunk Electric Latch\r\nB38 4045\r\nBody Mechanismus. Measurement of the stress applied to the controls\r\nB38 4140\r\nBold of Door Cold tests\r\n00978_13_00762\r\nMeasuring the acoustic insulation of crossings in the isolation cabin\r\nB62 0020\r\nPlastic Materials and Thermosetting conventional Designations\r\nD47 1309\r\nAutomotive Equipment materials and Parts Ageing following a given climatic cycle\r\nR99 1020\r\nCAISSE PEINTE EQUIPEE STRUCTURE - BAIE ET TOIT - FACE AV / AR / LAT CONTRAINTES REGLEMENTAIRES PERIMETRE METIER CCHE\r\n01378_23_02419\r\nTechnical Specification Materials (PMXP)\r\n01005_19_02073\r\nDOC-1630315\r\nDoor latch and Handles CAE requested Deliveries\r\n01005_23_00065\r\nDOC-4101261\r\nMaterials CAE Requirements\r\n01005_23_00468\r\nDOC-4334065\r\nLS Dyna Generic Supplier Guideline\r\nSD-11401HYPERLINK \u0022https://docinfogroupe.stellantis.com/ead/doc/ref.01446_22_00407/v.dp/pj\u0022\r\n(docinfo 01446_22_00407)\r\nDesign for service\r\nSPB-00001-04\r\nSource Package boilerplate - Serviceability and service technical\r\nPF.901106\r\n(docinfo 01276_22_00116)\r\nComponent traceability\r\nCS-11000\r\n( docinfo 01446_22_00053)\r\nTrademark and Product Brand identification on part\r\nMS.90528\r\nExterior organic coatings performance requirements paint/pvd/paint over crome/deco finished\r\nCS.00251\r\nCorrosion requirements \u2013 vehicle systems and components"
+    },
+    {
+      "level": 2,
+      "title": "Glossary",
+      "content": "Term\r\nDefinition\r\nComponent\r\nSee Systems Engineering Glossary\r\nPart\r\nSee Systems Engineering Glossary"
+    },
+    {
+      "level": 2,
+      "title": "Acronyms",
+      "content": "Acronym\r\nDefinition\r\nRAMS\r\nReliability, Availability, Maintainability, Safety\r\nFBS\r\nFunctional Breakdown Structure\r\nPCP\r\nPlan Condition Piece\r\nSDF\r\nFunctional Safety\r\nTSR\r\nTechnical Safety Requirement\r\nFSR\r\nFunctional Safety Requirement\r\nCOE\r\nExterior opening order"
+    },
+    {
+      "level": 1,
+      "title": "OPERATIONAL ANALYSIS",
+      "content": ""
+    },
+    {
+      "level": 2,
+      "title": "Missions",
+      "content": ""
+    },
+    {
+      "level": 2,
+      "title": "Input requirements summary",
+      "content": ""
+    },
+    {
+      "level": 2,
+      "title": "Context diagram \u0026 external interfaces",
+      "content": ""
+    },
+    {
+      "level": 2,
+      "title": "Lifecycle",
+      "content": ""
+    },
+    {
+      "level": 2,
+      "title": "Uses Cases",
+      "content": ""
+    },
+    {
+      "level": 2,
+      "title": "Operational scenarios",
+      "content": ""
+    },
+    {
+      "level": 1,
+      "title": "COMPONENT ARCHITECTURE",
+      "content": ""
+    },
+    {
+      "level": 2,
+      "title": "General design constraints",
+      "content": ""
+    },
+    {
+      "level": 2,
+      "title": "Configuration and diversity",
+      "content": ""
+    },
+    {
+      "level": 2,
+      "title": "Physical characteristics",
+      "content": ""
+    },
+    {
+      "level": 2,
+      "title": "Functional architecture",
+      "content": ""
+    },
+    {
+      "level": 3,
+      "title": "Static functional architecture",
+      "content": ""
+    },
+    {
+      "level": 4,
+      "title": "Functional Breakdown Structure",
+      "content": ""
+    },
+    {
+      "level": 4,
+      "title": "Functional interfaces",
+      "content": ""
+    },
+    {
+      "level": 4,
+      "title": "Functional architecture",
+      "content": ""
+    },
+    {
+      "level": 3,
+      "title": "Dynamic functional analysis",
+      "content": ""
+    },
+    {
+      "level": 4,
+      "title": "Functional state machine",
+      "content": ""
+    },
+    {
+      "level": 4,
+      "title": "Functional scenario",
+      "content": ""
+    },
+    {
+      "level": 2,
+      "title": "Constructional architecture",
+      "content": ""
+    },
+    {
+      "level": 3,
+      "title": "Product Breakdown Structure",
+      "content": ""
+    },
+    {
+      "level": 3,
+      "title": "Static constructional architecture",
+      "content": ""
+    },
+    {
+      "level": 3,
+      "title": "Dynamic constructional analysis",
+      "content": ""
+    },
+    {
+      "level": 4,
+      "title": "Component state machine",
+      "content": ""
+    },
+    {
+      "level": 4,
+      "title": "Constructional scenario",
+      "content": ""
+    },
+    {
+      "level": 3,
+      "title": "Constructional interfaces",
+      "content": ""
+    },
+    {
+      "level": 3,
+      "title": "Constructional architecture",
+      "content": ""
+    },
+    {
+      "level": 1,
+      "title": "OUTPUT REQUIREMENTS",
+      "content": ""
+    },
+    {
+      "level": 2,
+      "title": "Functional requirements",
+      "content": ""
+    },
+    {
+      "level": 3,
+      "title": "Requirements in normal condition",
+      "content": "N\u00B0Requirement\r\nContent of the Requirement\r\nREQ-0877949 A\r\nGEN-F1-CD-FUNC-01\r\nOwner : u054762\r\nGrade:\r\nFlexibility :\r\nto allow the user to access the vehicle\r\nGrab/Pull handle, allow entry\r\nLock/unlock  the door with Key cylinder rotation\r\nIdentification action/mode if ADML\r\nIdentification  action/mode if NFC\r\nComments\r\nLCDV Simplified EN\r\nN\u00B0Requirement\r\nContent of the Requirement\r\nREQ-0877950 A\r\nGEN-F2-CD-FUNC-02\r\nOwner : u054762\r\nGrade:\r\nFlexibility :\r\nto provide excellent appearance\r\nNo burrs, smooth surface\r\nPerceived quality\r\nPaint Quality\r\nNo dents\r\nComments\r\nLCDV Simplified EN\r\nN\u00B0Requirement\r\nContent of the Requirement\r\nREQ-0877951 A\r\nGEN-F3-CD-FUNC-03\r\nOwner : u054762\r\nGrade:\r\nFlexibility :\r\nto protect against theft attacks\r\nWithstand mechanical- and electronic Theft attacks\r\nComments\r\nLCDV Simplified EN\r\nN\u00B0Requirement\r\nContent of the Requirement\r\nREQ-0877952 A\r\nGEN-F4-CD-FUNC-04\r\nOwner : u054762\r\nGrade:\r\nFlexibility :\r\nto avoid/reduced  intrusion of\r\nWater/liquids\r\nGas, Air\r\nSolids\r\nComments\r\nLCDV Simplified EN\r\nN\u00B0Requirement\r\nContent of the Requirement\r\nREQ-0877953 A\r\nGEN-Fc5-CD-FUNC-05\r\nOwner : u054762\r\nGrade:\r\nFlexibility :\r\nto support\r\nNo squeak/noise during operation\r\nLow snap back noise\r\nNo scratchy feeling during operation\r\nMeet Ergonomic requirements\r\nComments\r\nLCDV Simplified EN\r\nN\u00B0Requirement\r\nContent of the Requirement\r\nREQ-0877954 A\r\nGEN-Fc6-CD-FUNC-06\r\nOwner : u054762\r\nGrade:\r\nFlexibility :\r\nto be resistant in terms of\r\nChemical fluids\r\nComments\r\nLCDV Simplified EN\r\nN\u00B0Requirement\r\nContent of the Requirement\r\nREQ-0877955 A\r\nGEN-Fc9-CD-FUNC-07\r\nOwner : u054762\r\nGrade:\r\nFlexibility :\r\nto guarantee electronic function\r\nelectronic lock/unlock sensor\r\nNFC\r\nComments\r\nLCDV Simplified EN\r\nN\u00B0Requirement\r\nContent of the Requirement\r\nREQ-0877956 A\r\nGEN-Fc10-CD-FUNC-08\r\nOwner : u054762\r\nGrade:\r\nFlexibility :\r\nto protect against theft attacks\r\nNo electronic sensor/NFC activation for not authorized users\r\nComments\r\nLCDV Simplified EN"
+    },
+    {
+      "level": 3,
+      "title": "Requirements in accident conditions",
+      "content": ""
+    },
+    {
+      "level": 4,
+      "title": "Requirements during a crash/accident",
+      "content": "N\u00B0Requirement\r\nContent of the Requirement\r\nREQ-0877959 A\r\nGEN-F1-CD-FUNC-09\r\nOwner : u054762\r\nGrade:\r\nFlexibility :\r\nto protect passengers\r\nMeet all legal requirement\r\nNo unlatching of any door\r\nComments\r\nLCDV Simplified EN\r\nN\u00B0Requirement\r\nContent of the Requirement\r\nREQ-0877963 A\r\nGEN-F3-CD-FUNC-10\r\nOwner : u054762\r\nGrade:\r\nFlexibility :\r\nto protect other people\r\nNo separation of handle from door\r\nNo \u201Cflying\u201D fragments\r\nComments\r\nLCDV Simplified EN"
+    },
+    {
+      "level": 4,
+      "title": "Requirements after a crash/accident",
+      "content": "N\u00B0Requirement\r\nContent of the Requirement\r\nREQ-0877960 A\r\nGEN-F1-CD-FUNC-11\r\nOwner : u054762\r\nGrade:\r\nFlexibility :\r\nto allow door opening from the outside (front crash):\r\nHandle can be still pulled with reasonable efforts\r\nNo sharp edges\r\nNo handle breakage\r\nComments\r\nLCDV Simplified EN"
+    },
+    {
+      "level": 3,
+      "title": "Requirements in generic environments",
+      "content": ""
+    },
+    {
+      "level": 4,
+      "title": "Montage/Assembly",
+      "content": "Assembly the cable (STELLANTIS plant) in the handle bracket:\r\nAssembly force of the sleeve Abutment (embout de gaine) in the bracket interface without humidity: 40N Maxi as per direction F12.\r\nPull-out force of the sleeve abutment of the cable out of the bracket without humidity: 40N mini as per -F12\r\nPull-out force of the sleeve abutment of the cable out of the bracket with humidity: 20N mini as per -F12 (increased humidity will be as follows: 10 days at 40\u02DAC and 95% relative humidity and 2 hours at ambient temperature, in accordance with procedure D471309.\r\nFor the following clipping manipulations:\r\nA loss of maximum 20% from the 1st clipping is allowed after 5 clipping \u0026 unclipping operations.(with and without Humidity)\r\nAssembly the bracket and the handle on the door (STELLANTIS plant):\r\nInsert the bracket in the inner panel of the door and pre-clip the bracket by pre-cilp hooks.\r\nThen hooks are engaged on the door panel by horizontal travel. Pre-retention must be guaranteed by the hook design, and the same without locking cable and without the operator\u0027s intervention.\r\nGliding force of the pre-retention hooks on the door panel is 50N max.\r\nInsert the lock cylinder or socket into the bracket designated location.\r\nInsert the handle through the external door panel with a rotating motion. Then push the handle in order to engage the handle hook on the bracket and link the electrical connector (where present)\r\nGliding force of handle may not exceed 40N \u002B/-20 %\r\nTightening of the bracket eccentric screws to ensure the packaging between handle and bracket: torque screw  4 Nm \u002B/-15 % - speed 600 RPM (screw and other fixation characteristics are defined in APOQUA file: TBD)\r\nTightening of the bracket lateral screws to ensure the lock cylinder fixation: torque screw  4 Nm \u002B/-15 % - speed 600 RPM (screw and other fixation characteristics are defined in APOQUA file: TBD). The screw\u0027s tightening torque in the delivered position (on the metal clamp) must be less than the minimum fixation torque value and must be sufficient to prevent it from moving during transport.\r\nTightening of the bracket internal screws (screw with tolerance recovery system) to ensure the packaging between handle door panel: torque screw  4 Nm \u002B/-15 % - speed 600 RPM (screw and other fixation characteristics are defined in APOQUA file: TBD)\r\nAfter Sales/Service on the bracket clamp. Assembly Bezel (only driver door)\r\nThe lock cylinder or socket must be retained on the bracket until clamp in complete engaged (without pressing)\r\nOther requirements:\r\n- Give preference to clipping fasteners, various technical solutions are available from our suppliers.\r\n- The tightening torques used in the Stellantis plants must comply with standard B13 3116.\r\n- The choice of fasteners will be made by Stellantis.\r\n- In the case of fixing by metric screw, a metal insert must be provided to ensure no creep.\r\n- The Stellantis screws are with Pilot ends, so take this into account on the implantation length.\r\n- In the case of fixing by soft materials screws (MT), the interface on the part must respect\r\n-Tapping torque \u003C1 NM for an MT4.5 screw (\u003C2 NM for an MT6)\r\n-Tightening torque : 2 NM \u002B/- 15% for an MT 4.5 screw (4 NM \u002B/- 15% for an MT6)\r\nN\u00B0Requirement\r\nContent of the Requirement\r\nREQ-0877964 A\r\nGEN-F1-CD-FUNC-12\r\nOwner : u054762\r\nGrade:\r\nFlexibility :\r\nTo support the General Assembly operator\r\nNo sharp edges\r\nNo grease in gripping area\r\nEasy differentiation of similar parts\r\nDesign fits for easy and error proof assembly\r\nNo injury risks\r\nMatching Interfaces\r\nComments\r\nLCDV Simplified EN\r\nN\u00B0Requirement\r\nContent of the Requirement\r\nREQ-0877968 A\r\nGEN-F3-CD-FUNC-13\r\nOwner : u054762\r\nGrade:\r\nFlexibility :\r\nTo consider plant requirements\r\nComply with Stellantis Plant rules\r\nComments\r\nLCDV Simplified EN\r\nN\u00B0Requirement\r\nContent of the Requirement\r\nREQ-0877970 A\r\nGEN-F4-CD-FUNC-14\r\nOwner : u054762\r\nGrade:\r\nFlexibility :\r\nTo support easy assembly\r\nNo third hand assembly\r\nDesign fits for easy and error proof assembly\r\nMatch with all interfaces (metal sheet, cable, i.e.)\r\nComments\r\nLCDV Simplified EN\r\nN\u00B0Requirement\r\nContent of the Requirement\r\nREQ-0877971 A\r\nGEN-F5-CD-FUNC-15\r\nOwner : u054762\r\nGrade:\r\nFlexibility :\r\nTo match with interfaces\r\nMatch with door depression and cut outs\r\nWell integrated side door cylinder\r\nError proof installation of cable\r\nComments\r\nLCDV Simplified EN"
+    },
+    {
+      "level": 5,
+      "title": "Creation of Design fits for easy and error proof assembly",
+      "content": "The supplier needs to guarantee by their design (pokayoke) that there is only one correct possibility (orientation, position) to assembly the Bowden cable (sleeve abutment) into the Handle\u2019s bracket.\r\nThe supplier needs to guarantee by their design (pokayoke) that there is only one correct possibility (orientation, position) to assembly the Ball with wire (Tonneau metallique) into the Handle\u2019s bracket"
+    },
+    {
+      "level": 4,
+      "title": "After Sales/Service",
+      "content": "See 6.1.3.1 for Assembly, Dis-Assembly start from end backwards of the assembly instructions.\r\nN\u00B0Requirement\r\nContent of the Requirement\r\nREQ-0877961 A\r\nGEN-F1-CD-FUNC-16\r\nOwner : u054762\r\nGrade:\r\nFlexibility :\r\nto be conform with identification and location by dps information systems\r\nDPS (Direction of Parts for Service) information system\r\nInformation on component (i.e. Tag)\r\nComments\r\nLCDV Simplified EN\r\nN\u00B0Requirement\r\nContent of the Requirement\r\nREQ-0877962 A\r\nGEN-F2-CD-FUNC-17\r\nOwner : u054762\r\nGrade:\r\nFlexibility :\r\nto enable operator action\r\nDiagnostic\r\nAccessibility of fixing zones\r\nRepair\r\nMaintenance plan\r\nAccessibility of parts to be maintained\r\nGripping\r\nComments\r\nLCDV Simplified EN\r\nN\u00B0Requirement\r\nContent of the Requirement\r\nREQ-0877965 A\r\nGEN-F3-CD-FUNC-18\r\nOwner : u054762\r\nGrade:\r\nFlexibility :\r\nto avoid operator hazards\r\nGood Accessibility of fixing zones\r\nOperator safety, no risks from contact\r\nOperator safety, no risks from inhalation\r\nOperator safety, no risks from physical attacks\r\nComments\r\nLCDV Simplified EN"
+    },
+    {
+      "level": 2,
+      "title": "Performance requirements",
+      "content": ""
+    },
+    {
+      "level": 3,
+      "title": "Noise",
+      "content": ""
+    },
+    {
+      "level": 4,
+      "title": "Functional noise",
+      "content": ""
+    },
+    {
+      "level": 5,
+      "title": "Snap Back noise",
+      "content": "For these tests following equipment is needed:\r\na.  a microphone to measure the noise\r\nb.  a mono-axis accelerometer to determine the average impact speed of the handle\r\nThis test has to be performed on a vehicle door (completely fitted). If not available for DV/PV Testing, a rigid frame work or a sheet metal jig can be used as well. For MRD EL1, a complete assembled vehicle door shall be used.\r\nAcceptance is done across the whole audible frequency range (20HZ - 20KHZ) for a duration of 10s. Test to be performed 6 times in order to get representative results.\r\nSee sketch below for test set up, the measurement axis of the accelerometer is following the movement of the handle.\r\nPicture 5.0 shows the test set up.\r\nPicture 5.0\r\nAnalysis of acoustic data:\r\nThe analysis of the acoustic data can be done with:\r\na.  integration time : impulse\r\nb.  weighting A\r\nAnalysis of vibratory data:\r\nThe acceleration measures allow the average impact speed of the handle. This speed is measured from the temporal signal issued by the accelerometer and it is determined in the following manner:\r\na.  Note the time \u0394t between release and hit of the door skin (Figure 4)\r\nDivide the movement of the door skin (Graph 5.0) by the time \u0394t\r\nGraph 5.0\r\nTarget dB(A) is max. 70, snap back speed by spring."
+    },
+    {
+      "level": 6,
+      "title": "Handle operation: Vibration, Squeak and Rattle",
+      "content": "The requirement for the handle is to have absolutely no customer annoyance due to squeaks and rattles. There shall be no squeaks or rattles at any of the interfacing or contact points between parts. There shall be no squeaks or rattles between the cable end fitting and the interface to the handle assembly. The Supplier is to accept full responsibility to produce squeak and rattle free, subsystems and/or components.  They shall cooperate with STELLANTIS and/or other supplier to assure that no squeak and rattle annoyance occurs at the interface of their subsystem/component to the body, chassis or other subsystem / component.  If an objectionable noise is found during any phase of the program, it will be the supplier\u0027s responsibility, with STELLANTIS cooperation, to eliminate the noise and demonstrate resolution in a vehicle prior to exiting the program phase.  If the noise is found in pilot or production, the supplier will be responsible to develop a containment plan (and fix), as well a short and long term solutions, as appropriate.  Any issue raised during these processes, which is demonstrated to be the responsibility of the supplier, shall be corrected with urgency at no additional cost to STELLANTIS.  The Supplier will be responsible for the Squeak \u0026 Rattle performance of their subsystem."
+    },
+    {
+      "level": 5,
+      "title": "Aerodynamic noise",
+      "content": ""
+    },
+    {
+      "level": 6,
+      "title": "Acoustic sealing",
+      "content": "This measurement has to be performed in a small cabine, matching the handle size. Objective 0dB from 400Hz to 10kHz.\r\nPurpose of test is to determine noise reduction effiency of the handle gaskets and other provisions.\r\nMeasurement to be performed in a small cabine according to STELLANTIS norm 00978_13_00762, the handle assembled on a small (cabin matching) sheet metal panel (0,65mm thickness) with a bracket (but without peripheral interface parts as inner panel, door trim i.e.)\r\nCriteria: 0dB between 400Hz and 10kHz.\r\nThe delta between a measured sheet metal and a door handle installed on a datacontrol model should be 0 dB\r\nThe performance must come out above the curve criterion.\r\nAny fault (surface below the curve criterion) must be \u003C= 15 points.\r\nFalling below the criterion by a third of an octave must be \u003C= 3 dB"
+    },
+    {
+      "level": 6,
+      "title": "Aeroacoustics noise (Stellantis Vehicle Test)",
+      "content": "The physical features are evaluated in an aero-acoustic wind tunnel on a standard or prototype vehicle. This vehicle is submitted to a frontal wind or to skidding (wind impact equal to \u002B or - 10\u00B0 in relation to the X axis of the vehicle), and in several conditions:\r\nMaximum condition: vehicle in condition whereby all external accessories are taken off and all the joints and chassis parts taped down.\r\nCharacterisation the condition of a watertight zone or accessory: maximum condition of vehicle whereby tape is taken off the watertight zone or for which the accessory is remounted.\r\nThese states are characterised in the following manner: measures of interior noise done by a wind of 140 km/h under an impact of 0\u00B0and of \u002B/-10\u00B0 on Head Acoustics dummies placed on the seats arranged at half-way between X and Z and operated by internal or external ear according to the source position.\r\nThus, for each state and for each impact corresponding to spectrums of noise in thirds of octaves and fine bands (units of measure and references dB(A)).\r\nMaximum state :\r\n-  maximum noise condition: algebraic sum, by frequency bands 1/3 octave (400 Hz \u003C f  \u003C 10 000 Hz), of the dB at the level of acoustic pressure of the vehicle\r\n-  sensitivity to skidding of maximum condition: difference between maximum noise condition at  \u002B/-10\u00B0 and that at 0\u00B0.\r\nCriteria for sealing and accessories:\r\nThe watertight zones and accessories are characterised by twoo types of criteria:\r\n-  participation: algebraic sum of dB or distance points of the condition in relation to maximum condition at 140 km/h under impact of 0\u00B0and of \u002B/-10\u00B0 ;\r\n-  sensitivity to skidding: difference between participation at \u002B/-10\u00B0 and that at 0\u00B0 ;\r\nEntre 400 Hz \u003C f \u003C 10 000 Hz ;\r\nBetween 400 Hz \u003C f \u003C 10 000 Hz ;\r\nIllustration des crit\u00E8res:\r\nRequirements for the Exterior Door handle :\r\n-  Wind tunnel test participation:\r\n-  Whistling noise criteria:\r\nit will have to make sure, for whistling noise that \u00ABprominence ratio\u00BB shall been in green area in the following figure"
+    },
+    {
+      "level": 5,
+      "title": "Spurious noise",
+      "content": "The handle must not emit static noise (requirement B284185-009)\r\nTo simulate the efficency of static noise reduction/avoidance, 2 tests must be done during the project:\r\na.  complete handle mounted on a representative door skin with depression in prototype stage\r\nb.  handle mounted on a door equipped with window panes, grooves and polishers ( to be provided by STELLANTIS, meet milestone VRS2DV).\r\n-  All gaskets to be present.\r\n-  Single components on bracket (i.e. counterweight, release lever and all other moveable parts) isolated in the way that they cannot create a noise (would disturb the test results)\r\n-  The risk of not allowed frequencies must be taken into account in the development stage: no part included must have a resonance frequency \u201Cstuck\u201D on resonance frequencies/own support mode.\r\n-  Tool markings (splitlines, ejector pin i.e.) must not cause noises during handling of the HANDLE, they must not be positioned in contact with mobile parts.\r\nValidation of the HANDLE must be done by static noise measures which are compared to the acceptance.\r\na.  Subjective listening must also be done in independent of the test result.\r\nb.  Subjective litening by Stellantis experts\r\nDESCRIPTION OF THE STATIC NOISE TEST:\r\nAs shown by the requirement - Acoustic response spectrum maximum 1/3 octave when new -, it is imperative to respect the following test chronology:\r\na.  Before installing a part: Application of the temporal listening stimulation profile and proceeding to acceptance of the environmental acoustic response \u002B mounting for comparison with the - acoustic response spectrum maximum 1/3 octave when empty (validation of test conditions without the part to analyse)\r\nb.  When new: Application of the temporal listening stimulation profile and proceeding to acceptance of the acoustic response of the part for comparison with the graph specified in the requirement - acoustic response spectrum maximum 1/3 octave when new.\r\nc.  Ageing on handling: Submit the HANDLE to 3 years climatic endurance handling (corresponding to a number of cyles G1G2 = 55000 cycles)\r\nd.  After ageing during handling: application of the temporal listening stimulation profile and proceeding to acceptance of the acoustic response of the part for comparison with the graph specified in the requirement - acoustic response spectrum maximum 1/3 octave on use.\r\ne.  Vibration ageing: Application of the stimulation profile creating vibration fatigue (this profile corresponds to an equivalent of 3 years). The stimulation profile creating vibratory fatigue is a temporal signal of ageing of 117 hours defining a response representing damage sustained by the body when it is integrated into the vehicle (with compulsory sorting at simultaneous axes)\r\nAt the end of the test: Application of the temporal listening stimulation profile and proceeding to acceptance of the acoustic response of the part for comparison with the graph specified in the requirement - Spectrum acoustic response spectrum maximum 1/3 octave on use.\r\nThe part is submitted to several temporal listening stimulations representing response stimulations measured on the STELLANTIS static noise tracks. (This signal will be updated by STELLANTIS during the development of the project). The listening signal applied to the HANDLE allows the absence of noise sensed by the occupants of the vehicle to be judged.\r\nAll Stored data to submit STELLANTIS after end of the test in excel native format. See an example of a detailed protocol of this test in appendix B/chapter 9\r\nACCEPTANCE CRITERIA\r\nN\u00B0Requirement\r\nContent of the Requirement\r\nREQ-0877975 A\r\nB284185-xxx-01\r\nOwner : u054762\r\nGrade:\r\nFlexibility :\r\n1 acoustic response spectrum maximum 1/3 octave (terzfilter analyse) when empty (validation of test conditions in the part to be analysed)\r\nWhen carrying out supplier vibration silencer tests, a base noise recording must be carried out and this must be less than 6 dB(A) for the acceptance criteria of the requirement - acoustic response spectrum maximum 1/3 octave when new, over the whole band.\r\n2 requirements on the framework\r\nThe framework (permitting maintenance of the part) must be representative of the normal conditions of the vehicle: The framework must have an initial own mode superior to 100hz.\r\nComments\r\nLCDV Simplified EN\r\nN\u00B0Requirement\r\nContent of the Requirement\r\nREQ-0877976 A\r\nB284185-xxx-02\r\nOwner : u054762\r\nGrade:\r\nFlexibility :\r\nAcoustic response spectrum maximum 1/3 octave when new:\r\nAbsence of static noise when new is translated in terms of the graph, over the whole auditory range of the human ear (see static noise graph above).\r\nComments\r\nLCDV Simplified EN\r\nN\u00B0Requirement\r\nContent of the Requirement\r\nREQ-0877977 A\r\nB284185-xxx-03\r\nOwner : u054762\r\nGrade:\r\nFlexibility :\r\nAcoustic response spectrum maximum 1/3 octave when used :\r\nThe absence of static noise when used (3 years) is translated in terms of the graph shown by the requirement, marked up by 3 dBA across the whole auditory band (see static noise graph above)\r\nComments\r\nLCDV Simplified EN\r\nN\u00B0Requirement\r\nContent of the Requirement\r\nREQ-0877978 A\r\nB284185-xxx-04\r\nOwner : u054762\r\nGrade:\r\nFlexibility :\r\nAll the faults noticed in the vibrating silencer in the context of the organic tests must be treated imperatively and mentioned with the plan of action marked out in the test reports, transmitted to STELLANTIS. (Not only the faults to be validated, but also the faults linked to the test conditions). The locking coupling after the tests must remain within the tolerance specified.\r\nComments\r\nLCDV Simplified EN"
+    },
+    {
+      "level": 4,
+      "title": "Water-tightness/retention and freeze test",
+      "content": "The gaskets have to be designed in a way to limit water intrusion into the inside of the door.\r\nThe cable routing has to be designed to avoid any risk of water accumulation/infiltration inside it.\r\nA specific water test according Q548200 will be performed at STELLANTIS engineering. In case of performance issues, STELLANTIS expect suppliers support for improvements.\r\nThe handle shall pass the following water freeze test (handle is connected to the Latch with Cable)\r\nMount the handle to a simulated outer door panel coupon in body position with a drip panel used to simulate water entry inside the door (see picture 5.1)\r\n2.  Flow water to the following specifications:\r\na.  Hose Size 16.0 mm inside diameter\r\nb.  Hose Location 100\u002B/- 13.0 mm from the drip panel\r\nc.  Spray the drip panel ledge in the area of the handle for 10 seconds\r\nd.  Flow rate 0.15 liters per second\r\ne.  Duration of spray 10.0 \u002B/1 seconds\r\nPicture 5.1\r\n3.  Use a power car wash\u0027 type nozzle, which is capable of providing a flat spray pattern with a 40\u00BA dispersion angle and 9.5 liter/minute volume flow rate at a 4,825 kPa/48 bar pressure.  The nozzle should be positioned 300 \u002B/- 13.0 mm from face of handle.  Allow the spray to strike the entire handle.  Duration of spray is 20.0 \u002B/- 2.0 seconds.  Place the panel and handle into the cold chamber within 90 seconds of the start of the test.\r\n4.  Cool the handle assembly and panel for 2 hours minimum at -40 \u002B/- 5\u00BA C.\r\n5.  With the handle at the above temperature, pull the handle at the center and perpendicular to the surface; it shall take no more than 160N static load to break any ice lock\u0027 of the handle assembly.  When the handle is released, it shall return to a position that allows the latching system to fully function.  There shall be no breakage or damage to the handle.  Any noise caused by ice or ice build- up shall be noted in the test report.\r\n6.  After the handle system warms to ambient temperature, the handle shall return to pre-test rest position and condition.\r\nNote:  Resistive load (representing friction of the latch and system = 35 N) shall be applied in one direction to the handle."
+    },
+    {
+      "level": 3,
+      "title": "Fluid Compatibility",
+      "content": "The purpose of this test is to determine if the handle material an pint is able to meet specification requirements when exposed to fluids that could be encountered in the automotive environment\r\nCleaning Agents for Interior\r\nCleaning Agents for Exterior\r\nResistance to other Fluids per following list:\r\n1.  Carpet Cleaner (CaptureTM PN 1050429)\r\n2.  Coffee\r\n3.  Cola\r\n4.  Fingernail Polish Remover\r\n5.  Grease\r\n6.  Hand Cleaner (GoopTM)\r\n7.  Hand Lotion)\r\n8.  Insect Repellent\r\n9.  Lubricating Oil\r\n10.   Sun Tan Lotion (SPF 30\u002B)\r\n11.  Tap Water\r\n12.  Windshield Washer Solvent\r\n13.  Sun milk\r\n14.  Hand Sanitizer\r\n15.  Krytox (any kind)\r\n\u00B0Requirement after the tests: No surface damages."
+    },
+    {
+      "level": 3,
+      "title": "Automatic Car Wash",
+      "content": "The handle shall be designed to pass through an automatic car wash without damage to the exterior parts when contacted by moving car wash brushes and dryers.\r\na.  Components shall resist the force of high-pressure spray equipment\r\nb.  Parts shall be designed to avoid catching brushes/cleaning media\r\nc.  There shall be no inadvertent activation of the handle during automated car washes\r\nd.  Cleaning procedures and recommended materials for cleaning shall be identified and listed in the owner\u0027s manual\r\ne.  Recesses, crevices, or enclosures in components shall be easily accessible for cleaning\r\nf.  Components shall not hold water via pooling or capillary action\r\ng.  Grained parts shall have a wax release grain"
+    },
+    {
+      "level": 3,
+      "title": "HANDLE Performance Criteria",
+      "content": ""
+    },
+    {
+      "level": 4,
+      "title": "Drawings for test forces/directions and test requirements",
+      "content": "Picture 5.2                                                                      Picture 5.3\r\nPicture 5.5\r\nBefore start of the tests, parts are submitted to:\r\na.  Being passed through a climate chamber at 85\u00B0C for \u00BD an hour, and being returned to ambient temperature.\r\nb.  The parts are submitted to increased humidity for 10 days at 40\u00B0C and 95% of relative humidity and 2 hours at ambient temperature (following procedure D471309)\r\nc.  Post-withdrawal stabilization (after the thermal performance test from 22 h to 85\u00B0C) for non-painted parts.\r\nThe tests to be performed at\u00A0:\r\n-40\u00B0C \u00B1 2\u00B0C, Humidity uncontrolled/ambient\r\n\u002B23\u00B0C \u00B1 2\u00B0C Humidity uncontrolled/ambient\r\n\u002B85\u00B0C \u00B1 2\u00B0C Humidity uncontrolled/ambient\r\na.  All parts tested for strength will be tested to failure at the specified temperature.\r\nb.  Handle loads at failure must meet or exceed specified strength test load.\r\nc.  Mode of failure and test load at failure must be documented.\r\nTest speed is 50 mm/min"
+    },
+    {
+      "level": 4,
+      "title": "Cable Pull/travel requirement",
+      "content": "The nominal values and tolerances on these measurement points will be specified on the drawing and apply to the whole OUTSIDE HANDLE function. Measurement as described in figure below:\r\nPicture 5.6\r\nSee interface drawing: Plan RFQ LA-xxxxxxx.pdf and M2 Excel RFO.xls for dimensions (TBD)"
+    },
+    {
+      "level": 4,
+      "title": "Conditions of increased humidity",
+      "content": "All tests must be done under the following pre-condions\u00A0: 10 days at 40\u02DAC and 95% relative humidity and 2 hours at ambient temperature (in accordance with procedure D471309).\r\nExcept if different or specific conditions are required.\r\nThe \u201Cstandard\u201D conditions of increased humidity representative of client use and to be taken into account for all tests are those defined in the ST Plastic Materials PMXP_ECH08_1340, being 10 days at 40\u02DAC and 95% relative humidity and 2 hours at ambient temperature (in accordance with procedure D471309).\r\nIn case of emergency actions (to be agreed with STELLANTIS engineering), the specified 10 day can be reduced to following values:\r\na.  96 hours at 70\u02DAC 95% humidity\r\nb.  2 hours at ambient temperature\r\nThis test set up cannot not be used for product validation.\r\nSpecial case for parts assembled in the STELLANTIS factory:\r\nFor all tests relating to parts assembly (clipping the bezel on to the lock cylinder, for example), increased humidity of 5 days at 23\u02DAC and 50% relative humidity and 2 hours at ambient temperature (in accordance with procedure D471309) has to be performed. In these conditions, the criteria specific to the ST must be satisfied. Besides this, the tests will be repeated for dry parts (such as is defined in the norm NF T58-000, being 48 h after injection in an ambience stabilised at 23\u02DAC and 50% relative humidity). In this case, the force variations must be less than 15%.\r\nFor unclipping tests, the conditions of increased humidity will be as follows: 10 days at 40\u02DAC and 95% relative humidity and 2 hours at ambient temperature (in accordance with procedure D471309). Please note that for unclipping tests of the bezel for the lock cylinder and cable dethatching the parts will be placed in the depths of the oven assembled on a mounting which is representative of the vehicle situation (part of door panel)"
+    },
+    {
+      "level": 4,
+      "title": "Rigidity and resistance",
+      "content": "Test conditions before testing:\r\nThe tests have to be performed with a original door sheet metal or if not available, a simulated door skin to use.\r\nFor all tests before testing, the free play and the cable travel has to be measured and compared with values after the tests. As well:\r\na.  All parts tested for strength will be tested to failure at the specified temperature (consider two different batches for strenght test and strength test up to failure)\r\nb.  Handle loads at failure must meet or exceed specified strength test load.\r\nMode of failure and test load at failure must be documented."
+    },
+    {
+      "level": 5,
+      "title": "Strength Test - Full Open Position",
+      "content": "The handle in the full open position shall withstand a 667 N force when pulled perpendicular to the handle (see picture 5.3) in the F1 direction at a temperature -40\u00B0C and \u002B23\u00B0C (humidity uncontrolled). No breaking of the handle (especially in the hand insertion area), nor the handle coming loose from the bracket is permitted. Perform test \u002B 85\u00B0C for information only (the test report shall be reviewed with the appropriate STELLANTIS personnel for determination of whether further action is required). The moving grip part of the handle must firmly return to its rest position.\r\nUnder a load of 100 N, max. displacement of the handle in F1 direction of 1,5 mm at 23\u00B0C and 2 mm at 85\u00B0C is permitted.\r\n(different batches to be used for each temperature)"
+    },
+    {
+      "level": 5,
+      "title": "Strength Test- Inertia lock manually engaged",
+      "content": "The handle shall withstand a 355 N load in the F1 direction with the handle lever blocked at the rod/cable connect point with the inertia locker.  Test to be performed at -40\u00B0C, 23\u00B0C and 85\u00B0C in F1 direction (see picture 5.3) Displacement of the handle max. 2 mm. No breaking of the handle, nor the handle coming loose from the bracket is permitted, no degradation of electronic performance.\r\n(different batches to be used for each temperature)"
+    },
+    {
+      "level": 5,
+      "title": "Strength Test - Horizontal Load at handle\u0027s vertex - Full open",
+      "content": "For this test, apply a load of 100N on \u201Cpoint 1\u201D (see picture 5.7) in F1 direction (with handle in full open position) and measure the the displacement of handle on \u201Cpoint 2\u201D in -F1 direction.\r\nRepeat the same test applying the load on \u201Cpoint 2\u201D and measure the displacement of handle on \u201Cpoint 1\u201D\r\nUnder a load of 100 N, max. displacement on \u201Cpoint 1 and 2\u201D of the handle in -F1 direction of 2 mm at 23\u00B0C and 3 mm at 85\u00B0C is permitted.\r\n(different batches to be used for each temperature)\r\nPicture 5.7"
+    },
+    {
+      "level": 5,
+      "title": "Strength Test - Longitudinal Load-Rest Position",
+      "content": "For this test, apply a load of 500N in F4/-F4 direction (see picture 5.2) in the temperatures ranges -40\u00B0C, 23\u00B0C and 85\u00B0C (humidity uncontrolled). No breaking of the handle, nor the handle coming loose from the bracket is permitted, no degradation of electronic performance.\r\nUnder a load of 100 N, max. displacement of the handle in F4/-F4 direction of 0,5 mm at 23\u00B0C and 1 mm at 85\u00B0C is permitted.\r\n(different batches to be used for each temperature)"
+    },
+    {
+      "level": 5,
+      "title": "Strength Test - Longitudinal Load-Full Open Position",
+      "content": "Test to be performed at -40\u00B0C, 23\u00B0C and 85\u00B0C (humidity uncontrolled) in F4/-F4 (see picture 5.2) direction with a force of 500N in the shown areas applied. No breaking of the handle, nor the handle coming loose from the bracket is permitted, no degradation of electronic performance.\r\nUnder a load of 100 N, max. displacement of the handle in F4/-F4 direction of 1 mm at 23\u00B0C and 1,5 mm at 85\u00B0C is permitted.\r\n(different batches to be used for each temperature)"
+    },
+    {
+      "level": 5,
+      "title": "Stiffness of the HANDLE to an horizontal load, handle at rest",
+      "content": "This test represents a user leaning on his vehicle on the COE. The COE must resist -30\u00B0C to \u002B85\u00B0C to a -F1 stress of 500 N (see picture 5.2/5.3). After this test, no breakage, nor permanent distortion, nor deterioration, nor loss of functions, of the COE is permitted. The cable pull (\u00A7 5.2.4.2) will remain compliant with the requirements of the plan.\r\nUnder a load of 50 N, max. displacement of the handle in -F1 direction of 1 mm at 23\u00B0C and 1,5 mm at 85\u00B0C is permitted.\r\n(different batches to be used for each temperature)"
+    },
+    {
+      "level": 5,
+      "title": "Resistance and rigidity of the bracket when flexed",
+      "content": "During a lateral impact (regulated or high-frequency), the intrusion of the barrier and possible hit of the handle , impacts and distorts the entire handle/bracket assembly. In order to avoid excessive cable pull caused by the attacked bracket, the bracket has to meet following requirements. Test set ups acc. pictures 5.10/5.11/5.12 , to be reviewed and approved by STELLANTIS engineering.\r\nPicture 5.10\r\na.  All parts tested for strength will be tested to failure at the specified temperature 23\u00B0C Humidity uncontrolled.\r\nb.  Handle loads at failure must meet or exceed specified strength test load.\r\nc.  Mode of failure and test load at failure must be documented.\r\nd.  With door handle, cable and sheet metal (also 3th fixation on bracket must be foreseen)\r\nTwo Robustness test on the bracket to perform:"
+    },
+    {
+      "level": 6,
+      "title": "Load on the front of the bracket",
+      "content": "Follow instructions according to the test setup description below:\r\nPicture 5.11"
+    },
+    {
+      "level": 6,
+      "title": "Load on the rear of the bracket",
+      "content": "Follow instructions according to the test setup description below:\r\nPicture 5.12\r\nFor each of the 2 load application, 3 different test to perform\r\nN\u00B0Requirement\r\nContent of the Requirement\r\nREQ-0877994 A\r\nGEN-Outer_Door_Handle_M2-CD-PERF-01\r\nOwner : u054762\r\nGrade:\r\nFlexibility :\r\nThis test corresponds to a door which has not been submitted to a high level of acceleration (remains in zones A and B) described in chapter 5.2.4.6.3 inertia locker is in not engaged position.\r\nUnder a load of F 600N, applied according to the pictures 5.11/5.12, the bracket must resist without breakage or permanent deformations of the handle/bracket. Cable movement max. 4 mm permitted\r\nComments\r\nLCDV Simplified EN\r\nN\u00B0Requirement\r\nContent of the Requirement\r\nREQ-0877995 A\r\nGEN-Outer_Door_Handle_M2-CD-PERF-02\r\nOwner : u054762\r\nGrade:\r\nFlexibility :\r\nThis test simulates an impact with high level of acceleration (zone C see chapter 5.2.4.6.3) and the handle is equipped with an engaged/blocking inertia blocker.\r\nUnder a load of 600N in F direction, applied according to the pictures 5.11/5.12, the bracket must resist without breakage or permanent deformations of the handle/bracket. Cable movement max. 1,5 mm permitted.\r\nComments\r\nLCDV Simplified EN\r\nN\u00B0Requirement\r\nContent of the Requirement\r\nREQ-0877996 A\r\nGEN-Outer_Door_Handle_M2-CD-PERF-03\r\nOwner : u054762\r\nGrade:\r\nFlexibility :\r\nThis test simulates an impact with a high level of acceleration (zone C in chapter 5.2.4.6.3) and the handle does not have an installed inertia blocker (if handle is equipped with an inertia blocker, disassemble)\r\nUnder a load of 600N in F direction\u00B4s, applied according to the pictures 5.11/5.12, the bracket must resist without breakage or permanent deformations of the handle/bracket. Cable movement above 4 mm not permitted.\r\nComments\r\nLCDV Simplified EN"
+    },
+    {
+      "level": 5,
+      "title": "Traction Load",
+      "content": "During lateral impact, the barrier can pull the handle during bouncing.\r\na.  All parts tested for strength will be tested to failure at the specified temperature.\r\nb.  Handle loads at failure must meet or exceed specified strength test load.\r\nc.  Mode of failure and test load at failure must be documented."
+    },
+    {
+      "level": 6,
+      "title": "Static traction load on the handle",
+      "content": "The handle will be mounted on a sheet metal bench and fixed with the screw and key cylinder (test to perform as well with the socket) via the clamp. The inertia locker has to be in engaged state if irreversibility function is taken.\r\nWith a load of 700 N applied  (speed 50 mm/min) in F1 direction as shown in the picture 5.2/5.3 (starting from rotated position allowed by the inertial locker), no permanent deflection of the bracket/handle is permitted. Cable movement max. 4.5 mm."
+    },
+    {
+      "level": 6,
+      "title": "Dynamic traction load on the handle",
+      "content": "Same requirements as in chapter 6.2.4.4.8.1 but dynamic force to be applied by a kind of negative hammer. Hight of the tube and mass of the weight to calculate in order to reach the 700N.\r\nPicture 5.20"
+    },
+    {
+      "level": 5,
+      "title": "Other requirements",
+      "content": "The handle must remain fully functional during door slam testing at STELLANTIS.\r\nThe handle must remain functional in all tests on vibrating silencer."
+    },
+    {
+      "level": 6,
+      "title": "Function check in vibration testing",
+      "content": "Two tests defined to verify the vibration resistance:\r\na)  A synthesized impact test from the response spectrum to the impact measured on the vehicle, Value to be provided from STELLANTIS engineering. If not available, use following test:\r\nb)  Simulation of the HANDLE by sinusoidal acceleration.\r\nTest set up to be agreed with STELLANTIS engineering.\r\nIn general, 2 tests to perform:"
+    },
+    {
+      "level": 6,
+      "title": "Handle is instrumented in a position of displacement:",
+      "content": "a)  Fix the sensitive part (capable of leading to non-function, example : blocking the handle in its kinematics) on the driver (example\u00A0: shaker) to accelerate in the Y direction of the vehicle,\r\nb)  Record the displacement and acceleration of the handle,\r\nc)  Steer the driver in displacement :\r\nd)  Variable sinusoidal signal from 20 to 40 Hz, logarithmic scanning, 5 second duration, amplitude 10 mm.\r\ne)  Check the level of acceleration leading to non-function."
+    },
+    {
+      "level": 6,
+      "title": "Handle is not instrumented:",
+      "content": "a)  Fix the sensitive part on to the driver to accelerate in the Y direction of the vehicle,\r\nb)  Record the acceleration of the HANDLE,\r\nc)  Steer the driver in displacement :\r\nd)  Variable sinusoidal signal from 20 to 40 Hz, logarithmic scanning, 5 second duration, amplitude 5 mm.\r\ne)  Increase the amplitude of displacement by a step of 0.25 mm,\r\nf)  After each scanning check the maximum acceleration level of the HANDLE and the level of acceleration leading to non-function.\r\ng)  The displacement amplitude could be adapted by means of the acceleration levels advocated for the HANDLE."
+    },
+    {
+      "level": 6,
+      "title": "Tight fit of gasket",
+      "content": "The gasket must stay in position during shipment and assembly operation."
+    },
+    {
+      "level": 6,
+      "title": "Performance of the tightening fixing torque",
+      "content": "With the handle mounted on a vehicle configuration framework, screws are tightened to 4 Nm \u002B/-15 % (speed - TBC).\r\nAfter being put through extreme temperatures of (-30\u00B0C and \u002B85\u00B0C), i.e. 4 AF cycles in accordance with D47 1309, there can be no loss of coupling greater than 20%\r\nVerification with following procedure (has to be done also post durability test (see chapter 6.6.1.2):\r\na. Before start of the durability tests, tightening of the screws at the nominal value of 4Nm with a calibrated screw driver\r\nb. Mark (with a line) the angular position of the screw\r\nc. Post-test, measure torque (with same screwdriver) and communicate as well any displacement (difference from b/c) to Stellantis engineering. Torque to be in specification (4 Nm \u002B/- 15%).\r\nSecond point:\r\nAfter a minimum of 5 assemblies and 5 disassembly\u0027s, we should be able to carry out tightening of screws to a coupling of 4 Nm \u002B/- 15 % (no deterioration of the front and back tappings)."
+    },
+    {
+      "level": 6,
+      "title": "Beauty cover performance",
+      "content": "Beauty cover or any other component of handle must not detached during testing under any circumstance.\r\nWhen the client touches the beauty cover:\r\n-  No creak noise or other are accepted\r\n-  The handle needs to give the impression of robustness by the design proposed by the supplier"
+    },
+    {
+      "level": 4,
+      "title": "Performance under small impacts",
+      "content": ""
+    },
+    {
+      "level": 5,
+      "title": "Drop Test (to be performed with B21 7120 M3.3 free fall)",
+      "content": "Drop test requirement to determine with prototype parts.\r\nAfter being dropped from a height of 1 meter onto a concrete floor, the components must not show any signs of breakage, nor function faults, including ADML and NFC.  If this requirement cannot be met, the ensemble must show visible faults (splinters, cracks, \u2026) for the operator. Inertia blocker not engaged and bracket to stay in pre stage condition."
+    },
+    {
+      "level": 5,
+      "title": "Axis holding - To avoid the axis getting out of place.",
+      "content": "The articulation axis, must resist to an extraction effort/stress during 5 second by \u002B/- F \u00AB\u00A0axis direction\u00A0\u00BB of 300N minimum at -30\u00B0C , 23\u00B0C and at 85\u00B0C, the extraction effort must resist to 150N.\r\nAt the end of the test the displacement of the axis, must be lower than 0,5mm compared to the initial position."
+    },
+    {
+      "level": 4,
+      "title": "Performance on impact",
+      "content": "The handle/bracket system has to meet all legal requirements listed in chapter 3.2.1, External Standards/Specifications. All tests to be performed at Stellantis at vehicle level with the exception of ECE11, FMVSS206, ECE26 and 2002/95/EC. Those 4 requirements have to be tested at supplier. Regardless of test responsibility, chapter 6.6 will point out, how the supplier has to support.\r\nAll calculations have to be performed with worst case conditions (i.e. springs on lowest or highest end of torque tolerance, counterweight with min or max specified mass, with justification) in order to meet legal requirements."
+    },
+    {
+      "level": 5,
+      "title": "Side impact",
+      "content": "With lateral impact, three phases are identified and can cause an unallowed opening of the side door.\r\na)  Phase 1:\r\nFrom 0ms to 20ms: acceleration in both directions of Y (door bouncing/backlash).\r\nb)  Phase 2:\r\nFrom 20 ms to 70 ms : severe deformation of the door (as well in handle location area\r\nc)  Phase 3:\r\nFrom 70 ms to 300 ms: barrier pullback, during this event, the barrier can pull the handle and cause a door opening.\r\nDuring all identified phases, the door has to remain closed according to the legal requirements.\r\nIn the following chapters the blocking system will be called: \u201Cinertia blocker\u201D, \u201Cinertial system\u201D, or \u201Cinertia lock\u201D\r\nThe inertial system shall be:\r\n- Option 1 - Request for EU market. Irreversible. That means that the counterweight remains blocked by the system after the crash (inertia blocker engaged).\r\n- Option 2 - Request for NA market. Reversible. As the counterweight is not blocked anymore after the crash, this option is only possible if there\u0027s no risk of door opening by the barrier during phases 2 and 3 for all vehicle applications. Option not compliant with modular policy\r\n- Component design synergy between option 1 and 2 needs to be studied\r\n- Option 3 - Any other design (to define) which can guarantee modular applicability (system works for many different vehicles) \u002B North America reversibility obligation specificity"
+    },
+    {
+      "level": 5,
+      "title": "Regulation test ECER11 / FMVSS206",
+      "content": "Refer to official latest release of the regulations. As a part of the latching system (cable/latch) the handle has to fulfil the 30g requirement (maintained during 30ms) and must support that the doors are fully latched during the impact. Validation must to be performed virtual point of view (calculation according to official procedure present in the regulations) and with physical test (the handle must be fully functional).\r\nFor acceleration applied in directions -X,\u002BX and -Y,\u002BY, of amplitude less than or equal to 45 g (maintained to 30 ms), the HANDLE must not cause cable pull higher than or equal to 4,5 mm.\r\nAfter acceleration of 45 g maintained to 30 ms, the handle must remain fully functional and supports opening of the door.\r\nThe origin of the specification is linked to the current means of approval (catapult with elastomer receptacles), which, in order to obtain the signal of 30 g for 30 ms, presents a function peak of 42 g.\r\nValidation:\r\nThe regulation test on the door with all components (latch/cable/handle) is Stellantis\u0027s responsibility.\r\nComponent simulation and physical testing in order to meet those requirements is supplier\u0027s responsibility. Physical testing has to be performed with a kind of certified \u201Ccatapult\u201D which, in order to obtain the signal of 30 g for 30 ms, presents a function peak of 42 g"
+    },
+    {
+      "level": 5,
+      "title": "Acceleration",
+      "content": "I)  Acceleration value\r\nThe acceleration values mentioned are values filtered to 300 Hz (low pass filter with cutting frequency of 300 Hz/ CFC180). Four zones are distinguished (see graph 6.2):\r\na)  Zone A: The handle must not cause opening of the door during impact, but must allow opening of the door after the impact. This zone corresponds to the requirements in chapter 6.2.4.6.2 (Regulation test ECER11 / FMVSS206).\r\nb)  Zone B: Intermediate zone, the handle must not cause opening of the door during impact. After the impact the handle may or may not allow the door to open. This zone allows different inertias to be covered for the inertia blocking system which keeps the handle non-functional/blocked. This zone is detailed below.\r\nc)  Zone C: Functioning zone during impact: the handle must not cause opening of the door during impact for strong accelerations and does not require the handle fully functional after the crash. In the case when the barrier can pull the handle during retraction (phase 3), the handle has to stay blocked (if irreversibility function is taken). This zone is detailed below.\r\nd)  Zone D: Zone beyond impact : zone which is situated beyond the possible test methods known by our services, no requirement in this zone and shown only for reference.\r\nGraph 6.2\r\nZone A specification:\r\nSee Graph 6.2, yellow field\r\nZone B specification: Validation of the upper graph limit (in red)\r\nFor the following semi-sinusoidal acceleration, applied in Y direction (direction of impact), the handle must not cause cable pull higher than or equal to 4,5mm. This value must take into consideration all the different factors occurring during the test (Part deformation, stiffness\u2026), that could generate an increasing of the cable pulling. In all cases, the addition of all the constraints, will never generate a cable pull higher to 4,5mm\r\na)  amplitude 80 g and half-period 30 ms (validation by calculation and physical test),\r\nb)  amplitude 80 g and half-period 10 ms (validation by calculation and physical test),\r\nc)  amplitude 100 g and half-period 5 ms (validation by calculation and physical test),\r\nd)  amplitude 150 g and half-period 3 ms (validation by calculation and physical test).\r\nIf irreversibility function taken, after the tests/requirements listed above, the handle must remain in blocked/non-functional condition, inertia locker activated. As this system keeps the handle non-functional it must therefore be activated somewhere in the acceleration range corresponding to zone B and whatever the acceleration level.\r\nSpecification of zone C: Validation of the higher graph limit (in black)\r\nFor acceleration in the Y direction, semi-sinusoidal as follows :\r\na)  amplitude 450 g and half-period 10 ms (calculation validation only requested),\r\nb)  amplitude 520 g and half-period 3 ms (validation by calculation and physical test),\r\nc)  amplitude 450 g and half-period 4 ms (validation by calculation and physical test),\r\nd)  amplitude 350 g and half-period 5 ms (validation by calculation and physical test),\r\ne)  amplitude 150 g and half-period 10 ms (validation by calculation and physical test),\r\nThe handle must not cause cable traction higher than or equal to 4,5mm. This value must take into consideration all the different factors occurring during the test (Part deformation, stiffness\u2026), that could generate an increasing of the cable pulling. In all cases, the addition of all the constraints, will never generate a cable pull higher to 4,5mm\r\nValidation of zone C: Validation of the total surface\r\nFor the acceleration mentioned below, in the Y direction, the handle must not cause cable pull of higher than or equal to 4,5mm\r\nTo demonstrate handle system capability, supplier must perform  the following simulation :\r\na)  half-period of 3ms : amplitudes of 150 g, 200 g, 300 g, 400 g and 520 g,\r\nb)  half-period of 5ms : amplitudes of 100 g, 150 g, 200 g, 300 g and 350 g,\r\nc)  half-period of 10ms : amplitudes of 80 g, 100 g and 150 g.\r\nMaintain of the \u201Cinertia locking system\u201D during backslash/door bouncing (if irreversibility option taken):\r\nWith the \u201Cinertia locking system\u201D being in blocked position and prevents the handle to move in opening position, following requirements need to met in both Y directions:\r\na)  half-period of 3ms : amplitudes of 150 g and 520 g,\r\nb)  half-period of 5ms : amplitudes of 100g and 350 g,\r\nc)  half-period of 10ms : amplitudes of 80 g and 150 g.\r\nDuring periods and g stated in a to c, the inertia lock has to remain engaged and prevent any movement of the handle in open position.\r\nII) Real vehicle side impacts pulses validation\r\nAs half sinus pulses do not represent quite completely the real vehicle side impact situation, additional requirement is asked with real physical pulses coming from real complete vehicle side impact tests.\r\nThe supplier will have to :\r\n- i. Demonstrate a sufficient level of correlation between component simulations and physical tests for previous paragraph half sinus pulses validation (zones A, B, C and their limits)\r\n- ii. Demonstrate with simulation that the inertia locking system blocks and prevents the handle to move in opening position, for 35 pure-Y-acceleration signals available and provided by Stellantis. 31 of these pulses come from physical vehicle tests, and are intended to represent a generic envelope for all real possible behaviours for barrier side impact. 4 of them are combined half-sinus pulses made to highlight negative accelerations dreaded events (counterweight blocking inertia lock, and/or springleaf not catching the inertia lock when it goes back in position)\r\nPhysical pulses picture\r\nHalf-Sinus combinations\r\n- iii. Demonstrate with simulation that the inertia locking system blocks and prevents the handle to move in opening position, for xx (number to be confirmed, corresponding to side impact loadcases which are taken into account) acceleration signals provided by Stellantis. These additional pulses will come from complete vehicle side impact simulation (at a sufficient mature step of development), and will be provided for each new vehicle project equipped with the handle.\r\nFor ii. and iii. demonstrations, the inertia lock has to remain engaged at the end of the pulse application in case of irreversibility function taken.\r\nIII) Vibration of spring leaf / irreversible device behavior during crash (if irreversibility function taken with a spring leaf component)\r\nTo prevent the dreaded event of spring leaf not being able to catch the inertia lock when the latter comes back in position, the spring leaf shall have a limited vibration behavior during crash.\r\nFor that:\r\na. Spring leaf natural frequency in Hz shall be given for each bracket design (numerical simulation and/or physical test)\r\nb. Inertia lock design shall be oriented to limit the vibration phenomenon and amplitude.\r\nc. For each calculated signal in paragraph I) and II) spring leaf deflection curve shall be indicated, with a deflection \u003C xxxx mm, with the demonstration that this limit is consistent with no risk of inertia lock being unable to catch it.\r\nIV) Mechanical resistance during acceleration tests\r\nFor all accelerations validations mentioned in 5.2.4.6.3, no mechanical failure shall occur. (No breakage of counterweight, lever, inertia lock, \u2026)"
+    },
+    {
+      "level": 5,
+      "title": "Front and rear impacts",
+      "content": ""
+    },
+    {
+      "level": 6,
+      "title": "Front and rear impact tests",
+      "content": "For the following sinusoidal acceleration applied to the both X directions:\r\na)  amplitude 40g and 70g continuous (\u003E 80ms): validation by calculation and physical test,\r\nb)  amplitude 50g, 100g and 130g and half-period of 3ms: validation by calculation and physical test,\r\nc)  amplitude 50g and 100g and half-period of 5ms: validation by calculation and physical test,\r\nThe handle must not cause cable pull \u003E 4,5mm.\r\nAfter these tests the handle must be able fully functional and allow door opening."
+    },
+    {
+      "level": 4,
+      "title": "Bezel Lock Cylinder and key cylinder installation",
+      "content": "The bracket has a provision to host the lock cylinder for driver door.\r\nThere is 1 kind of bezel to cover the lock cylinder:\r\nWithout a hole/closed bezel for the key blade\r\nInstallation of the key cylinder into the handle shall not be so tight as to require the use of a tool.  The maximum force for insertion of the key cylinder in handle at ambient, shall not exceed 25 N. The key cylinder interface to the handle or bracket assembly shall not rattle or squeak under all test conditions.\r\nAll parts are assembled at the STELLANTIS General Assembly Plant"
+    },
+    {
+      "level": 5,
+      "title": "Assembly/disassembly requirements of the bezel",
+      "content": "The assembly force (at new and at 23\u00B0C \u002B/- 3\u00B0C) of the cap on the handle, in accordance with -F5, must be less than 40 N per clip per clipping action. (V = 50 mm / min).\r\nTest procedure:\r\nThe unclipping force (at new and at 23\u00B0C \u002B/- 3\u00B0C) of the cap on the handle, in accordance with F5, must be bigger than 20 N and lower than 120 N (V = 50 mm / min) after increased humidity\r\nFor unclipping tests, the conditions of increased humidity will be as follows: 10 days at 40\u02DAC and 95% relative humidity and 2 hours at ambient temperature (in accordance with procedure D471309).\r\nTraction machine equipped with 1 crock, traction successively applied on one side of cap"
+    },
+    {
+      "level": 5,
+      "title": "Door cylinder and socket screw/clamp torque test",
+      "content": "First point:\r\nThe clamp will keep the key cylinder and socket in position after tightening with 4 Nm.\r\nWith the COE mounted on a vehicle configuration framework, screws are tightened to 4 Nm \u002B/-15 % (speed: - TBC).\r\nAfter being put through extreme temperatures of (-40\u00B0C and \u002B85\u00B0C), i.e. 4 AF cycles in accordance with D47 1309, there can be no loss of coupling greater than 20%\r\nVerification with following procedure (has to be done also post durability test (see chapter 6.6.1.2):\r\na. Before start of the durability tests, tightening of the screws at the nominal value of 4Nm with a calibrated screw driver\r\nb. Mark (with a line) the angular position of the screw and clamp\r\nc. Mark (with a line) the position of the clamp in the bracket\r\nd. Post-test, measure torque (with same screwdriver) and communicate as well any displacement (difference from b/c) to STELLANTIS engineering. Torque to be in specification (4 Nm \u002B/- 15%).\r\nKey cylinder and or socket to have tight fit.\r\nSecond point:\r\nAfter a minimum of 5 assemblies and 5 disassembly\u0027s, we should be able to carry out tightening of screws to a coupling of 4 Nm \u002B/- 15 % (no deterioration of the front and back tappings).\r\nThe tests must be done simultaneously on the COE driver side (with lock cylinder housing) and on the COE passenger side (with socket)."
+    },
+    {
+      "level": 5,
+      "title": "Key Cylinder Retention",
+      "content": "When the Key Cylinder is mounted in the handle it must not separate from the handle under following test condition:"
+    },
+    {
+      "level": 6,
+      "title": "Key Cylinder Twist-Out Test",
+      "content": "A.  Assemble the key cylinder to the handle and the handle to the panel or fixture using the released fasteners. When screws are used, torque them to the minimum specified in the Installation Graphics.\r\nB.  At 23\u00B0C, fixture the handle in a vise so that the back of the Key Cylinder can be accessed. Slowly apply the torque to the Key Cylinder via a torque wrench and adaptor that fits over the back of the key cylinder. Apply the torque until failure occurs. Both clockwise and counter clockwise directions must be evaluated\r\nC.  Repeat Steps A \u0026 B except with handle and key cylinder assemblies soaked at - 40\u00B0C for a minimum of 4 Hours. Either in the chamber, or within 2 minutes of removing the fixture from the chamber repeat step B now at -40\u00B0C and record the failure load.\r\nD.  Repeat steps A \u0026 B except with handle and key cylinder assemblies soaked at 80\u00B0C \u0026 95% Relative Humidity for a minimum of 72 hours. Either in the chamber, or within 2 minutes of removing the fixture from the chamber repeat steps B now at 85\u00B0C and record the failure load\r\nThe key cylinder retainer must provide enough retention to prevent the key cylinder from twisting out when a minimum torque of 22.6 N-m is applied."
+    },
+    {
+      "level": 6,
+      "title": "Key Cylinder Push Out Test",
+      "content": "A.  Assemble the key cylinder to the handle using specified fasteners and torques as from Assembly Graphics.\r\nB.  At 23\u00B0C, fixture the handle assembly in the tensile test machine so that the face of the key cylinder is perpendicular to the direction of the applied load.\r\nC.  Apply load with a flat punch with a minimum 12.7 mm diameter centered on the face of the Key Cylinder\r\nD.  Apply load at the rate of 25.4 mm per minute until failure occurs.\r\nE.  Repeat Steps A - D, except with handle and key cylinder assemblies soaked at - 40\u00B0C for a minimum of 4 Hours. Either in the chamber, or within 2 minutes of removing the fixture from the chamber repeat steps B - D now at -40\u00B0C and record the failure load.\r\nF.  Repeat steps A - D, except with handle and key cylinder assemblies soaked at 80\u00B0C \u0026 95% Relative Humidity for a minimum of 72 Hours. Either in chamber, or within 2 minutes of removing the fixture from the chamber repeat steps B - D now at 85\u00B0C and record the failure load\r\nThe key cylinder retainer must provide enough retention to prevent the key cylinder from being pushed out, when a load of 1112 N is applied."
+    },
+    {
+      "level": 2,
+      "title": "External interfaces requirements",
+      "content": "See Interface drawing-xxx.pdf (TBD) for all information regarding matching parts and interfaces."
+    },
+    {
+      "level": 2,
+      "title": "Operational requirements",
+      "content": ""
+    },
+    {
+      "level": 3,
+      "title": "Mission profile",
+      "content": "Mission profiles for calculations of reliabilities and dependability requirements are stated in chapter 6.4.4.3.1.\r\nCustomer specific data are used to define the endurance tests in chapter 6.6."
+    },
+    {
+      "level": 3,
+      "title": "Lifetime",
+      "content": "No specific requirements"
+    },
+    {
+      "level": 3,
+      "title": "Ergonomics and human factors",
+      "content": "Surfaces in the visible and perceptible areas of the handle shall be smooth and without streaks, sink marks, discoloration or material traces. Perceptible and visible tool separation burrs and mold mismatches are not permissible. If design surface parting lines are unavoidable, they shall be identified (preferably on verification models). The maximum height of a splitline is 0.1 mm (this can be modified/limited by the appropriate STELLANTIS engineering team, design and quality representatives. In addition the part must be free from traces of mould removal agents which could harm the appearance of the paint.\r\nAfter the humidity test for 10 days at 40\u00B0C and 95% humidity and 2 hours at ambient temperature (following procedure D471309) no deviation/degradation a. to d. accepted.\r\nAll hidden components exposed when the handle is actuated shall be black (or alternate color as approved by STELLANTIS).\r\nAll visible parts need to meet the graining requirements, outlined in the RFQ Package. Grain application in the tool can be chemical or with electrode, method to be agreed with STELLANTIS engineering and design quality department. Paint specification see HANDLE A9: P MXP_ECH08_1340.\r\nFor the handle version with ADML and/or NFC, a non-conductive primer has to be used."
+    },
+    {
+      "level": 4,
+      "title": "Appearance, finish and perceptual quality",
+      "content": "All handles, regardless of application, must meet the requirements.\r\nGeneral STELLANTIS requirements concerning burs, injection threshold, clearance, chamfers, coupling radius and stripping:\r\na.  in norm STELLANTIS A32 4140 \u201Cnon-specific tolerances - plastic parts \u201C,\r\nb.  in norm STELLANTIS A32 4250 \u201Cnon-specific tolerances - aluminum alloy parts\u201D."
+    },
+    {
+      "level": 4,
+      "title": "Gap between handle cover and bezel",
+      "content": "The gap between the short cover handle and the bezel should be linear with handle in rest position and in open position (gap 0,5 mm \u002B/- 0,2mm). Contact of both parts are not permitted because of risk of scratches and noise development.\r\nThis requirement is valid for the following overall temperature/humidity range:\r\na) new parts\r\nb) after 24h @ -40\u00B0C\r\nc) after 24h @ 85\u00B0C\r\nd) after 24h @ 40\u00B0C / 95 % r.h.\r\nSupplier to provide dimensional stack up in order to proof capability."
+    },
+    {
+      "level": 4,
+      "title": "Operating force in F1",
+      "content": "A physical test during the RFQ and/or development, and when the maturity of the part is sufficient, will be done by Stellantis with the Supplier support with a mock up in a vehicle in order to define the definitive effort range/curves (min- max- nominal value) for rocking/paddle handle solution.\r\nThe mock-up will be presented to a group of different people (man, women, ect..) representing the final customer.\r\nThe vehicle will represent different configuration in order to consider, among others, different ground height and door joint reaction.\r\nThe operating forces will also consider the crash constraints.\r\nFor handle pull force directions to apply, F1 direction (see graph 6.0)\r\nFor the tests, apply a constant load of 35N applied on the cable following F10 to simulate (see picture 5.6)\r\nthe side door latch.  In these conditions, the draw force of the handle until to the end position must meet the force displacement curves of the graph below:\r\nGraph 6.0\r\nInterpretation of the force displacement curve :\r\nThe green is the target value to meet, development target for bracket/handle system. Update of the values after PV testing and agreement with STELLANTIS engineering. The blue- and orange Curves correspond to the Tolerance Range of the Operating Force, it includes all tolerances (dimension/spring torque on the single components). As well, manufacturing/assembly variations. This Tolerance Range should be used for capability determination of the Operating Force.\r\nThe deviation of the measure forces must not be higher than 5N and a vertical variation (between a maximum and a minimum or a minimum and maximum in succession) of 2N maximum can be tolerated.\r\nGraph 6.1\r\nAfter passing through a climate chamber at 110\u00B0C for \u00BD an hour and being returned to ambient temperature, the force curve must remain in conformity with the starting requirements.\r\nThe moving grip part of the handle must firmly return to its rest position under all circumstances, regardless of temperature and humidity impacts."
+    },
+    {
+      "level": 4,
+      "title": "Operating force F1 in minus temperature",
+      "content": "The handle assembly is submitted to a cold test following test procedure Appendix C.\r\nAfter the tests, the handle must function normally including the ADML and NCF function, and the operating force must not exceed more than 50% of the values in chapter 6.4.3.3/graph 6.0."
+    },
+    {
+      "level": 3,
+      "title": "RAMS requirements",
+      "content": "The Feared events are classified according to their severity grade: The severity Grade represents the effect of the Feared event in terms of injury or inconvenience for the user.\r\nGrade\r\nDefinition\r\nComments\r\nG1\r\nDissatisfaction or deterioration of a functionality of the vehicle.\r\nGeneral performances of the vehicle preserved. The user can continue to use his vehicle. There is no necessity of a repair.\r\nG2\r\nLoss of a functionality of the vehicle.\r\nAppearance of embarrassing symptoms. The user can continue to use his vehicle, but a repair is essential to make quickly.\r\nG3\r\nThe vehicle is unavailable for the user.\r\nImpossibility of beginning a distance or\r\nImpossibility of finishing a distance due to loss of a main function or due to non observance of the regulation (risk of infringement).\r\nImpossibility of parking the vehicle in its current state (risk of inviolability).\r\nG4\r\nRisk of physical injuries for human.\r\nCan potentially lead to traffic accident or physical injuries."
+    },
+    {
+      "level": 4,
+      "title": "Safety requirements",
+      "content": "N\u00B0Requirement\r\nContent of the Requirement\r\nREQ-0877966 A\r\nGen-VHL-FD-TFx-001-0-1-01\r\nOwner : u054762\r\nGrade:\r\nFlexibility : Mandatory\r\nThe traceability requirements are required by ISO26262. The supplier is required to perform the traceability of the Stellantis requirements with the version number and to carry out a traceability of the internal requirements in the same way.\r\nComments\r\nLCDV Simplified EN\r\nN\u00B0Requirement\r\nContent of the Requirement\r\nREQ-0877967 A\r\nGen-VHL-FD-TFx-001-0-1-02\r\nOwner : u054762\r\nGrade:\r\nFlexibility : Mandatory\r\nThe supplier shall take into account in his FMEA this level of severity for Stellantis safety requirements:\r\nFMEA Severity\r\nStellantis Requirements\r\n10\r\nG4 ASIL A\r\nG4 ASIL B\r\nG4 ASIL C\r\nG4 ASIL D\r\nG4 ASIL C(D)\r\nG4 QM\r\n9\r\nG4 ASIL Y(X) with Y = A, B,  and X = B, C or D\r\nG3 QM\r\nor QM (Z) with Z = A, B, C or D\r\nComments\r\nLCDV Simplified EN"
+    },
+    {
+      "level": 5,
+      "title": "Functional dreaded events of the component",
+      "content": "The failure modes which are resulting in a severity level 4 are listed below.\r\nEach failure mode is associated  to a specific requirement on the probability of occurrence. In particular, the following failure modes will have to be subject of an analysis\r\nIt is the responsibility of the supplier to add other failure modes in case those are not listed in the table above.\r\nRecall of the list of the dreaded events of gravity 4 for information only:\r\nReference of the FE\r\nWording\r\nAsil\r\nER_SOCV_4_1101\r\nThe vehicle shall avoid a loss of vehicle confinement during still vehicle  :  Unexpected opening of a side opening panel.\r\nA\r\nER_SOCV_4_1202\r\nThe vehicle shall avoid a loss of vehicle confinement during moving vehicle : Unexpected opening of a side opening panel.\r\nC\r\nER_SOCV_4_1302\r\nThe vehicle shall avoid a loss of vehicle confinement during a vehicle crash : Unexpected opening of a side opening panel.\r\nA\r\nER_SOCV_4_0706\r\nThe vehicle shall avoid an impossible exit of the vehicle without vehicle crash  :  Manual and automated opening of one side opening panel impossible.\r\nA\r\nER_SOCV_4_0506\r\nThe vehicle shall avoid an impossible access of the vehicle without vehicle crash  :  Unable opening of any side opening panel\r\nA\r\nER_SOCV_4_0602\r\nThe vehicle shall avoid an impossible access of the vehicle after vehicle crash  :  Unability to open all side opening panel of a seat row.\r\nA\r\nER_SOCV_4_0606\r\nThe vehicle shall avoid an impossible access of the vehicle after vehicle crash  :  Unability to open each side opening panel of the vehicle\r\nQM\r\nN\u00B0Requirement\r\nContent of the Requirement\r\nREQ-0877979 A\r\nGEN_VHL_FMEA_B_AND_I_External_door_handle_FM124\r\nOwner : u054762\r\nGrade: ASIL_C\r\nFlexibility : Mandatory\r\nFM124 Loss of door locking or Untimely opening of door\r\nSeverity : 4\r\nAsil : C\r\nCumulative probability : 10-5  at 15 years or 240 000 km\r\nPMHF :\r\nDreaded events : ER_SOCV_4_1101\r\nER_SOCV_4_1202\r\nER_SOCV_4_1302\r\nComments\r\nLCDV Simplified EN\r\nN\u00B0Requirement\r\nContent of the Requirement\r\nREQ-0877982 A\r\nGEN_VHL_FMEA_B_AND_I_External_door_handle_FM125\r\nOwner : u054762\r\nGrade: ASIL_A\r\nFlexibility : Mandatory\r\nFM125 Breakage of door control or Impossible opening of door\r\nSeverity : 4\r\nAsil : A\r\nCumulative probability : 10-3 at 15 years or 240 000 km\r\nPMHF :\r\nDreaded events : ER_SOCV_4_0706\r\nComments\r\nLCDV Simplified EN\r\nN\u00B0Requirement\r\nContent of the Requirement\r\nREQ-0877984 A\r\nGEN_VHL_FMEA_B_AND_I_External_door_handle_FM126\r\nOwner : u054762\r\nGrade: ASIL_A\r\nFlexibility : Mandatory\r\nFM126 Loss of function of the blocking system of handle during crash\r\nSeverity : 4\r\nAsil : A\r\nCumulative probability : 10-3 at 15 years or 240 000 km\r\nPMHF :\r\nDreaded events : ER_SOCV_4_0506\r\nER_SOCV_4_0602\r\nER_SOCV_4_0606\r\nComments\r\nLCDV Simplified EN\r\nN\u00B0Requirement\r\nContent of the Requirement\r\nREQ-0877988 A\r\nGEN_VHL_FMEA_B_AND_I_External_door_handle_FM127\r\nOwner : u054762\r\nGrade: ASIL_A\r\nFlexibility : Mandatory\r\nFM127 No door opening with the handle after crash\r\nSeverity : 4\r\nAsil : A\r\nCumulative probability : 10-3 at 15 years or 240 000 km\r\nPMHF :\r\nDreaded events : ER_SOCV_4_1302\r\nComments\r\nLCDV Simplified EN"
+    },
+    {
+      "level": 5,
+      "title": "Technical Safety Requirements (TSR ISO26262)",
+      "content": "Safety mechanisms, safety diagnosis and rehabilitation are specified in the following table.\r\nImplementation of these requirements shall follow ISO26262 methodology according to the ASIL specified.\r\nFor information, a list of Safety Goal:\r\nReference of the SAFETY GOAL\r\nWording\r\nAsil\r\nSG_SOCV_01_03\r\nAccess to the vehicle shall be possible without vehicle crash : One side opening by seat row shall ensure the opening on user request\r\nA\r\n\u0027SG_SOCV_02_02\r\n\u0027Access to the vehicle shall be possible after vehicle crash : the manual opening of one side opening panel by seat row shall be ensured.\r\nA\r\nSG_SOCV_06_01\r\nThe confinement of the vehicle shall be guaranteed during still vehicle : the opening of a manual or automated side opening panel shall be related to a voluntary command of the user.\r\nA\r\nSG_SOCV_07_08\r\nThe confinement of the vehicle shall be guaranteed during moving vehicle : the opening of a manual or automated side opening panel shall be related to a voluntary command of the user.\r\nC\r\nSG_SOCV_08_02\r\nThe confinement of the vehicle shall be guaranteed during a vehicle crash : Side opening panel maintained closed position shall be guaranteed.\r\nA\r\nN\u00B0Requirement\r\nContent of the Requirement\r\nREQ-0877980 A\r\nST_VRODH_RAMS_TSR_01(0)\r\nOwner : u054762\r\nGrade:\r\nFlexibility :\r\nSafety Requirement: External Door Handle shall guarantee sufficient pull on the cable to unbolt the lock in order to ensure the opening of the door. Refer to CTF list for the value of the distance and  tolerances between the casing stop and the cable stop when in end position shall be guarantee during all the life of the car, by taking into account the wear phenomenon and degradation (deformation, blockage, breakage, interferences, etc.) of the internals parts.\r\nNote : failure mode: no opening of the 1 door by seat row by External Door Handle\r\nSpecified observable state : Distance and tolerances between the casing stop and the cable stop when in end position shall be guarantee. Refer to CTF list for the value.\r\nPerformance  :   10-3 def/240 000 km or 15 years\r\nASIL level : A\r\nSafety Goal  : SG_SOCV_01_03\r\nComments\r\nLCDV Simplified EN\r\nN\u00B0Requirement\r\nContent of the Requirement\r\nREQ-0877983 A\r\nST_VRODH_RAMS_TSR_02(0)\r\nOwner : u054762\r\nGrade:\r\nFlexibility :\r\nSafety Requirement: External Door Handle shall ensure to open the doors by the user, without the situation crash.\r\nThe connection with the door lock by the locking cable shall be ensure for all car life, with the extraction load for bowden clip 45N - 100N (except the repair after sale), for the temperature range from -30\u00B0C to 85\u00B0C, in dry condition and  95% relative humidity. The connection shall be ensure in the case of the vibration or slamming door. Flush handle shall resist to stress of 35N for the door lock activation and 93N for door opening.\r\nNote : failure mode: no opening of the 1 door by seat row by External Door Handle\r\nSpecified observable state : The connection with the door lock by the locking cable shall be ensure for all car life, with the extraction load for bowden clip 45N - 100N\r\nPerformance  : 10-3 def/240 000 km or 15 years\r\nASIL level : A\r\nSafety Goal  : SG_SOCV_01_03\r\nComments\r\nLCDV Simplified EN\r\nN\u00B0Requirement\r\nContent of the Requirement\r\nREQ-0877989 A\r\nST_VRODH_RAMS_TSR_03(0)\r\nOwner : u054762\r\nGrade:\r\nFlexibility :\r\nSafety Requirement: External Door Handle shall allow to open the door (one door by seat row) after vehicle crash\r\nNote : after vehicle regulation crash situation\r\nTrigger event : vehicle crash =\u003E  according Crash regulation\r\nSpecified observable state :\r\nExternal Door Handle shall resist to crash (according regulation request) and it shall allow open the door (one side opening panel by seat row)\r\nPerformance  : 10-3 def/240 000 km or 15 years\r\nASIL level : A\r\nSafety Goal  : SG_SOCV_02_02\r\nComments\r\nLCDV Simplified EN\r\nN\u00B0Requirement\r\nContent of the Requirement\r\nREQ-0877991 A\r\nST_VRODH_RAMS_TSR_04(0)\r\nOwner : u054762\r\nGrade:\r\nFlexibility :\r\nSafety Requirement: External Door Handle design shall assure that  the distance between the casing stop and the cable stop in rest position will not lead to an unexpected opening of the door during all vehicle life\r\nNote :  \u0022cable pull at rest position\u0022\r\nSpecified observable state :  design of the External door handle shall guarantee the distance between the casing stop and cable stop in rest position (refer to CTF List) during all vehicle life, in order to avoid inopportune opening of the door\r\nPerformance  : 10-5 def/240 000 km or 15 years\r\nASIL level : C\r\nSafety Goal : SG_SOCV_07_08, SG_SOCV_06_01\r\nComments\r\nLCDV Simplified EN\r\nN\u00B0Requirement\r\nContent of the Requirement\r\nREQ-0877992 A\r\nST_VRODH_RAMS_TSR_05(0)\r\nOwner : u054762\r\nGrade:\r\nFlexibility :\r\nSafety Requirement: External Door Handle (the \u0022blocking \u0022 system) shall keep the COE in non-functional state during the crash depending of the acceleration.\r\nNote : regulation life phase \u0022crash\u0022\r\nTrigger event : Crash situation (lateral, frontal or rear impact) (refer to crash scenario according regulation requirements)\r\nSpecified observable state : External Handle shall guarantee no activation of door latch during the crash\r\nPerformance  : 10-3 def/240000km or 15 years\r\nASIL level : A\r\nSafety Goal : SG_SOCV_08_02\r\nComments\r\nLCDV Simplified EN"
+    },
+    {
+      "level": 5,
+      "title": "Threats and Stresses requirements",
+      "content": "It is the responsibility of the supplier to add other failure modes in case those are not listed in the table above.\r\nN\u00B0Requirement\r\nContent of the Requirement\r\nREQ-0877985 A\r\nGen-VHL-FD-TFx-001-0-1-03\r\nOwner : u054762\r\nGrade: Security\r\nFlexibility : Mandatory\r\nThe supplier shall take into account the stresses that may violate safety requirements as well as other levels of severity including the threats, for example: vibrations, thermal, exceptional loads, corrosion, humidity, washing (all types), snow, rain, wind, UV, salty conditions, Electromagnetic emission, gravels \u2026\r\nComments\r\nCTF\r\nLCDV Simplified EN\r\nN\u00B0Requirement\r\nContent of the Requirement\r\nREQ-0877990 A\r\nGen-VHL-FD-TFx-001-0-1-04\r\nOwner : u054762\r\nGrade: Security\r\nFlexibility : Mandatory\r\nThe supplier shall take into account the failure modes and causes that may lead to these Feared Events (Threats) :\r\nCFE4-60\r\nFire and/or explosion of the vehicle.\r\nCFE4-75\r\nElectrocution. Electric Shock\r\nCFE4-61\r\nDangerous contact with cutting, aggressive, heating, or moving components.\r\nCFE4-62\r\nRelease of gases or toxic fluids in the passenger compartment or in a confined space.\r\nCFE4-64\r\nProjection of vehicle elements or of carried objects in the passenger compartment.\r\nCFE4-65\r\nMechanical breakage of vehicle elements during their handling or during vehicle loading.\r\nCFE4-69\r\nLoss of objects carried outside the vehicle on the roadway.\r\nCFE4-70\r\nLoss of vehicle elements on the roadway.\r\nCFE4-71\r\nLeakage of liquid on the roadway or on vehicle components likely to be attacked or to lose the nominal performance of their function.\r\nCFE4-84\r\nUnexpected intensive exposition to radiations emitted by vehicle elements.\r\nComments\r\nCTF\r\nLCDV Simplified EN"
+    },
+    {
+      "level": 4,
+      "title": "Availability/Reliability/Durability Requirements",
+      "content": "N\u00B0Requirement\r\nContent of the Requirement\r\nREQ-0877969 A\r\nGEN-5-E-03-CD-1-5E-02-DURA-0001(1.0)\r\nOwner : u054762\r\nGrade:\r\nFlexibility :\r\nScenarios\r\nRequirement\r\nUpper level requirement reference\r\nIn case of complete furniture replacement\r\nFor any failure leading to complete replacement of the part, the maximum cumulative failure rates are :\r\nD(7 years or 150 000km) \u003C 5 E-03\r\nD(15 years or 240 000km) \u003C 1,5E-02\r\nComments\r\nLCDV Simplified EN\r\nN\u00B0Requirement\r\nContent of the Requirement\r\nREQ-0877972 A\r\nGEN-5-E-03-CD-1-5E-02-DURA-0002(1.0)\r\nOwner : u054762\r\nGrade:\r\nFlexibility :\r\nScenarios\r\nRequirement\r\nUpper level requirement reference\r\nIn case of partial furniture replacement (sub parts)\r\nFor any failure leading to partial replacement (replacement of sub part(s), the maximum cumulative failure rates are :\r\nD(7 years or 150 000km) \u003C 5 E-03*\r\nD(15 years or 240 000km) \u003C 1,5E-02\r\nComments\r\nLCDV Simplified EN\r\nN\u00B0Requirement\r\nContent of the Requirement\r\nREQ-0877973 A\r\nGEN-5-E-03-CD-1-5E-02-DURA-0003(1.0)\r\nOwner : u054762\r\nGrade:\r\nFlexibility :\r\nScenarios\r\nRequirement\r\nUpper level requirement reference\r\nRepairing without dismounting / replacement needed (soft update, small adjustements, cleaning \u2026)\r\nFor any failure leading to maintenance without part replacement, the maximum cumulative failure rates are  :\r\nD(7 years or 150 000km) \u003C 5 E-03*\r\nD(15 years or 240 000km) \u003C 1,5E-02\r\nComments\r\nLCDV Simplified EN\r\nN\u00B0Requirement\r\nContent of the Requirement\r\nREQ-0877974 A\r\nGEN-5-E-03-CD-1-5E-02-DURA-0004(1.0)\r\nOwner : u054762\r\nGrade:\r\nFlexibility :\r\nScenarios\r\nRequirement\r\nUpper level requirement reference\r\nSingle standard, basic requirement without versioning\r\nTo satifsty the Durability Requirements, the maximum cumulative failure rates are :\r\nD(7 years or 150 000km) \u003C 5 E-03*\r\nD(15 years or 240 000km) \u003C 1,5E-02\r\nComments\r\nLCDV Simplified EN"
+    },
+    {
+      "level": 4,
+      "title": "Validation requirements",
+      "content": "Input data for the demonstration of the SdF (Functional Safety) requirements:\r\nThe components are subjected to meet various customers behaviors and therefore different levels are durability requirements\r\nThe profiles of various customers are characterized by :\r\n- a statistical model\r\n- parameters of the law for the base period considered.\r\nStarting from these characteristics, the data useful for each calculation of dimensioning could be deduced : mean value, median, value of the parameters of the law over another base period, etc\r\nCustomer force profile requirement\r\nForce profiles on the entire service life (15 years our 240 000 km):\r\nThe design and robustness of the components has to meet following customers profiles:\r\nMission Profiles\r\nClient 50%\r\nClient 80%\r\nClient 90%\r\nAverage\r\ns ln x\r\nNumber of door openings/closings EUROPE\r\n51400\r\n77900\r\n96800\r\nLog  10,85 Normale\r\n0,49\r\nNumber of door openings/closings CHINA\r\n67000\r\n101150\r\n125500\r\nLog  11,112 Normale\r\n0.49\r\nNumber of door openings/closings NA\r\nTBD\r\nTBD\r\nTBD\r\nTBD\r\nTBD\r\nPulling Force\r\n50\r\n62\r\n68\r\nNormale 50\r\n14\r\nAmount of lock/Unlock operations Europe\r\n47700\r\n64000\r\n74500\r\nLog  10.772 Normale\r\n0.349\r\nAmount of lock/Unlock operations China\r\n64700\r\n85000\r\n98000\r\nLog 11.077 Normale\r\n0.322\r\nAmount of lock/Unlock operations NA\r\nTBD\r\nTBD\r\nTBD\r\nTBD\r\nTBD\r\n(values to be defined for rocking handle)"
+    },
+    {
+      "level": 5,
+      "title": "Required confidence level",
+      "content": "The handle shall have a demonstrated test reliability of 98%.  The test reliability shall be demonstrated at a confidence level of 50%.   The Weibull slope shall be assumed to be 2.5 unless data exists to calculate the actual Weibull slope after prototpe test to failure is complete."
+    },
+    {
+      "level": 5,
+      "title": "Demonstration of Dependability requirements",
+      "content": "N\u00B0Requirement\r\nContent of the Requirement\r\nREQ-0877981 A\r\nGEN-Outer_Door_Handle_M2-CD-RAMS-01\r\nOwner : u054762\r\nGrade:\r\nFlexibility :\r\nThe Dependability - Durability documents :\r\n- TBD\r\nprovides the acceptance charts to respect for each characteristic that can modify the malfunction risk. This document should be used to dimension the mechanical reliability tests in endurance.\r\nComments\r\nLCDV Simplified EN"
+    },
+    {
+      "level": 5,
+      "title": "Required validation",
+      "content": "The demonstration of the behavior of the SdF requirements is conducted by:\r\n- the estimated reliability calculation,\r\n- the setting up of tests,\r\n- the implementation of the design constraint (for the threat-damage ER)\r\nThe Chapter 6.6 and the Testplan PIV M2 rocking handle.xlxs defines all requested testing\r\nN\u00B0Requirement\r\nContent of the Requirement\r\nREQ-0877986 A\r\nGEN-Outer_Door_Handle_M2-CD-RAMS-02\r\nOwner : u054762\r\nGrade:\r\nFlexibility :\r\nThe calculation of reliability estimates can be made:\r\n- From the Standard-UTE 80-811: in this case the table mission profile in chapter 6.4.4.3.1 shall be used.\r\n- From the standard norm-UTE 80-810: in this case the table mission profile in chapter 6.4.4.3.1 shall be used.\r\n- Sample Size and Life Calculator USE THIS.xlsx, Number of parts and lives to be agreed between Supplier and STELLANTIS engineering\r\nComments\r\nLCDV Simplified EN"
+    },
+    {
+      "level": 3,
+      "title": "Maintainability",
+      "content": "The requirement concerning the after sales mounting/dismounting is dealt in the \u00A76.5.3 Design and manufacturing."
+    },
+    {
+      "level": 3,
+      "title": "Product quality",
+      "content": "Refer to CPPR document  31st Aug 2023 Quality targets M2 in the RFQ package.  This document describes the Terms and conditions for the product."
+    },
+    {
+      "level": 3,
+      "title": "Protection against hostility",
+      "content": "The handle system incl. the key cylinder has to meet the Thatcham requirement.\r\nIn case of a non passed Thatcham Attack test, Supplier is requested to work closly with STELLANTIS Engineering and the Lock cylinder Supplier in order to meet the requirements.\r\nAll attack test to be performed at Room Temperature and test set up to be reviewed before testing with STELLANTIS engineering. Handle/bracket assembly with key cylinder mounted on a door sking or sheet metal piece.\r\na.  All parts tested for strength will be tested to failure at the specified temperature.\r\nb.  Handle loads at failure must meet or exceed specified strength test load.\r\nc.  Mode of failure and test load at failure must be documented."
+    },
+    {
+      "level": 4,
+      "title": "Axial Loading",
+      "content": "Drive a screw into the cylinder and apply the load to the screw as explained below in Picture 6.2:\r\nThe cylinder retention strength when tested with an impact load to simulate Thatcham slide hammer testing shall be a minimum of 1.5kg dropped repetitively from a height of 0.5m. 10 Cycles to perform, as well test to failure. Cylinder to be retained in bracket.\r\nPicture 6.2"
+    },
+    {
+      "level": 4,
+      "title": "Push in Test",
+      "content": "The cylinder when mounted in a production door environment at STELLANTIS shall withstand two minutes of brutal force when hammered with a 12mm diameter rod or screwdriver. Criteria:  Cylinder shall remain in the bracket."
+    },
+    {
+      "level": 4,
+      "title": "Tong Load",
+      "content": "Attack with a tong the housing of the key cylinder (bezel removed) and apply a torque of 60Nm clockwise and counter clockwise 10 times. The cylinder remains into the bracket."
+    },
+    {
+      "level": 4,
+      "title": "Bending Test",
+      "content": "Use a hammer to pound a screwdriver into the cylinder.\r\n1.  Apply a 300 N downward load.\r\n2.  Apply a 300 N upward load.\r\n3.  Repeat steps 1-2 for a total of 20 cycles.\r\nCylinder has to remain in the bracket."
+    },
+    {
+      "level": 3,
+      "title": "Resources reserve capacity of the system",
+      "content": "Does not apply."
+    },
+    {
+      "level": 3,
+      "title": "Document requirements",
+      "content": "In order to respect all legal regulations (listed in chapter 3) and norms relating to lateral-, front and rears impacts, the supplier\u0027s plan must enable STELLANTIS engineering to review following documents/drawings, (in accordance with norm A10 0250):\r\na.  Centre of gravity and volume of moving parts.\r\nb.  Total balancing of all moving parts linked to the locking cable or equivalent system.\r\nc.  Minimum radius on the external projections.\r\nd.  Compliance to load requirements.\r\ne.  Cable movement and the lever arm.\r\nf.  Value of the lever arms.\r\ng.  Position of the rotation axes of the lever arms.\r\nh.  DFMEA\r\ni.  PFMEA\r\nj.  Process Control Plan\r\nk.  Part Certification Procedure (Government Certification Process)\r\nl.  Compliance Letter (MVSS 114)\r\nm.  All Test Procedures\r\nn.  Packaging Layout Drawings with all interfaces, and travels\r\no.  Design Development Process\r\np.  Calculations for springs, force analysis, strength analysis and inertia\r\nq.  Product validation test plans\r\nr.  All math data for all components including dimensions, tolerances, materials, drawing notes etc\r\ns. Risk Management plan (PMR document)\r\nDimensional tolerance stack up (Hi-Lo) studies for components and vehicle installation."
+    },
+    {
+      "level": 2,
+      "title": "Constraint requirements",
+      "content": ""
+    },
+    {
+      "level": 3,
+      "title": "Regulation and consumerism",
+      "content": "The regulatory requirements are valid for the entire ST COE M2 (Rocking handle)"
+    },
+    {
+      "level": 3,
+      "title": "Weight and other physical characteristics",
+      "content": "Co-Driver/Rear door handle mechanical version (incl. Bracket):            max. 430g\r\nDriver door handle with ADML \u002B NFC (incl. Bracket):                         max. 515g"
+    },
+    {
+      "level": 3,
+      "title": "Design and manufacturing",
+      "content": ""
+    },
+    {
+      "level": 4,
+      "title": "Studies and/or imposed solutions",
+      "content": "a.  Handle bracket system to be designed for a sheet metal thickness of 0,65mm\r\nb.  Same bracket body for front and rear door, as well shared between mechanical and electronic handle\r\nc.  All gaskets mounted from Supplier\r\nd.  ADML Sensors and NFC sensor: pre mounted or completely potted in handle."
+    },
+    {
+      "level": 5,
+      "title": "Development of Thatcham provision",
+      "content": "The optional Thatcham cover interface to bracket has to be developed by the Supplier in cooperation with STELLANTIS engineering. The physical cover is not part of the TS. All requirements (disassembly force, assembly force, Material) to develop."
+    },
+    {
+      "level": 5,
+      "title": "Electrical connection interface",
+      "content": "The electrical connection with internal door wiring (for version with ADML/NFC function) must be done using a follow connector typology (six-way connector typology):\r\nRefer to the connector drawing below:"
+    },
+    {
+      "level": 4,
+      "title": "Materials",
+      "content": "Materials and Paint agreed with STELLANTIS, see Drawing.\r\nAll part must meet the requirements listed in ST Plastic Parts MXP"
+    },
+    {
+      "level": 4,
+      "title": "Manufacturing/EOL Testing",
+      "content": "The Bracket/Handle needs to be End Off Line  (EOL) Tested at following performance criteria:\r\n1)  Functional check of inertia Blocker.\r\n2)  Full rotation of Release Lever/counterweight in unlatching direction (forced) and backwards with spring force.\r\n3)  Electronic test of ADML and NFC function (no parametric, only function)\r\n4)  All assembly operations poka yoke proof and automatic presence checks of single components."
+    },
+    {
+      "level": 5,
+      "title": "Grease",
+      "content": "The presence of grease on the handle/bracket interface in the guide zones is in general acceptable but needs to be reviewed with STELLANTIS engineering. Greased zones will be specified on the supplier drawing with gram identification, supplier of grease and specification of grease. Recommended is automatic grease application."
+    },
+    {
+      "level": 4,
+      "title": "Marking of the Components or Parts",
+      "content": "The HANDLE must correspond to the requirements formulated in the technical specs ST Materials PMXP.\r\nThe marking of the parts must be compliant with the norms CS-11000\r\nEach part must be marked to allow to identify the material for the recycling (if case the dimension of the part allow it).\r\nThe Material base must be compliant to the norms STELLANTIS B20 1315, B20 1415, B62 0020.\r\nBecause of different definitions of handles and brackets, the marking of the STELLANTIS references is not required in the tool.\r\nTherefore it is asked that the marking of the references is done during the assembly sequence (micro-percussion, ink jet, laser) on the bracket and on the handle (finished good: with/without thief shield, with/without guidance cone, with/without anti-G system,\u2026)."
+    },
+    {
+      "level": 3,
+      "title": "Traceability and configuration",
+      "content": "Each part with the Stellantis reference must be in conformity with the standard PF.901106.\r\nThe purpose of this standard is to define the Stellantis Traceability Harmonized standard describing methodology of traceability process, label format and list of components to be traced.\r\nFollowing information to be laser engraved/sticker/Printing on the bracket after EOL testing:\r\n1)  Supplier Name\r\n2)  Production date\r\n3)  Shift\r\n4)  Assembly line\r\nAll injected parts must have a production clock."
+    },
+    {
+      "level": 3,
+      "title": "Transportability, storage, and packaging",
+      "content": "We inform to the supplier that during the launching phase and until DHT6 milestone (painting milestone /jalon peinture), a specific logistic (plane transportation or similar) will be in place for the color matching reactivity."
+    },
+    {
+      "level": 3,
+      "title": "Flexibility and extension",
+      "content": "No specific requirements"
+    },
+    {
+      "level": 3,
+      "title": "Withdrawal",
+      "content": "No specific requirements"
+    },
+    {
+      "level": 3,
+      "title": "Environment conditions",
+      "content": "See requirements listed in cycle testing, chapter 6.6.1.2, table 6.3"
+    },
+    {
+      "level": 3,
+      "title": "Handle assembly Prototypes",
+      "content": "No specific prototype requirement from Stellantis side (excepting the Electronics dpt requirements). Nevertheless is under supplier responsibility to demonstrate the robustness of their conception before the TKO (Crash behaviour, extra load cases\u2026). This means, that is the supplier that must perform physical tests by prototypes (3D printed parts, real material parts\u2026.) or numerical calculations, if they judged is needed. (without any additional cost for Stellantis)."
+    },
+    {
+      "level": 2,
+      "title": "Integration and validation requirements",
+      "content": ""
+    },
+    {
+      "level": 3,
+      "title": "Durability Tests",
+      "content": "Test Setup to be agreed with STELLANTIS engineering before test and test reports to be reviewed and approved with STELLANTIS Engineering."
+    },
+    {
+      "level": 4,
+      "title": "Test condition and Setup",
+      "content": "The handle assembly to be tested in the durability cycle test according to the table below. Duration of one cycle is between xx and xx cycles per minute in accordance with STELLANTIS norm B38 4145.\r\nThe test setup should be similar as in door/vehicle condition with a rigid framework. Test set up to be agreed with STELLANTIS engineering.\r\nThe supplier must specify the number of parts necessary for validation of endurance criteria. Refer as well to chapter 6.4.4.3\r\nNr. of Pieces\r\n3\r\n4\r\n5\r\n6\r\n10\r\n20\r\nRequired cycles\r\n159000\r\n147000\r\n138000\r\n132000\r\n113000\r\n91000\r\nTable 6.2"
+    },
+    {
+      "level": 4,
+      "title": "Cycle testing",
+      "content": "The durability test has to be performed with Driver door handles (short cover), Driver Door Handles (short cover) with ADML Sensor/NFC Electronic, Rear door handles (long cover) and Driver door handles RHD (long cover) with ADML Sensor/NFC Electronic. This means, 4 full cycle test\u00B4s to perform.\r\nTest requirements:\r\na.  Proper distribution of temperatures and humidity\r\nb.  100 % of the total number of cycles will be performed with load in F1 direction (see picture 6.5)\r\nThe dust and chemical agents defined in the norm B384145 are sprayed on to the cable uniformly in powder form.\r\nThe normal conditions correspond to 23\u02DAC and 50% humidity (depend on test facility).\r\nThe dust is defined in the norm: ISO 12103-1 fine grade A2 (external)\r\nTesting can be continued during temperature/humidity transmission time.\r\nCycle requirement listed in this table with 3 Pieces\r\nTemperature definition\r\nTotal amount of cycles\r\nNG12 for the Endurance Run G1 und G2\r\nNG3 for the complete Endurance Run G3\r\nNR = NG3 -  NG12\u00A0: Amount of cycles remaining after Validation G1 and G2\r\nNG12  =   55 000 cycles\r\nNG3   =    159 000 cycles\r\nNR     =    104 000 cycles\r\nHot:                              85 \u00B0C\r\nAmbient:                     23\u00B0C\r\nCold:                           -20\u00B0C\r\nExtreme cold:           -40\u00B0C\r\nStep\r\nAmount of Cycles\r\nTemperature\r\nHumidity\r\nChem. Agents\r\nDust\r\nAngle a\r\n1\r\n14% of NG12\r\n23\u00B0C\r\nAmbient\r\n0\u00B0\r\n2\r\n10% of NG12\r\n23\u00B0C\r\nAmbient\r\n0\u00B0\r\n3\r\n8% of  NG12\r\n23\u00B0C\r\nAmbient\r\nyes\r\nSnap Back Cycles\r\n0\u00B0\r\n4\r\n2% of NG12\r\n23\u00B0C\r\nAmbient\r\n2 times 1.5 grams in the release lever zone\r\n0\u00B0\r\nCheck performance criteria\r\n5\r\n4% of NG12\r\n23\u00B0C\r\n95%\r\nYes\r\n0\u00B0\r\n6\r\n2% of  NG12\r\n85\u00B0C\r\nuncontrolled\r\n0\u00B0\r\n7\r\n16% of NG12\r\n85\u00B0C\r\nuncontrolled\r\n2 times 1.5 grams in the release lever zone\r\n0\u00B0\r\n8\r\n10 % of NG12\r\n85\u00B0C\r\n95%\r\n0\u00B0\r\nCheck performance criteria\r\nDuration for each of the Steps 6,7 and 8 shall be  32h min. If the number of cycles is reached before the 96h, maintain 80\u02DAC and 95% of Humidity in the chamber before passing on to step 9.\r\n9\r\n6% of NG12\r\n23\u00B0C\r\n95%\r\n0\u00B0\r\n10\r\n4% of NG12\r\n23\u00B0C\r\n95%\r\nYes\r\n0\u00B0\r\nCheck performance criteria\r\n11\r\n6% of NG12\r\n-20\u00B0C\r\nuncontrolled\r\nYes\r\n0\u00B0\r\n12\r\n6% of NG12\r\n-20\u00B0C\r\nuncontrolled\r\nSnap Back Cycles\r\n0\u00B0\r\n13\r\n2% of NG12\r\n-40\u00B0C\r\nuncontrolled\r\n2 times 1.5 grams in the release lever zone\r\n0\u00B0\r\nCheck performance criteria\r\n14\r\n10% of NG12\r\n23\u00B0C\r\nAmbiant/Ambient\r\n0\u00B0\r\nEnd of Cycle testing  G1 and G2  - Check performance criteria\r\n15\r\n14% of NR\r\n23\u00B0C\r\nAmbient\r\n0\u00B0\r\n16\r\n10% of NR\r\n23\u00B0C\r\nAmbient\r\n0\u00B0\r\n17\r\n8% of NR\r\n23\u00B0C\r\nAmbient\r\nYes\r\n0\u00B0\r\n18\r\n2% of NR\r\n23\u00B0C\r\nAmbient\r\n2  times 1.5 grams in the release lever zone\r\n0\u00B0\r\nCheck performance criteria\r\n19\r\n4% of NR\r\n23\u00B0C\r\n95%\r\nYes\r\n0\u00B0\r\n20\r\n2% of NR\r\n85\u00B0C\r\nuncontrolled\r\nSnap Back Cycles\r\n0\u00B0\r\n21\r\n16% of NR\r\n85\u00B0C\r\nuncontrolled\r\n2  times 1.5 grams in the release lever zone\r\n0\u00B0\r\n22\r\n10 % of NR\r\n85\u00B0C\r\n95%\r\n0\u00B0\r\nCheck performance criteria\r\nDuration for each of the Steps 20, 21 and 22 shall be 32h min. If the number of cycles is reached before the 96h, maintain 80\u02DAC and 95% of Humidity in the chamber before passing on to step 23.\r\n23\r\n6% of NR\r\n23\u00B0C\r\n95%\r\n0\u00B0\r\n24\r\n4% of NR\r\n23\u00B0C\r\n95%\r\nYes\r\n0\u00B0\r\nno opening of the climate chamber before continue with step 25\r\n25\r\n6% of NR\r\n-20\u00B0C\r\nuncontrolled\r\nYes\r\n0\u00B0\r\n26\r\n6% of NR\r\n-20\u00B0C\r\nuncontrolled\r\nSnap Back Cycles\r\n0\u00B0\r\n27\r\n2% of NR\r\n-40\u00B0C\r\nuncontrolled\r\n2  times 1.5 grams in the release lever zone\r\n0\u00B0\r\nCheck performance criteria\r\n28\r\n10% de NR\r\n23\u00B0C\r\nAmbient\r\n0\u00B0\r\nEnd of validation Cycle test G3, Check performance criteria\r\nTable 6.3\r\nNote: If the cycle test continues during temperature changes, the new target temperature has to be reached within 2 hours max."
+    },
+    {
+      "level": 4,
+      "title": "Cycle Description",
+      "content": "The cycle testing as described has to be performed with acc the test set up in picture 6.4 and 6.5 part location/orientation in original vehicle condition and simulated load to the release lever stop.\r\nPicture 6.4\r\nPicture 6.5\r\n- Cycle description for handle version with NFC and w/o ADML\r\nAction\r\nForce\r\nRate\r\n\u002B/- 80mm/s\r\nDwell\r\ns\r\nNote\r\nHandle in rest position\r\nNFC unlock (using NFC card)\r\nPull handle to full open position\r\nF1 150N\r\n183 mm/s\r\n1\r\nResistive load during travel of 35N\r\nSlowly return the handle to the rest position without allowing it to snap back (not valid for the snap back cycles)\r\nNFC lock (using NFC card)\r\n- Cycle description for handle version with ADML \u002B NFC\r\nAction\r\nForce\r\nRate\r\n\u002B/- 80mm/s\r\nDwell\r\ns\r\nNote\r\nHandle in rest position\r\nADML unlock\r\nPull handle to full open position\r\nF1 150N\r\n183 mm/s\r\n1\r\nResistive load during travel of 35N\r\nSlowly return the handle to the rest position without allowing it to snap back (not valid for the snap back cycles)\r\nADML lock\r\nTable 6.4\r\nCable to be used for one full cycle test only.\r\nCheck performance criteria before, during and after test."
+    },
+    {
+      "level": 5,
+      "title": "Before start of testing:",
+      "content": "Measure following performance criterias :\r\na.  Pull force until to full open position\r\nb.  Free play in \u002B/-X, \u002B/- Y and \u002B/-Z direction\r\nc.  Cable release stroke\r\nd.  Proof Sensor function (if ADML Version)\r\ne.  Proof NFC function (If ADML/NFC content)"
+    },
+    {
+      "level": 5,
+      "title": "During testing:",
+      "content": "Measure all criterias in chapter 6.6.1.3.1\r\na.  At the end of the first half of the total number of cycles a deviation of 10% of the force in the original release stroke/force diagram is permitted in accordance with F1. No functioning noise/malfunction is permitted.  No malfunction is permitted.\r\nb.  At the end of the test, a deviation of 20% of the force in the original release stroke/force graph is permitted in accordance with F1.\r\nc.  By the end of the endurance test, the handle has to go from fully draw position to its rest position by the mechanic of the bracket in stand alone part condition.\r\nd.  Free play in all directions can increase by 5% (compare with measured values before test)\r\ne.  The inertia lock function shall not have any mal function.\r\nFor each of the Check performance criteria actions (listed in the previous table) a report has to be provided for all tests.\r\nAt the end of testing, 100% of the system should remain operational."
+    },
+    {
+      "level": 5,
+      "title": "After regular cycle testing:",
+      "content": "After finishing the complete cycle test listed in chapter 6.6.1.2 and in order to allow an evaluation of the performance of the controls by a statistical method, the handle has to be tested to failure. Conditions at 23\u00B0C and ambient humidity.\r\nBeyond the number of cycles listed in table 6.3, checks to be performed every 10,000 cycles.\r\nEnd of Life test to stop if test shows one of the following failure criteria:\r\na)  The cable release stroke is out of specification (see chapter 6.2.4.2).\r\nb)  A reduction of activation force in the original release stroke/force graph of 30% or an increase of this force of 75% is considered a failure.\r\nc)  the number of cycles reaches 1.5 times the total number of cycles selected in chapter 6.6.1.1.\r\nAt the end of the test, a complete overview of test reports (focused on failures) as well as their potential consequences is carried out and submitted to STELLANTIS engineering."
+    },
+    {
+      "level": 4,
+      "title": "Durability Test for lock/unlock function (by key)",
+      "content": "Purpose of the test is to verify the lock unlock activation of the side door latch function with a released key (can be a flip key with electronic, a mechanical key or a backup key (ADML design)"
+    },
+    {
+      "level": 5,
+      "title": "Test conditions",
+      "content": "Pick 3 parts randomly. Recommended is to the same or similar test configuration as for the cycle test. Lock cylinder are required for this testing."
+    },
+    {
+      "level": 5,
+      "title": "Lock/unlock cycles testing",
+      "content": "The total number of cycles is 50,000 cycles\r\n3 handle assemblies/Lock cylinders\r\nTemperature definition\r\nNtotal  =   50 000 cycles\r\nHot:                              85 \u00B0C\r\nAmbient:                     23\u00B0C\r\nCold:                           -20\u00B0C\r\nExtreme cold:           -40\u00B0C\r\nStep\r\nAmount of Cycles\r\nTemperature\r\nHumidity\r\nChem. Agents\r\nDust\r\n1\r\n24% dof NT\r\n23\u00B0C\r\nAmbient\r\n2\r\n8% of NT\r\n23\u00B0C\r\nAmbient\r\nyes\r\n3\r\n2% of NT\r\n23\u00B0C\r\nAmbient\r\n1.5 grams in the release lever zone on the tip of the cylinder and 1,5 grams in the rear\r\nCheck performance criteria\r\n4\r\n4% of NT\r\n23\u00B0C\r\n95%\r\nyes\r\n5\r\n2% of NT\r\n85\u00B0C\r\nuncontrolled\r\n6\r\n16% of NT\r\n85\u00B0C\r\nuncontrolled\r\n1.5 grams in the release lever zone on the tip of the cylinder and 1,5 grams in the rear\r\n7\r\n10 % of NT\r\n85\u00B0C\r\nuncontrolled\r\nCheck performance criteria\r\nDuration for each of the Steps 6,7 and 8 shall be 32h min. If the number of cycles is reached before the 96h, maintain 80\u02DAC and 95% of Humidity in the chamber before passing on to step 8.\r\n8\r\n6% of NT\r\n23\u00B0C\r\n95%\r\n9\r\n4% of NT\r\n23\u00B0C\r\n95%\r\nYes\r\nno opening of  the climate chamber before continue with step 10\r\n10\r\n6% of NT\r\n-20\u00B0C\r\nuncontrolled\r\nyes\r\n11\r\n6% of NT\r\n-20\u00B0C\r\nuncontrolled\r\n12\r\n2% of NT\r\n-40\u00B0C\r\nuncontrolled\r\n1.5 grams in the release lever zone on the tip of the cylinder and 1,5 grams in the rear\r\nCheck performance criteria\r\n13\r\n10% of NT\r\n23\u00B0c\r\nambient\r\nEnd of validation Cycle test Nt, Check performance criteria\r\nTable 6.5"
+    },
+    {
+      "level": 6,
+      "title": "Description of a cycle",
+      "content": "Before start of cycles testing the bezels has to be subjected for 10 days at 40\u00B0C and 95% humidity, then let it dry for at least 2 hours at ambient (see procedure D471309)\r\nAction\r\nTorque\r\nForce\r\nRate\r\nDwell\r\nNote\r\nInsert Key\r\n30N\r\n80mm/s\r\n0.2s\r\nRotate CW\r\n1.5 Nm\r\n120deg/s\r\nResistive load during travel of 0,8Nm\r\nCW Position End Stop\r\n1.5 Nm\r\n0,2s\r\nCW stops at full rotational travel\r\nReturn to CCW Position End Stop\r\n1.5 Nm\r\n120deg/s\r\nResistive load during travel 0,8Nm\r\nCCW Position End Stop\r\n1.5 Nm\r\n0,2s\r\nCCW stops at full rotational travel\r\nReturn to Rest Position\r\n1.5 Nm\r\n120deg/s\r\nRemove Key\r\n80mm/s\r\nTable 6.6"
+    },
+    {
+      "level": 6,
+      "title": "Angular deviation of lock cylinder",
+      "content": "The angular deviations of the lock cylinder position on the bracket are less than 1\u00B0 in relation to the values at new conditions. These values are inspected every 5,000 cycles.\r\nTest procedure:\r\nFix the \u0022door lock\u0022 by tightening the lateral screw\r\nSet the measuring instrument according to this starting \u0022door lock\u0022 position\r\nPerform the lock-unlock cycles\r\nMisure the angular deviation of the \u0022door lock\u0022 (max 1\u00B0 along the key axis) respect to the starting position\r\nIf a batch of 3 parts passes the total number of cycles as described above, the test is considered as being satisfactory.\r\nFunction\r\nNo. of test\r\nTest\r\nMeans or time-limit\r\nResp.\r\nFinish Date\r\nto allow the user to access and lock the vehicle\r\nDurability Test for lock/unlock function\r\nVRS2DV\r\nSupplier\r\nTBD\r\nTable 6.7"
+    },
+    {
+      "level": 3,
+      "title": "Robustness of bracket/Release Lever",
+      "content": "a.  Apply a 45N load on the cable in direction of F9 until the end stop of the release lever.\r\nb.  Apply a 65N load in F10 direction on the cable wire.\r\nc.  Measure the free length of the cables wire.\r\nd.  Put the assembly in a climate chamber for 100 hours with 85\u00B0C and 80% Humidity.\r\ne.  Measure the free length of the cable wire.\r\nf.  Measure the free length again after 4 hours (store assembly in ambient\r\ng.  Communicate changes in free length of the cable wire to STELLANTIS engineering."
+    },
+    {
+      "level": 3,
+      "title": "Cycle testing with parts out of mass production",
+      "content": "Test definition same as in 6.2.4.1 but number of samples can be extended up to 20 depend on assembly line design (EOL test, manual assembly i.e.). Number of parts to be tested to agree with STELLANTIS engineering."
+    },
+    {
+      "level": 3,
+      "title": "Corrosion testing",
+      "content": "The handle has to fulfill all requirements in the accelerated cyclic corrosion test, in the vehicle position, in accordance with the std. CS.00251 (120 cycles according to std. SAE-J-2334)\r\nMeasure following performance criteria before start of test:\r\na.  Pull force until to full open position.\r\nb.  Free play in \u002B/-X, \u002B/- Y and \u002B/-Z direction\r\nc.  Cable release stroke\r\nd.  Proof Sensor function (if ADML Version)\r\ne.  Proof NFC function (If ADML \u002B NFC content)\r\nf.  Function inertia blocker\r\nTest procedure\r\nPer Lab Procedure the components are assembled to a vehicle or e-coated and painted sheet metal pocket fixture that represents door sheet metal. The door handle assembly shall be placed in car position in the chamber. If the inertial lock rotates during a 1.52 m/s door slam, or during each handle actuation, then it can be rotated this same angular rotation during each corrosion cycle. Handle shall be cycled once per day during testing to simulate usage and avoid seizing that would not represent normal usage.\r\nAcceptance Criteria\r\nDoor Handle Assembly must meet the requirements of CS.00251, with regards to function and appearance. Handles must not lose function during or after the test. The Inertia Lock must return to its normal position within 1 second when held in car position and only under the influence of its return spring, after it\u2019s actuated to its minimum and full engagement positions. The handle and all of its movable components shall return to their normal positions within 1 second when held in car position only under the influence of its return spring when actuated to 50% and 100% of full travel."
+    },
+    {
+      "level": 3,
+      "title": "Electronic/mechanical Testing",
+      "content": "Electromechanical testing: see B21 7120 and B21 7130"
+    },
+    {
+      "level": 1,
+      "title": "PARAMETERS",
+      "content": ""
+    },
+    {
+      "level": 1,
+      "title": "TRACEABILITY MATRIX",
+      "content": ""
+    },
+    {
+      "level": 1,
+      "title": "APPENDIX / ANNEX",
+      "content": ""
+    },
+    {
+      "level": 2,
+      "title": "Appendix A - Assembly of the handle at STELLANTIS",
+      "content": "POSITIONING INTERNAL HANDLE BRACKET INTO THE DOOR\u00A0:\r\nThe handle bracket must have a robust pre-holding system for handle assembly\r\nThe clipping force must not exceed 4 daN with a one hand\r\nThe handle bracket and handle assembly must be fitted without an alignment jig\r\nThe clips must allow the bracket pre-assembly as per procedure requested/shared with Stellantins assembly team. The shape of the locking clip must not cause a hard point (hall effect) for clipping (the clip must slide over the metal sheet during the rotation)\r\nCABLE LATCH CLIPPING ON DOOR HANDLE BRACKET\r\nThe overlenght of the cable latch must be long enough for connection to the handle bracket (lever and fixed interface, otherwise accessibility for clipping must be guaranteed. The interface must be as close as possible to the door opening.\r\nThe cable latch must have its clips in the Y direction on the handle bracket\r\nThe cable latch must have only one possible position on the handle bracket"
+    },
+    {
+      "level": 2,
+      "title": "Appendix B - Detailed Protocol of Noise testing (example)",
+      "content": ""
+    },
+    {
+      "level": 3,
+      "title": "Documents/ information necessary",
+      "content": "- The type of assembly and minimum fastening torque of the part on the car.\r\n- An Excel file for each acoustic signal is required (duration of a signal: Ca. 100s)\r\n- An Excel file for the ageing signal (about a total of 117 hours)\r\n- An acceptance graph.\r\n- The supplier\u0027s inspection report of the units and sub-assemblies tested (with the reference(s) of the parts used)"
+    },
+    {
+      "level": 3,
+      "title": "Methods necessary",
+      "content": "a)  An anechoic or semi-anechoic room\r\nb)  A three-axle vibrator which can be insulated so that noise pollution does not occur\r\nc)  One single HANDLE (prototype stage) or a door equipped with window-opener, window, slide and window sealing strip (VRS stage)\r\nd)  A bench on which the HANDLE can be supported in car-representative configuration and which is adapted for vibratory tests (first mode higher than 100Hz) (prototype stage)\r\ne)  A bench on which the door \u002B HANDLE assembly can be supported in car-representative configuration and which is adapted to vibratory tests (first mode higher than 100Hz) (prototype stage) (VRS stage)\r\nf)  Two micros (without wind-breaker ball) with a range of function corresponding to the required frequency band and which are calibrated (e.g. : G.R.A.S type 40AER - \u00BD\u0027\u0027 free field, pre-polarized, of a sensibility of 50 mV/Pa, class I).\r\nThe first micro is placed as close as possible to the part (this is not necessarily a criteria of acceptance, but allows for better communication on the type of noise recorded between the different parties)\r\ng)  The second micro is placed at a representative distance from distance LV / ears of the passenger who is closest in the car configuration (here ca. 70 cm). This micro is the one applicable for all sound level measurements."
+    },
+    {
+      "level": 3,
+      "title": "Test sequence",
+      "content": ""
+    },
+    {
+      "level": 4,
+      "title": "Basic schema",
+      "content": ""
+    },
+    {
+      "level": 5,
+      "title": "First time, acoustic characteristics of test conditions",
+      "content": "The objective is to play interfering noise acoustical signals under the required test conditions (vibrato is working \u002B HANDLE support HANDLE in the \u201Cmeasuring\u201D room), but without the HANDLE.\r\nEach acoustical signal is played one by one (the number of signals may vary from 5 to 7, and they have a duration of ca. 100s).\r\nThe 3 axes can be played simultaneously or separately. In the case that the signals are played direction by direction, this will increase the number of interceptions.\r\n100s x 5 track x 3 directions = 1500s\r\nThe acoustic signals are submitted in a separate document in the form of an Excel file and can be improved in the course of the project (supplier has to ask for this before running any tests)\r\nAt the same time, recording is started for each of the micros (Acquisition of acoustic pressure by one-third octave via the micro(s) within the frequency range of [20 HZ ; 20 000 HZ] then compared to the acceptance graph.    The test technician is present to do a subjective hearing test and give his opinion if he should detect a noise coming from the installation required for testing."
+    },
+    {
+      "level": 5,
+      "title": "Second time, acoustic characteristics of the HANDLE body when new",
+      "content": "(to be carried out when the first test is validated)\r\nInstall the new HANDLE in the previous assembly.\r\nPlay each of the acoustic signals one after the other as done in the first time\u0027 test.\r\nAt the same time, recording is started for each of the micros (Acquisition of acoustic pressure by third octave filters via the micro(s) within the frequency range of [20 HZ; 20 000 HZ] then compared to the acceptance graph.    The test technician is present to do a subjective hearing test and give his opinion if he should detect a noise coming from the installation required for testing."
+    },
+    {
+      "level": 5,
+      "title": "Third time; ageing of the HANDLE due to operation.",
+      "content": "Subject the HANDLE to a climatic handling endurance test of 3 years.\r\nThe part undergoes the same ageing as the one subjected to the classic handling endurance test, but endurance will be stopped on this part for an ageing period equivalent to 3 years."
+    },
+    {
+      "level": 5,
+      "title": "Fourth time; HANDLE acoustic charact. after endurance operation of 3 years",
+      "content": "Play each of the acoustic signals on this HANDLE aged by handling one after the other as done in the second time\u0027 test.\r\nAt the same time, recording is started for each of the micros (Acquisition of acoustic pressure by one-third octave via the micro(s) within the frequency range of [20 HZ; 20 000 HZ] then compared to the acceptance graph.    The test technician is present to do a subjective hearing test and give his opinion if he should detect a noise coming from the installation required for testing."
+    },
+    {
+      "level": 5,
+      "title": "Fifth time; ageing of the HANDLE during driving (at ambient temperature)",
+      "content": "Apply a vibratory ageing sequence on this HANDLE which is already aged from handling.\r\nThe temporary signals of ageing of a duration of 117 hours will be sent to you separately from this document as an Excel file and can be improved/amended in the course of the project.\r\nThe 3 axes must be played simultaneously; this profile equalling a car driving period of 3 years.\r\nDuring this ageing process, the part is positioned in the same way as on vehicle."
+    },
+    {
+      "level": 5,
+      "title": "Sixth time; acoustic characteristics of the aged HANDLE",
+      "content": "Play each of the acoustic signals with the opener having been subjected to handling endurance and vibratory testing as run with times 2 and 4.\r\nAt the same time, recording is started for each of the micros (Acquisition of acoustic pressure by one-third octave via the micro(s) within the frequency range of [20 HZ; 20 000 HZ] then compared to the acceptance graph.    The test technician is present to do a subjective hearing test and give his opinion if he should detect a noise coming from the installation required for testing."
+    },
+    {
+      "level": 2,
+      "title": "Appendix C \u2013 ODH Cold Testing",
+      "content": ""
+    },
+    {
+      "level": 3,
+      "title": "Principe of test",
+      "content": "Before engagement of the freezing test, the request is to prepare the tested parts by engagement of 4 AF cycles (to prepare the parts to receive the water ingress).\r\nOnce this preliminary test has been carried out, the tests consist of undergoing a sequence of tests in 3 stages with at the end of each of them a status on the functionality of the ODH.\r\nThe supplier need to make pictures on critical zone to clearly identify the potential area how the ice could be damaged the part ( functionality of it) pictures done before test and just after extraction of the climatic chamber . And supplier need to check and measure the part as soon as the\u00A0 part is extracted to the climatic chamber."
+    },
+    {
+      "level": 3,
+      "title": "Test mean",
+      "content": "It is constituted:\r\na water supply\r\na partial mean of testing including the definition of the door sheet metal in the area around the ODH\r\na spacious climatic chamber to accommodate the part on partial mean and allowing the temperature T = - 40 \u00B0C to be reached"
+    },
+    {
+      "level": 3,
+      "title": "Mode operational",
+      "content": "The ODH must undergo each of the following 4 cold tests in order and on the same part (see \u00A7 Dry part, \u00A7 After icing, \u00A7 Runoff and \u00A7 Karcher washing). At the end of each of them, the characteristics specified in the reference document are verified. (list of functionality and specific measurements checked to be propose and validated with STLA team)\r\nPhase 1: DRY PART\r\nThe ODH fixed on its partial mean in car position is placed in a climatic chamber leveled off beforehand with - 40 \u00B0C and must remain 2 hours there\r\nPhase 2: AFTER ICING\r\nThe ODH having undergone the test in \u00A7 Dry room, is exposed to ambient temperature (see: 23\u00B0C \u00B1 5\u00B0C) until droplets form.\r\nUnder these conditions, it is subject to the following constraints:\r\n\u2022 The \u201CODH \u002B his support\u201D assembly is introduced into a climatic chamber which has previously been stabilized at -20\u00B0C for 1 hour.\r\n\u2022 Immediately, the refrigeration system and ventilation are stopped.\r\n\u2022 At -5\u00B0C, the temperature is stabilized and the \u201CODH on its support\u201D assembly remains in the enclosure for 3 hours\r\nPhase 3: WATER INGRESS, RUN-OFF\r\nAt the conclusion of the tests of the \u00A7 After icing, to leave the unit the climatic test rig and to let the whole return to the room temperature of workshop (see: 23 \u00B0C \u00B1 5 \u00B0C) then to carry out the following tests:\r\n\u2022 The ODH is exposed during 5 Hours under a jet of water having the following characteristics:\r\n\u2022 flow: 10 l/hour without any pressure\r\n\u2022 watering system reproducing rain positioned vertically on the ODH (ODH in vehicle position) and watering covering 100% of the surface at the ODH; watering drain positioned 300 mm from the ODH (vertical to it).\r\n\u2022 To carry out the tests of the \u00A7 After freezing test"
+    }
+  ]
+}

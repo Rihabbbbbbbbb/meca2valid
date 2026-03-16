@@ -1,0 +1,15 @@
+c:\users\ta29225\v2_leon_github\cdc_stellantis\ReportGeneratorChat\bin\Debug\net8.0\ReportGeneratorChat.exe
+c:\users\ta29225\v2_leon_github\cdc_stellantis\ReportGeneratorChat\bin\Debug\net8.0\ReportGeneratorChat.deps.json
+c:\users\ta29225\v2_leon_github\cdc_stellantis\ReportGeneratorChat\bin\Debug\net8.0\ReportGeneratorChat.runtimeconfig.json
+c:\users\ta29225\v2_leon_github\cdc_stellantis\ReportGeneratorChat\bin\Debug\net8.0\ReportGeneratorChat.dll
+c:\users\ta29225\v2_leon_github\cdc_stellantis\ReportGeneratorChat\bin\Debug\net8.0\ReportGeneratorChat.pdb
+c:\users\ta29225\v2_leon_github\cdc_stellantis\ReportGeneratorChat\obj\Debug\net8.0\ReportGeneratorChat.GeneratedMSBuildEditorConfig.editorconfig
+c:\users\ta29225\v2_leon_github\cdc_stellantis\ReportGeneratorChat\obj\Debug\net8.0\ReportGeneratorChat.AssemblyInfoInputs.cache
+c:\users\ta29225\v2_leon_github\cdc_stellantis\ReportGeneratorChat\obj\Debug\net8.0\ReportGeneratorChat.AssemblyInfo.cs
+c:\users\ta29225\v2_leon_github\cdc_stellantis\ReportGeneratorChat\obj\Debug\net8.0\ReportGeneratorChat.csproj.CoreCompileInputs.cache
+c:\users\ta29225\v2_leon_github\cdc_stellantis\ReportGeneratorChat\obj\Debug\net8.0\ReportGeneratorChat.sourcelink.json
+c:\users\ta29225\v2_leon_github\cdc_stellantis\ReportGeneratorChat\obj\Debug\net8.0\ReportGeneratorChat.dll
+c:\users\ta29225\v2_leon_github\cdc_stellantis\ReportGeneratorChat\obj\Debug\net8.0\refint\ReportGeneratorChat.dll
+c:\users\ta29225\v2_leon_github\cdc_stellantis\ReportGeneratorChat\obj\Debug\net8.0\ReportGeneratorChat.pdb
+c:\users\ta29225\v2_leon_github\cdc_stellantis\ReportGeneratorChat\obj\Debug\net8.0\ReportGeneratorChat.genruntimeconfig.cache
+c:\users\ta29225\v2_leon_github\cdc_stellantis\ReportGeneratorChat\obj\Debug\net8.0\ref\ReportGeneratorChat.dll

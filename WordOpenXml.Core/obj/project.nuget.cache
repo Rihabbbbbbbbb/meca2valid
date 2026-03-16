@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "Ud8s3ci5M9I=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\TA29225\\V2_Leon_github\\CDC_Stellantis\\WordOpenXml.Core\\WordOpenXml.Core.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\TA29225\\.nuget\\packages\\documentformat.openxml\\3.4.1\\documentformat.openxml.3.4.1.nupkg.sha512",
+    "C:\\Users\\TA29225\\.nuget\\packages\\documentformat.openxml.framework\\3.4.1\\documentformat.openxml.framework.3.4.1.nupkg.sha512",
+    "C:\\Users\\TA29225\\.nuget\\packages\\system.io.packaging\\8.0.1\\system.io.packaging.8.0.1.nupkg.sha512"
+  ],
+  "logs": []
+}

@@ -1,0 +1,11 @@
+c:\users\ta29225\v2_leon_github\cdc_stellantis\WordOpenXml.Core\bin\Debug\net8.0\WordOpenXml.Core.deps.json
+c:\users\ta29225\v2_leon_github\cdc_stellantis\WordOpenXml.Core\bin\Debug\net8.0\WordOpenXml.Core.dll
+c:\users\ta29225\v2_leon_github\cdc_stellantis\WordOpenXml.Core\bin\Debug\net8.0\WordOpenXml.Core.pdb
+c:\users\ta29225\v2_leon_github\cdc_stellantis\WordOpenXml.Core\obj\Debug\net8.0\WordOpenXml.Core.csproj.AssemblyReference.cache
+c:\users\ta29225\v2_leon_github\cdc_stellantis\WordOpenXml.Core\obj\Debug\net8.0\WordOpenXml.Core.GeneratedMSBuildEditorConfig.editorconfig
+c:\users\ta29225\v2_leon_github\cdc_stellantis\WordOpenXml.Core\obj\Debug\net8.0\WordOpenXml.Core.csproj.CoreCompileInputs.cache
+c:\users\ta29225\v2_leon_github\cdc_stellantis\WordOpenXml.Core\obj\Debug\net8.0\WordOpenXml.Core.sourcelink.json
+c:\users\ta29225\v2_leon_github\cdc_stellantis\WordOpenXml.Core\obj\Debug\net8.0\WordOpenXml.Core.dll
+c:\users\ta29225\v2_leon_github\cdc_stellantis\WordOpenXml.Core\obj\Debug\net8.0\refint\WordOpenXml.Core.dll
+c:\users\ta29225\v2_leon_github\cdc_stellantis\WordOpenXml.Core\obj\Debug\net8.0\WordOpenXml.Core.pdb
+c:\users\ta29225\v2_leon_github\cdc_stellantis\WordOpenXml.Core\obj\Debug\net8.0\ref\WordOpenXml.Core.dll

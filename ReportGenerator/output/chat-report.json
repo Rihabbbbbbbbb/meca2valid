@@ -1,0 +1,190 @@
+{
+  "metadata": {
+    "Tool": "TemplateOneShotExtractor",
+    "Version": "1.2.0",
+    "StartedAtUtc": "2026-03-05T14:06:30.2843673\u002B00:00",
+    "ValidatedAtUtc": "2026-03-05T14:06:32.7674043\u002B00:00",
+    "DurationMs": "2483",
+    "TemplatePath": "C:\\Users\\TA29225\\Desktop\\Component_or_Part_Specification_Template.docx",
+    "UserDocumentPath": "C:\\Users\\TA29225\\Downloads\\00692_25_01250_ASU_Technical_Specification_SPX.docx"
+  },
+  "summary": {
+    "finalScore": 95.21,
+    "pivotCoverage": 100,
+    "subtitleRecall": 90,
+    "subtitlePrecision": 59.5,
+    "orderScore": 100,
+    "confidenceBand": "LOW"
+  },
+  "policyCompliance": {
+    "missingSections": [
+      "architecture and design requirements",
+      "abbreviations",
+      "product context",
+      "system functions",
+      "system overview"
+    ],
+    "totalSections": 14
+  },
+  "qualityGates": {
+    "requiresNotApplicableForEmptySections": true,
+    "redTextDetected": false,
+    "emptySectionViolations": [
+      {
+        "order": 28,
+        "title": "VOCABULARY SPECIFIC TO THE COMPONENT",
+        "canonicalTitle": "vocabulary specific to the component",
+        "requirement": "Section vide: ajouter \u0027Not applicable\u0027 ou \u0027Sans objet\u0027"
+      },
+      {
+        "order": 86,
+        "title": "Technical Safety Requirements (ISO26262)",
+        "canonicalTitle": "technical safety requirements iso26262",
+        "requirement": "Section vide: ajouter \u0027Not applicable\u0027 ou \u0027Sans objet\u0027"
+      },
+      {
+        "order": 87,
+        "title": "SOTIF Requirements",
+        "canonicalTitle": "sotif requirements",
+        "requirement": "Section vide: ajouter \u0027Not applicable\u0027 ou \u0027Sans objet\u0027"
+      },
+      {
+        "order": 95,
+        "title": "Data for calculation of failure occurrences",
+        "canonicalTitle": "data for calculation of failure occurrences",
+        "requirement": "Section vide: ajouter \u0027Not applicable\u0027 ou \u0027Sans objet\u0027"
+      },
+      {
+        "order": 96,
+        "title": "Confidence level for dependability requirements calculation",
+        "canonicalTitle": "confidence level for dependability requirements calculation",
+        "requirement": "Section vide: ajouter \u0027Not applicable\u0027 ou \u0027Sans objet\u0027"
+      }
+    ]
+  },
+  "pivotHighlights": [
+    {
+      "pivotTitle": "GENERAL DESCRIPTION OF THE SYSTEM",
+      "templateSubtitleCount": 5,
+      "userSubtitleCount": 5,
+      "matchedSubtitleCount": 2,
+      "orderTemplate": 5,
+      "orderUser": 5,
+      "missingSubtitles": [
+        "system complexity",
+        "functional complexity",
+        "architecture complexity"
+      ],
+      "severity": "High"
+    },
+    {
+      "pivotTitle": "FUNCTIONAL REQUIREMENTS",
+      "templateSubtitleCount": 5,
+      "userSubtitleCount": 18,
+      "matchedSubtitleCount": 2,
+      "orderTemplate": 31,
+      "orderUser": 31,
+      "missingSubtitles": [
+        "use case xxx",
+        "expression of requirements",
+        "use case yyy"
+      ],
+      "severity": "High"
+    },
+    {
+      "pivotTitle": "EXTERNAL INTERFACES REQUIREMENTS",
+      "templateSubtitleCount": 11,
+      "userSubtitleCount": 16,
+      "matchedSubtitleCount": 10,
+      "orderTemplate": 38,
+      "orderUser": 56,
+      "missingSubtitles": [
+        "network interfaces"
+      ],
+      "severity": "High"
+    },
+    {
+      "pivotTitle": "OPERATIONAL REQUIREMENTS",
+      "templateSubtitleCount": 31,
+      "userSubtitleCount": 37,
+      "matchedSubtitleCount": 30,
+      "orderTemplate": 50,
+      "orderUser": 73,
+      "missingSubtitles": [
+        "quality convergence requirement in development"
+      ],
+      "severity": "High"
+    },
+    {
+      "pivotTitle": "INTEGRATION AND VALIDATION REQUIREMENTS",
+      "templateSubtitleCount": 3,
+      "userSubtitleCount": 18,
+      "matchedSubtitleCount": 3,
+      "orderTemplate": 95,
+      "orderUser": 124,
+      "missingSubtitles": [],
+      "severity": "Medium"
+    },
+    {
+      "pivotTitle": "PERFORMANCE REQUIREMENTS",
+      "templateSubtitleCount": 0,
+      "userSubtitleCount": 2,
+      "matchedSubtitleCount": 0,
+      "orderTemplate": 37,
+      "orderUser": 53,
+      "missingSubtitles": [],
+      "severity": "Low"
+    },
+    {
+      "pivotTitle": "CONSTRAINT REQUIREMENTS",
+      "templateSubtitleCount": 12,
+      "userSubtitleCount": 12,
+      "matchedSubtitleCount": 12,
+      "orderTemplate": 82,
+      "orderUser": 111,
+      "missingSubtitles": [],
+      "severity": "Low"
+    }
+  ],
+  "topIssues": [
+    {
+      "type": "MissingSections",
+      "count": 5,
+      "items": [
+        "architecture and design requirements",
+        "abbreviations",
+        "product context",
+        "system functions",
+        "system overview"
+      ],
+      "severity": "High"
+    },
+    {
+      "type": "EmptySections",
+      "count": 5,
+      "items": [
+        "VOCABULARY SPECIFIC TO THE COMPONENT",
+        "Technical Safety Requirements (ISO26262)",
+        "SOTIF Requirements",
+        "Data for calculation of failure occurrences",
+        "Confidence level for dependability requirements calculation"
+      ],
+      "severity": "Medium"
+    }
+  ],
+  "tableSummary": {
+    "Enabled": true,
+    "TemplateTableCount": 101,
+    "UserTableCount": 174,
+    "SectionCoveragePercent": 92.59,
+    "HeaderRecallPercent": 65.22,
+    "HeaderPrecisionPercent": 38.46,
+    "QualityBand": "LOW"
+  },
+  "recommendations": [
+    "Add the missing sections or explicitly mark them \u0027Not applicable\u0027.",
+    "Subtitle precision is low \u2014 review extra subtitles and consolidate duplicates.",
+    "Low confidence detected \u2014 manually review highlighted pivots and ambiguous sections."
+  ],
+  "humanSummary": "Overall score: 95,21%. Pivot coverage: 100%. Top issues: MissingSections, EmptySections. See \u0027pivotHighlights\u0027 for per-section details and \u0027recommendations\u0027 for next steps."
+}

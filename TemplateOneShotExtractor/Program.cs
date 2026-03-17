@@ -49,7 +49,6 @@ namespace TemplateOneShotExtractor.Models
         public string Type { get; set; } = string.Empty;
         public string Field { get; set; } = string.Empty;
         public string Message { get; set; } = string.Empty;
-        public string Severity { get; set; } = string.Empty;
     }
 
     public class ValidationSummary
@@ -59,7 +58,7 @@ namespace TemplateOneShotExtractor.Models
         public int MissingSections { get; set; }
         public int TrulyEmptySections { get; set; }
         public int PlaceholderSections { get; set; }
-        public int ThinContentSections { get; set; }
+
         public int TotalBlueprintTablePatterns { get; set; }
         public int MatchedTablePatterns { get; set; }
         public int MissingTablePatterns { get; set; }
@@ -98,7 +97,7 @@ namespace TemplateOneShotExtractor.Models
     public class ChatMetadata
     {
         public string Tool { get; set; } = "TemplateOneShotExtractor-AzureFunction";
-        public string Version { get; set; } = "4.0.0";
+        public string Version { get; set; } = "4.2.0";
         public string StartedAtUtc { get; set; } = string.Empty;
         public string ValidatedAtUtc { get; set; } = string.Empty;
         public long DurationMs { get; set; }
@@ -122,7 +121,6 @@ namespace TemplateOneShotExtractor.Models
         public int FoundSubtitleCount { get; set; }
         public int MatchedSubtitleCount { get; set; }
         public List<string> MissingSubtitles { get; set; } = new();
-        public string Severity { get; set; } = "Low";
     }
 
     public class ChatTopIssue
@@ -130,7 +128,6 @@ namespace TemplateOneShotExtractor.Models
         public string Type { get; set; } = string.Empty;
         public int Count { get; set; }
         public List<string> Items { get; set; } = new();
-        public string Severity { get; set; } = string.Empty;
     }
 
     public class ChatTableIssue
@@ -423,40 +420,14 @@ namespace TemplateOneShotExtractor
             }
             _logger.LogInformation("[{CId}] Placeholder sections: {N}", correlationId, placeholderSections.Count);
 
-            // ── STEP 9: Content depth/thinness check ─────────────────────
-            // Compare user section word counts against blueprint expectations
-            // Use GroupBy to handle duplicate canonical titles safely (e.g. "REGULATION AND CONSUMERISM" appears twice)
-            var blueprintWordCounts = blueprintHeadings
-                .Where(h => h.ContentWordCount > 10)
-                .GroupBy(
-                    h => Regex.Replace(Regex.Replace(h.Title.ToUpperInvariant().Trim(),
-                        @"^\d+(\.\d+)*\s*[-:.)]?\s*", ""), @"\s+", " ").Trim(),
-                    StringComparer.OrdinalIgnoreCase)
-                .ToDictionary(
-                    g => g.Key,
-                    g => g.First().ContentWordCount,
-                    StringComparer.OrdinalIgnoreCase);
-
-            var thinSections = new List<(NormalizedSection Section, int UserWords, int ExpectedWords)>();
-            foreach (var s in userAnalysis.Sections)
-            {
-                if (!commonSet.Contains(s.CanonicalTitle)) continue;
-                if (!blueprintWordCounts.TryGetValue(s.CanonicalTitle, out var expectedWords)) continue;
-
-                int userWords = CountWords(s.Content);
-                // Flag if user has less than 20% of expected content
-                if (userWords < expectedWords * 0.20 && userWords < 20)
-                {
-                    thinSections.Add((s, userWords, expectedWords));
-                }
-            }
-            _logger.LogInformation("[{CId}] Thin-content sections: {N}", correlationId, thinSections.Count);
-
-            // ── STEP 10: Smart table pattern matching ────────────────────
+            // ── STEP 9: Smart table pattern matching ─────────────────────
             // Group blueprint tables by DISTINCT signature (not 1-to-N).
             // Count how many instances of each pattern exist. Compare
             // against user table signature counts.
-            var sectionTables = blueprintTables.Where(t => t.SectionOrder.HasValue).ToList();
+            // Filter out explanatory/naming-convention tables that aren't real data tables.
+            var sectionTables = blueprintTables
+                .Where(t => t.SectionOrder.HasValue && !IsExplanatoryTable(t.HeaderSignature))
+                .ToList();
 
             // Group by signature → expected count + sections
             var blueprintSigGroups = sectionTables
@@ -483,6 +454,12 @@ namespace TemplateOneShotExtractor
                 .Where(k => !string.IsNullOrWhiteSpace(k))
                 .ToHashSet(StringComparer.OrdinalIgnoreCase);
 
+            // Build list of all user signature strings for substring fallback matching
+            var allUserSigs = userTables
+                .Where(t => !string.IsNullOrWhiteSpace(t.HeaderSignature))
+                .Select(t => t.HeaderSignature.ToLowerInvariant())
+                .ToList();
+
             var tableAnalysis = new List<ChatTableIssue>();
             int matchedPatterns = 0;
             int totalPatterns = blueprintSigGroups.Count;
@@ -491,11 +468,19 @@ namespace TemplateOneShotExtractor
             {
                 int foundCount = userSigCounts.TryGetValue(group.Signature, out var c) ? c : 0;
 
-                // Fuzzy fallback: if exact match fails, check if any user table has
-                // the same first-column key (handles "Req No" vs "Requirement Number")
+                // Fuzzy fallback #1: synonym-normalized first-column key
                 bool fuzzyMatch = foundCount == 0
                     && !string.IsNullOrWhiteSpace(group.Signature)
                     && userSigFuzzySet.Contains(SigFuzzyKey(group.Signature));
+
+                // Fuzzy fallback #2: substring containment for single-column signatures
+                // (e.g. blueprint "on indelible inscription" matches user table containing that text)
+                if (!fuzzyMatch && foundCount == 0 && !group.Signature.Contains('|'))
+                {
+                    var bpLower = group.Signature.ToLowerInvariant().Trim();
+                    fuzzyMatch = allUserSigs.Any(us =>
+                        us.Contains(bpLower) || bpLower.Contains(us));
+                }
 
                 if (foundCount > 0 || fuzzyMatch)
                 {
@@ -543,8 +528,7 @@ namespace TemplateOneShotExtractor
                 {
                     Type = "MissingSection",
                     Field = missing,
-                    Message = $"Required section '{missing}' is missing from the document",
-                    Severity = "critical"
+                    Message = $"Required section '{missing}' is missing from the document"
                 });
             }
 
@@ -555,8 +539,7 @@ namespace TemplateOneShotExtractor
                 {
                     Type = "EmptySection",
                     Field = empty.Title,
-                    Message = $"Section '{empty.Title}' exists but has no content (no text, no sub-sections with content, and no tables)",
-                    Severity = "high"
+                    Message = $"Section '{empty.Title}' exists but has no content (no text, no sub-sections with content, and no tables)"
                 });
             }
 
@@ -567,20 +550,7 @@ namespace TemplateOneShotExtractor
                 {
                     Type = "PlaceholderContent",
                     Field = sec.Title,
-                    Message = $"Section '{sec.Title}' appears to contain ~{ratio}% placeholder/template text (<<...>>, XXX, <name>) — needs real content",
-                    Severity = "high"
-                });
-            }
-
-            // Thin-content sections
-            foreach (var (sec, userWords, expectedWords) in thinSections)
-            {
-                report.Issues.Add(new ValidationIssue
-                {
-                    Type = "ThinContent",
-                    Field = sec.Title,
-                    Message = $"Section '{sec.Title}' has only {userWords} words — blueprint expects ~{expectedWords} words of content",
-                    Severity = "medium"
+                    Message = $"Section '{sec.Title}' appears to contain ~{ratio}% placeholder/template text (<<...>>, XXX, <name>) — needs real content"
                 });
             }
 
@@ -596,8 +566,7 @@ namespace TemplateOneShotExtractor
                         {
                             Type = "MissingTablePattern",
                             Field = section,
-                            Message = $"Section '{section}': required table with headers [{TruncateSig(mt.PatternSignature)}] not found — check that this table exists and has the correct column headers",
-                            Severity = "high"
+                            Message = $"Section '{section}': required table with headers [{TruncateSig(mt.PatternSignature)}] not found — check that this table exists and has the correct column headers"
                         });
                     }
                 }
@@ -611,8 +580,7 @@ namespace TemplateOneShotExtractor
                         Type = "MissingTablePattern",
                         Field = $"{mt.ExpectedInSections.Count} sections",
                         Message = $"Requirement table pattern [{TruncateSig(mt.PatternSignature)}] not found in {mt.ExpectedInSections.Count} sections (e.g. {preview}…). " +
-                                  $"Likely cause: your table headers use different wording than the blueprint — check that column headers match exactly.",
-                        Severity = "high"
+                                  $"Likely cause: your table headers use different wording than the blueprint — check that column headers match exactly."
                     });
                 }
             }
@@ -624,14 +592,13 @@ namespace TemplateOneShotExtractor
                 {
                     Type = "PartialTablePattern",
                     Field = mt.PatternSignature,
-                    Message = $"Table pattern [{TruncateSig(mt.PatternSignature)}] found {mt.FoundCount}× but expected {mt.ExpectedCount}× — some sections may be missing their tables",
-                    Severity = "medium"
+                    Message = $"Table pattern [{TruncateSig(mt.PatternSignature)}] found {mt.FoundCount}× but expected {mt.ExpectedCount}× — some sections may be missing their tables"
                 });
             }
 
-            // ── STEP 12: Score calculation ───────────────────────────────
-            // Weighted: 50% section coverage, 25% table pattern coverage,
-            // 15% content quality (empty + placeholder + thin penalty), 10% depth
+            // ── STEP 11: Score calculation ───────────────────────────────
+            // Weighted: 55% section coverage, 25% table pattern coverage,
+            // 20% content quality (empty + placeholder penalty)
             double sectionScore = comparison.CoveragePercent;
             double tableScore = tablePatternCoverage;
 
@@ -639,15 +606,11 @@ namespace TemplateOneShotExtractor
             double contentPenalty = refAnalysis.Sections.Count > 0
                 ? (double)contentIssues / refAnalysis.Sections.Count * 100 : 0;
 
-            double thinPenalty = refAnalysis.Sections.Count > 0
-                ? (double)thinSections.Count / refAnalysis.Sections.Count * 100 : 0;
-
             int finalScore = Math.Max(0, Math.Min(100,
                 (int)Math.Round(
-                    sectionScore * 0.50
+                    sectionScore * 0.55
                     + tableScore * 0.25
-                    + (100 - contentPenalty) * 0.15
-                    + (100 - thinPenalty) * 0.10)));
+                    + (100 - contentPenalty) * 0.20)));
 
             report.Score = finalScore;
             report.Summary = new ValidationSummary
@@ -657,7 +620,6 @@ namespace TemplateOneShotExtractor
                 MissingSections = comparison.MissingInUser.Count,
                 TrulyEmptySections = trulyEmptySections.Count,
                 PlaceholderSections = placeholderSections.Count,
-                ThinContentSections = thinSections.Count,
                 TotalBlueprintTablePatterns = totalPatterns,
                 MatchedTablePatterns = matchedPatterns,
                 MissingTablePatterns = missingPatterns,
@@ -701,8 +663,7 @@ namespace TemplateOneShotExtractor
                 {
                     Type = "MissingSections",
                     Count = comparison.MissingInUser.Count,
-                    Items = comparison.MissingInUser.ToList(),
-                    Severity = "Critical"
+                    Items = comparison.MissingInUser.ToList()
                 });
             }
             if (trulyEmptySections.Count > 0)
@@ -711,8 +672,7 @@ namespace TemplateOneShotExtractor
                 {
                     Type = "EmptySections",
                     Count = trulyEmptySections.Count,
-                    Items = trulyEmptySections.Select(s => s.Title).ToList(),
-                    Severity = "High"
+                    Items = trulyEmptySections.Select(s => s.Title).ToList()
                 });
             }
             if (placeholderSections.Count > 0)
@@ -721,18 +681,7 @@ namespace TemplateOneShotExtractor
                 {
                     Type = "PlaceholderContent",
                     Count = placeholderSections.Count,
-                    Items = placeholderSections.Select(p => $"{p.Section.Title} ({p.PlaceholderRatio}% placeholder)").ToList(),
-                    Severity = "High"
-                });
-            }
-            if (thinSections.Count > 0)
-            {
-                chat.TopIssues.Add(new ChatTopIssue
-                {
-                    Type = "ThinContent",
-                    Count = thinSections.Count,
-                    Items = thinSections.Select(t => $"{t.Section.Title} ({t.UserWords}/{t.ExpectedWords} words)").ToList(),
-                    Severity = "Medium"
+                    Items = placeholderSections.Select(p => $"{p.Section.Title} ({p.PlaceholderRatio}% placeholder)").ToList()
                 });
             }
             if (missingPatterns > 0)
@@ -742,8 +691,7 @@ namespace TemplateOneShotExtractor
                     Type = "MissingTablePatterns",
                     Count = missingPatterns,
                     Items = tableAnalysis.Where(t => t.Status == "missing")
-                        .Select(t => $"[{TruncateSig(t.PatternSignature)}] ×{t.ExpectedCount}").ToList(),
-                    Severity = "High"
+                        .Select(t => $"[{TruncateSig(t.PatternSignature)}] ×{t.ExpectedCount}").ToList()
                 });
             }
 
@@ -759,7 +707,7 @@ namespace TemplateOneShotExtractor
             // Recommendations
             chat.Recommendations = BuildRecommendations(
                 comparison.MissingInUser.Count, trulyEmptySections.Count,
-                placeholderSections.Count, thinSections.Count,
+                placeholderSections.Count,
                 missingPatterns, band, comparison.ExtraInUser.Count,
                 userTables.Count, sectionTables.Count);
 
@@ -767,9 +715,9 @@ namespace TemplateOneShotExtractor
             chat.HumanSummary = BuildHumanSummary(report, chat, comparison);
 
             _logger.LogInformation(
-                "[{CId}] DONE: Score={Score}%, Band={Band}, Missing={MS}, Empty={ES}, Placeholder={PS}, Thin={TS}, MissingTablePatterns={MT}",
+                "[{CId}] DONE: Score={Score}%, Band={Band}, Missing={MS}, Empty={ES}, Placeholder={PS}, MissingTablePatterns={MT}",
                 correlationId, finalScore, band, comparison.MissingInUser.Count,
-                trulyEmptySections.Count, placeholderSections.Count, thinSections.Count, missingPatterns);
+                trulyEmptySections.Count, placeholderSections.Count, missingPatterns);
 
             return (report, chat);
         }
@@ -952,18 +900,13 @@ namespace TemplateOneShotExtractor
                 var found = subs.Where(s => userCanonicals.Contains(s.CanonicalTitle)).ToList();
                 var missing = subs.Where(s => !userCanonicals.Contains(s.CanonicalTitle)).ToList();
 
-                string severity = missing.Count > 0 ? "High"
-                                : subs.Count > 0 && found.Count < subs.Count ? "Medium"
-                                : "Low";
-
                 highlights.Add(new ChatPivotHighlight
                 {
                     PivotTitle = pivot.Title,
                     ExpectedSubtitleCount = subs.Count,
                     FoundSubtitleCount = found.Count,
                     MatchedSubtitleCount = found.Count,
-                    MissingSubtitles = missing.Select(s => s.Title).ToList(),
-                    Severity = severity
+                    MissingSubtitles = missing.Select(s => s.Title).ToList()
                 });
             }
 
@@ -976,7 +919,7 @@ namespace TemplateOneShotExtractor
 
         private static List<string> BuildRecommendations(
             int missingSections, int emptySections, int placeholderSections,
-            int thinSections, int missingTablePatterns,
+            int missingTablePatterns,
             string band, int extraSections, int userTableCount, int blueprintTableCount)
         {
             var rec = new List<string>();
@@ -987,8 +930,6 @@ namespace TemplateOneShotExtractor
                 rec.Add($"Fill in the {emptySections} empty section(s) — these have no text content, no sub-sections with content, and no tables.");
             if (placeholderSections > 0)
                 rec.Add($"Replace placeholder content in {placeholderSections} section(s) — text like '<<Insert here>>', 'XXX', '<component name>' must be replaced with real project data.");
-            if (thinSections > 0)
-                rec.Add($"Expand {thinSections} section(s) with thin content — these have significantly less text than the blueprint expects. Review and add missing details.");
             if (missingTablePatterns > 0)
                 rec.Add($"Add {missingTablePatterns} missing table pattern(s) — each section must contain its expected tables with the correct header structure.");
             if (userTableCount > 0 && userTableCount < blueprintTableCount * 0.5)
@@ -1020,8 +961,6 @@ namespace TemplateOneShotExtractor
                 parts.Add($"{report.Summary.TrulyEmptySections} EMPTY section(s).");
             if (report.Summary.PlaceholderSections > 0)
                 parts.Add($"{report.Summary.PlaceholderSections} section(s) still contain PLACEHOLDER text.");
-            if (report.Summary.ThinContentSections > 0)
-                parts.Add($"{report.Summary.ThinContentSections} section(s) have THIN content (insufficient depth).");
             if (report.Summary.MissingTablePatterns > 0)
                 parts.Add($"{report.Summary.MissingTablePatterns} table pattern(s) MISSING ({report.Summary.UserTableCount} user tables vs {report.Summary.TotalBlueprintTables} expected).");
 
@@ -1045,7 +984,7 @@ namespace TemplateOneShotExtractor
             report.Issues.Add(new ValidationIssue
             {
                 Type = "error", Field = field,
-                Message = message, Severity = "critical"
+                Message = message
             });
             chat.HumanSummary = $"Validation failed: {message}";
             return (report, chat);
@@ -1064,24 +1003,57 @@ namespace TemplateOneShotExtractor
         }
 
         /// <summary>
-        /// Fuzzy key = first pipe-segment, normalized to first 3 words.
-        /// "requirement number v|..." and "req no v|..." both key to "requirement number"
-        /// vs "req no" — not equal, but covers cases where "number" ↔ "number" is same.
-        /// More importantly, used to detect that AT LEAST the same first-column concept is present.
-        /// Key logic: take first column, take first 2 alpha words, join.
-        /// So "requirement number v" → "requirement number"
-        ///    "req no v"            → "req no"
-        ///    "requirement n"       → "requirement n"  (network table)
+        /// Fuzzy key for table signature matching.
+        /// Normalizes synonyms and abbreviations so that different wording
+        /// for the same logical table still produces the same key.
+        /// Examples:
+        ///    "requirement number v|..."  → "requirement number"
+        ///    "requirement no v|..."      → "requirement number"  (synonym: no→number)
+        ///    "req no v|..."              → "requirement number"  (synonym: req→requirement)
+        ///    "on indelible inscription"  → "indelible inscription" (strip leading stop words)
+        ///    "type of attribute|..."     → "type attribute"
         /// </summary>
         private static string SigFuzzyKey(string sig)
         {
             if (string.IsNullOrWhiteSpace(sig)) return string.Empty;
-            var firstCol = sig.Split('|')[0].Trim();
+            var firstCol = sig.Split('|')[0].Trim().ToLowerInvariant();
+
+            // Normalize known synonyms/abbreviations
+            firstCol = Regex.Replace(firstCol, @"\breq\b", "requirement");
+            firstCol = Regex.Replace(firstCol, @"\bno\b", "number");
+            firstCol = Regex.Replace(firstCol, @"\bnbr\b", "number");
+
+            // Strip leading stop/filler words
+            firstCol = Regex.Replace(firstCol, @"^(on|the|of|a|an|in|for|to|and|or)\s+", "");
+
             var words = firstCol.Split(' ', StringSplitOptions.RemoveEmptyEntries)
                 .Where(w => w.Length > 1) // skip single chars like "v"
                 .Take(2)
                 .ToArray();
-            return string.Join(" ", words).ToLowerInvariant();
+            return string.Join(" ", words);
+        }
+
+        /// <summary>
+        /// Checks if a blueprint table signature represents explanatory/naming-convention
+        /// content rather than a real data table. Such tables should be excluded from
+        /// the missing-table validation.
+        /// </summary>
+        private static bool IsExplanatoryTable(string signature)
+        {
+            if (string.IsNullOrWhiteSpace(signature)) return false;
+            var lower = signature.ToLowerInvariant();
+
+            // Tables describing naming conventions (e.g. "APP|: Generic application...|: max 5 characters")
+            if (Regex.IsMatch(lower, @"max\s+\d+\s+char")) return true;
+            // Tables where columns are just abbreviation labels like "app|sys|doc"
+            var cols = lower.Split('|');
+            if (cols.Length >= 2 && cols.All(c => c.Trim().Length <= 5)) return true;
+            // Tables with "(ex." or "(e.g." examples — typically explanatory
+            if (lower.Contains("(ex.") || lower.Contains("(e.g.")) return true;
+            // Tables where a column is just ":" (punctuation-only)
+            if (cols.Any(c => c.Trim() == ":")) return true;
+
+            return false;
         }
 
         private async Task<string> LoadResourceAsync(string pathOrUrl, string correlationId)

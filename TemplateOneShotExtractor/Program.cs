@@ -10,7 +10,6 @@ using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
 using Microsoft.OpenApi.Models;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json.Serialization;
 
 // Entry point for .NET Isolated Worker with OpenAPI support
 var host = new HostBuilder()
@@ -37,9 +36,10 @@ namespace TemplateOneShotExtractor.Models
         public string User { get; set; } = string.Empty;
 
         /// <summary>
-        /// Optional: Base64-encoded DOCX file content for direct upload
+        /// Azure Blob Storage URL (SAS) of the uploaded DOCX document to validate.
+        /// Provided by Power Automate after uploading the user's file to Blob Storage.
         /// </summary>
-        public string? FileContent { get; set; }
+        public string? DocumentUrl { get; set; }
     }
 
     /// <summary>
@@ -185,6 +185,11 @@ namespace TemplateOneShotExtractor.Models
         /// Detailed validation report
         /// </summary>
         public ValidationReport Report { get; set; } = new ValidationReport();
+
+        /// <summary>
+        /// Unique correlation ID for this validation request (for tracing)
+        /// </summary>
+        public string CorrelationId { get; set; } = string.Empty;
     }
 
     /// <summary>
@@ -211,6 +216,7 @@ namespace TemplateOneShotExtractor
     public class ValidateTemplateFunction
 {
     private readonly ILogger<ValidateTemplateFunction> _logger;
+    private static readonly HttpClient _sharedHttpClient = new() { Timeout = TimeSpan.FromSeconds(60) };
 
     public ValidateTemplateFunction(ILogger<ValidateTemplateFunction> logger)
     {
@@ -256,13 +262,14 @@ namespace TemplateOneShotExtractor
     public async Task<HttpResponseData> Run(
         [HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequestData req)
     {
-        _logger.LogInformation("ValidateTemplate function triggered");
+        var correlationId = Guid.NewGuid().ToString("N")[..12];
+        _logger.LogInformation("ValidateTemplate function triggered. CorrelationId={CorrelationId}", correlationId);
 
         try
         {
             // Parse request body
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-            _logger.LogDebug("Request body received: {RequestBody}", requestBody);
+            _logger.LogDebug("[{CorrelationId}] Request body received: {RequestBody}", correlationId, requestBody);
 
             Dictionary<string, string>? argsMap;
             try
@@ -294,17 +301,32 @@ namespace TemplateOneShotExtractor
                 return badResponse;
             }
 
-            // Replace hardcoded paths with environment variables
+            // Resolve blueprint from environment or request
             var blueprintPath = Environment.GetEnvironmentVariable("BLUEPRINT_PATH") ?? argsMap["templateBlueprint"];
             var userPath = argsMap["user"];
+            var documentUrl = argsMap.ContainsKey("documentUrl") ? argsMap["documentUrl"] : null;
 
-            _logger.LogInformation("Processing validation for user: {User}, blueprint: {Blueprint}", userPath, blueprintPath);
+            // documentUrl is REQUIRED for real validation
+            if (string.IsNullOrWhiteSpace(documentUrl))
+            {
+                _logger.LogWarning("[{CorrelationId}] Missing required field: documentUrl", correlationId);
+                var noDocResponse = req.CreateResponse(HttpStatusCode.BadRequest);
+                await noDocResponse.WriteAsJsonAsync(new ErrorResponse
+                {
+                    Error = "Missing required field: documentUrl",
+                    Details = "A valid HTTPS URL to a .docx document is required. Upload your document to Azure Blob Storage and provide the URL (with SAS token if needed)."
+                });
+                return noDocResponse;
+            }
 
-            // Perform template validation and build detailed report
-            var validationReport = PerformValidation(blueprintPath, userPath);
+            _logger.LogInformation("[{CorrelationId}] Processing validation for user: {User}, blueprint: {Blueprint}, documentUrl: {DocUrl}",
+                correlationId, userPath, blueprintPath, documentUrl);
 
-            _logger.LogInformation("Validation completed for user: {User} - IsValid: {IsValid}, Score: {Score}", 
-                userPath, validationReport.IsValid, validationReport.Score);
+            // Perform REAL template validation: download DOCX, parse, compare against blueprint + policy
+            var validationReport = await PerformValidationAsync(blueprintPath, documentUrl, correlationId);
+
+            _logger.LogInformation("[{CorrelationId}] Validation completed for user: {User} - IsValid: {IsValid}, Score: {Score}",
+                correlationId, userPath, validationReport.IsValid, validationReport.Score);
             
             var response = req.CreateResponse(HttpStatusCode.OK);
             await response.WriteAsJsonAsync(new ValidationResponse 
@@ -316,7 +338,8 @@ namespace TemplateOneShotExtractor
                 ValidatedAt = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ssZ"),
                 User = userPath,
                 Template = blueprintPath,
-                Report = validationReport
+                Report = validationReport,
+                CorrelationId = correlationId
             });
             return response;
         }
@@ -333,10 +356,17 @@ namespace TemplateOneShotExtractor
         }
     }
 
+    // ═══════════════════════════════════════════════════════════════
+    // REAL VALIDATION ENGINE — No simulation, no Random()
+    // Downloads DOCX → parses OpenXML → compares vs blueprint → checks policy
+    // ═══════════════════════════════════════════════════════════════
+
     /// <summary>
-    /// Performs the actual template validation logic
+    /// Performs REAL validation: downloads DOCX from documentUrl, parses it with OpenXML,
+    /// compares its sections against the blueprint headings, and checks policy compliance.
+    /// All results are deterministic — same document always produces the same report.
     /// </summary>
-    private ValidationReport PerformValidation(string blueprintPath, string userPath)
+    private async Task<ValidationReport> PerformValidationAsync(string blueprintPathOrUrl, string documentUrl, string correlationId)
     {
         var report = new ValidationReport
         {
@@ -346,125 +376,419 @@ namespace TemplateOneShotExtractor
             Details = new List<SectionDetail>()
         };
 
+        // ── STEP 1: Download user DOCX from documentUrl ──────────────
+        byte[] docxBytes;
         try
         {
-            // Simulate comprehensive validation checks
-            int totalChecks = 0;
-            int passedChecks = 0;
-
-            // Check 1: Header validation
-            var headerSection = ValidateSection("Header", new[] { "Company Logo", "Document Title", "Date" });
-            report.Details.Add(headerSection);
-            totalChecks += headerSection.Checks.Count;
-            if (headerSection.Status == "valid") passedChecks += headerSection.Checks.Count;
-
-            // Check 2: Content structure
-            var contentSection = ValidateSection("Content Structure", new[] { "Introduction", "Main Body", "Conclusion" });
-            report.Details.Add(contentSection);
-            totalChecks += contentSection.Checks.Count;
-            if (contentSection.Status == "valid") passedChecks += contentSection.Checks.Count;
-
-            // Check 3: Formatting
-            var formatSection = ValidateSection("Formatting", new[] { "Font Consistency", "Spacing", "Margins" });
-            report.Details.Add(formatSection);
-            totalChecks += formatSection.Checks.Count;
-            if (formatSection.Status == "valid") passedChecks += formatSection.Checks.Count;
-
-            // Check 4: Metadata
-            var metadataSection = ValidateSection("Metadata", new[] { "Author", "Company", "Version" });
-            report.Details.Add(metadataSection);
-            totalChecks += metadataSection.Checks.Count;
-            if (metadataSection.Status == "valid") passedChecks += metadataSection.Checks.Count;
-
-            // Add some demo warnings (non-blocking issues)
-            if (blueprintPath.Contains("advanced") || blueprintPath.Contains("v2"))
-            {
-                report.Warnings.Add(new ValidationIssue
-                {
-                    Type = "warning",
-                    Field = "Metadata.Keywords",
-                    Message = "Optional field 'Keywords' is missing. Consider adding for better searchability.",
-                    Severity = "low"
-                });
-            }
-
-            // Add demo errors for specific blueprints
-            if (blueprintPath.Contains("strict") || blueprintPath.Contains("production"))
-            {
-                report.Errors.Add(new ValidationIssue
-                {
-                    Type = "error",
-                    Field = "Header.CompanyLogo",
-                    Message = "Company logo dimensions must be exactly 200x50 pixels.",
-                    Severity = "medium"
-                });
-                report.Errors.Add(new ValidationIssue
-                {
-                    Type = "error",
-                    Field = "Content.Introduction",
-                    Message = "Introduction section must contain at least 100 words.",
-                    Severity = "high"
-                });
-            }
-
-            // Calculate summary
-            report.Summary.TotalChecks = totalChecks;
-            report.Summary.Passed = passedChecks;
-            report.Summary.Failed = report.Errors.Count;
-            report.Summary.Warnings = report.Warnings.Count;
-
-            // Calculate score (0-100)
-            if (totalChecks > 0)
-            {
-                int baseScore = (passedChecks * 100) / totalChecks;
-                int errorPenalty = report.Errors.Count * 10;
-                int warningPenalty = report.Warnings.Count * 3;
-                report.Score = Math.Max(0, baseScore - errorPenalty - warningPenalty);
-            }
-            else
-            {
-                report.Score = 0;
-            }
-
-            // Determine overall validity
-            report.IsValid = report.Errors.Count == 0 && report.Score >= 70;
-
-            _logger.LogInformation("Validation report generated: {TotalChecks} checks, {Passed} passed, {Failed} errors, {Warnings} warnings",
-                totalChecks, passedChecks, report.Errors.Count, report.Warnings.Count);
+            _logger.LogInformation("[{CId}] Downloading document from: {Url}", correlationId, documentUrl);
+            docxBytes = await _sharedHttpClient.GetByteArrayAsync(documentUrl);
+            _logger.LogInformation("[{CId}] Document downloaded: {Size} bytes", correlationId, docxBytes.Length);
         }
-        catch (Exception ex)
+        catch (HttpRequestException ex)
         {
-            _logger.LogError(ex, "Error during validation logic");
+            _logger.LogError(ex, "[{CId}] Failed to download document from {Url}", correlationId, documentUrl);
             report.IsValid = false;
             report.Score = 0;
             report.Errors.Add(new ValidationIssue
             {
-                Type = "error",
-                Field = "System",
-                Message = "An error occurred during validation: " + ex.Message,
+                Type = "error", Field = "documentUrl",
+                Message = $"Cannot download document: {ex.StatusCode} — {ex.Message}",
                 Severity = "critical"
             });
+            report.Summary = new ValidationSummary { TotalChecks = 1, Passed = 0, Failed = 1, Warnings = 0 };
+            return report;
         }
+        catch (TaskCanceledException)
+        {
+            report.IsValid = false;
+            report.Score = 0;
+            report.Errors.Add(new ValidationIssue
+            {
+                Type = "error", Field = "documentUrl",
+                Message = "Document download timed out after 60 seconds",
+                Severity = "critical"
+            });
+            report.Summary = new ValidationSummary { TotalChecks = 1, Passed = 0, Failed = 1, Warnings = 0 };
+            return report;
+        }
+
+        // ── STEP 2: Parse the user DOCX into heading sections ────────
+        List<ParsedSection> userSections;
+        try
+        {
+            userSections = ParseDocxSections(docxBytes);
+            _logger.LogInformation("[{CId}] Parsed {Count} heading sections from user document", correlationId, userSections.Count);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "[{CId}] Failed to parse DOCX", correlationId);
+            report.IsValid = false;
+            report.Score = 0;
+            report.Errors.Add(new ValidationIssue
+            {
+                Type = "error", Field = "document",
+                Message = $"Cannot parse DOCX file: {ex.Message}. Ensure the file is a valid .docx (Office Open XML) document.",
+                Severity = "critical"
+            });
+            report.Summary = new ValidationSummary { TotalChecks = 1, Passed = 0, Failed = 1, Warnings = 0 };
+            return report;
+        }
+
+        if (userSections.Count == 0)
+        {
+            report.IsValid = false;
+            report.Score = 0;
+            report.Errors.Add(new ValidationIssue
+            {
+                Type = "error", Field = "document",
+                Message = "Document contains no identifiable headings or sections",
+                Severity = "critical"
+            });
+            report.Summary = new ValidationSummary { TotalChecks = 1, Passed = 0, Failed = 1, Warnings = 0 };
+            return report;
+        }
+
+        // ── STEP 3: Load blueprint JSON (from URL or local file) ─────
+        List<BlueprintHeading> blueprintHeadings;
+        try
+        {
+            var blueprintJson = await LoadResourceAsync(blueprintPathOrUrl, correlationId);
+            blueprintHeadings = ExtractBlueprintHeadings(blueprintJson);
+            _logger.LogInformation("[{CId}] Blueprint loaded: {Count} headings", correlationId, blueprintHeadings.Count);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "[{CId}] Failed to load blueprint from {Path}", correlationId, blueprintPathOrUrl);
+            report.IsValid = false;
+            report.Score = 0;
+            report.Errors.Add(new ValidationIssue
+            {
+                Type = "error", Field = "blueprint",
+                Message = $"Cannot load blueprint: {ex.Message}",
+                Severity = "critical"
+            });
+            report.Summary = new ValidationSummary { TotalChecks = 1, Passed = 0, Failed = 1, Warnings = 0 };
+            return report;
+        }
+
+        // ── STEP 4: Load policy JSON ────────────────────────────────
+        PolicyConfig policy;
+        try
+        {
+            var policyPathOrUrl = Environment.GetEnvironmentVariable("POLICY_PATH") ?? "template-policy.json";
+            var policyJson = await LoadResourceAsync(policyPathOrUrl, correlationId);
+            policy = JsonSerializer.Deserialize<PolicyConfig>(policyJson, new JsonSerializerOptions { PropertyNameCaseInsensitive = true })
+                     ?? new PolicyConfig();
+            _logger.LogInformation("[{CId}] Policy loaded: {Must} must, {Should} should, {Opt} optional",
+                correlationId, policy.MustCanonicalTitles.Count, policy.ShouldCanonicalTitles.Count, policy.OptionalCanonicalTitles.Count);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "[{CId}] Policy load failed, continuing with blueprint-only comparison", correlationId);
+            policy = new PolicyConfig();
+        }
+
+        // ── STEP 5: Compare user sections vs blueprint headings ──────
+        var userCanonicals = userSections
+            .Select(s => s.CanonicalTitle)
+            .Where(t => !string.IsNullOrWhiteSpace(t))
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+        var blueprintCanonicals = blueprintHeadings
+            .Select(h => h.CanonicalTitle)
+            .Where(t => !string.IsNullOrWhiteSpace(t))
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .ToList();
+
+        int totalChecks = 0;
+        int passedChecks = 0;
+
+        foreach (var bpTitle in blueprintCanonicals)
+        {
+            totalChecks++;
+            bool found = userCanonicals.Contains(bpTitle);
+
+            if (found)
+            {
+                passedChecks++;
+                var userSection = userSections.FirstOrDefault(s =>
+                    s.CanonicalTitle.Equals(bpTitle, StringComparison.OrdinalIgnoreCase));
+                int wordCount = userSection?.WordCount ?? 0;
+                string status = wordCount >= 5 ? "valid" : "warning";
+
+                var checks = new List<string> { "Section found in user document" };
+                checks.Add(wordCount > 0 ? $"Content: {wordCount} words" : "Section is empty (no content)");
+
+                report.Details.Add(new SectionDetail
+                {
+                    Section = bpTitle,
+                    Status = status,
+                    Checks = checks
+                });
+
+                if (wordCount < 5)
+                {
+                    report.Warnings.Add(new ValidationIssue
+                    {
+                        Type = "warning", Field = bpTitle,
+                        Message = $"Section '{bpTitle}' is present but has insufficient content ({wordCount} words)",
+                        Severity = "low"
+                    });
+                }
+            }
+            else
+            {
+                report.Details.Add(new SectionDetail
+                {
+                    Section = bpTitle,
+                    Status = "missing",
+                    Checks = new List<string> { "Section NOT found in user document" }
+                });
+            }
+        }
+
+        // ── STEP 6: Policy compliance ────────────────────────────────
+        foreach (var must in policy.MustCanonicalTitles)
+        {
+            if (!userCanonicals.Contains(must))
+            {
+                report.Errors.Add(new ValidationIssue
+                {
+                    Type = "error", Field = must,
+                    Message = $"REQUIRED section '{must}' is missing (policy: MUST have)",
+                    Severity = "critical"
+                });
+            }
+        }
+
+        foreach (var should in policy.ShouldCanonicalTitles)
+        {
+            if (!userCanonicals.Contains(should))
+            {
+                report.Warnings.Add(new ValidationIssue
+                {
+                    Type = "warning", Field = should,
+                    Message = $"Recommended section '{should}' is missing (policy: SHOULD have)",
+                    Severity = "medium"
+                });
+            }
+        }
+
+        // Report extra sections in user doc not in blueprint
+        var bpSet = new HashSet<string>(blueprintCanonicals, StringComparer.OrdinalIgnoreCase);
+        var extraSections = userCanonicals.Where(u => !bpSet.Contains(u)).ToList();
+        if (extraSections.Count > 0)
+        {
+            report.Details.Add(new SectionDetail
+            {
+                Section = "Extra Sections (not in blueprint)",
+                Status = "info",
+                Checks = extraSections.Select(s => $"Extra: {s}").ToList()
+            });
+        }
+
+        // ── STEP 7: Deterministic score calculation ──────────────────
+        double coveragePercent = totalChecks > 0 ? (double)passedChecks / totalChecks * 100.0 : 0;
+        int criticalPenalty = report.Errors.Count(e => e.Severity == "critical") * 15;
+        int mediumPenalty = report.Warnings.Count(w => w.Severity == "medium") * 3;
+        int lowPenalty = report.Warnings.Count(w => w.Severity == "low") * 1;
+
+        report.Score = Math.Max(0, Math.Min(100, (int)Math.Round(coveragePercent) - criticalPenalty - mediumPenalty - lowPenalty));
+        report.Summary = new ValidationSummary
+        {
+            TotalChecks = totalChecks,
+            Passed = passedChecks,
+            Failed = report.Errors.Count,
+            Warnings = report.Warnings.Count
+        };
+        report.IsValid = report.Errors.Count == 0 && report.Score >= 70;
+
+        _logger.LogInformation(
+            "[{CId}] Real validation complete: {Total} blueprint headings checked, {Pass} found in user doc ({Cov:F1}% coverage), {Err} errors, {Warn} warnings, Score={Score}, IsValid={Valid}",
+            correlationId, totalChecks, passedChecks, coveragePercent, report.Errors.Count, report.Warnings.Count, report.Score, report.IsValid);
 
         return report;
     }
 
-    /// <summary>
-    /// Validates a specific section (demo implementation)
-    /// </summary>
-    private SectionDetail ValidateSection(string sectionName, string[] checks)
-    {
-        // In a real implementation, this would perform actual document analysis
-        // For now, we simulate successful validation for most cases
-        var random = new Random();
-        bool isValid = random.Next(100) > 10; // 90% success rate for demo
+    // ═══════════════════════════════════════════════════════════════
+    // DOCX Parsing (OpenXML) — based on WordOpenXml.Core.WordParser
+    // ═══════════════════════════════════════════════════════════════
 
-        return new SectionDetail
+    /// <summary>
+    /// Parses a DOCX byte array into a list of heading sections with canonical titles and word counts.
+    /// </summary>
+    private static List<ParsedSection> ParseDocxSections(byte[] docxBytes)
+    {
+        using var stream = new MemoryStream(docxBytes);
+        using var document = WordprocessingDocument.Open(stream, false);
+        var body = document.MainDocumentPart?.Document?.Body
+                   ?? throw new InvalidOperationException("DOCX has no document body");
+
+        var sections = new List<ParsedSection>();
+        ParsedSection? current = null;
+
+        foreach (var paragraph in body.Descendants<Paragraph>())
         {
-            Section = sectionName,
-            Status = isValid ? "valid" : "warning",
-            Checks = new List<string>(checks)
-        };
+            var text = paragraph.InnerText?.Trim();
+            if (string.IsNullOrWhiteSpace(text)) continue;
+
+            var level = GetHeadingLevel(paragraph);
+            if (level.HasValue)
+            {
+                current = new ParsedSection
+                {
+                    Level = level.Value,
+                    Title = text,
+                    CanonicalTitle = CanonicalizeTitle(text),
+                    ContentBuilder = new System.Text.StringBuilder()
+                };
+                sections.Add(current);
+            }
+            else
+            {
+                if (current == null)
+                {
+                    current = new ParsedSection
+                    {
+                        Level = 0,
+                        Title = "(Preamble)",
+                        CanonicalTitle = "preamble",
+                        ContentBuilder = new System.Text.StringBuilder()
+                    };
+                    sections.Add(current);
+                }
+                if (current.ContentBuilder.Length > 0) current.ContentBuilder.Append('\n');
+                current.ContentBuilder.Append(text);
+            }
+        }
+
+        // Finalize content + word counts
+        foreach (var s in sections)
+        {
+            s.Content = s.ContentBuilder.ToString();
+            s.WordCount = string.IsNullOrWhiteSpace(s.Content)
+                ? 0
+                : s.Content.Split(new[] { ' ', '\n', '\r', '\t' }, StringSplitOptions.RemoveEmptyEntries).Length;
+        }
+
+        return sections;
+    }
+
+    private static int? GetHeadingLevel(Paragraph paragraph)
+    {
+        var styleId = paragraph.ParagraphProperties?.ParagraphStyleId?.Val?.Value;
+        if (!string.IsNullOrWhiteSpace(styleId) && styleId.StartsWith("Heading", StringComparison.OrdinalIgnoreCase))
+        {
+            var suffix = styleId.Substring("Heading".Length);
+            if (int.TryParse(suffix, out var level)) return level;
+            return 1;
+        }
+
+        var outlineLevel = paragraph.ParagraphProperties?.OutlineLevel?.Val?.Value;
+        if (outlineLevel is not null) return (int)outlineLevel + 1;
+
+        return null;
+    }
+
+    /// <summary>
+    /// Normalizes a heading title for comparison: strips numbering prefix, normalizes whitespace, lowercases.
+    /// </summary>
+    private static string CanonicalizeTitle(string title)
+    {
+        var result = Regex.Replace(title ?? "", @"^\d+(\.\d+)*\s*[-:.)\s]\s*", "");
+        result = Regex.Replace(result, @"\s+", " ").Trim();
+        return result.ToLowerInvariant();
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // Resource Loading (URL or local file)
+    // ═══════════════════════════════════════════════════════════════
+
+    /// <summary>
+    /// Loads a text resource from an HTTP(S) URL or a local file path relative to the app directory.
+    /// </summary>
+    private async Task<string> LoadResourceAsync(string pathOrUrl, string correlationId)
+    {
+        if (pathOrUrl.StartsWith("http://", StringComparison.OrdinalIgnoreCase) ||
+            pathOrUrl.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
+        {
+            _logger.LogDebug("[{CId}] Loading resource from URL: {Url}", correlationId, pathOrUrl);
+            return await _sharedHttpClient.GetStringAsync(pathOrUrl);
+        }
+
+        var fullPath = Path.IsPathFullyQualified(pathOrUrl)
+            ? pathOrUrl
+            : Path.Combine(AppContext.BaseDirectory, pathOrUrl);
+        _logger.LogDebug("[{CId}] Loading resource from file: {Path}", correlationId, fullPath);
+        return await File.ReadAllTextAsync(fullPath);
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // Blueprint & Policy JSON Parsing
+    // ═══════════════════════════════════════════════════════════════
+
+    private static List<BlueprintHeading> ExtractBlueprintHeadings(string blueprintJson)
+    {
+        using var doc = JsonDocument.Parse(blueprintJson);
+        var headings = new List<BlueprintHeading>();
+
+        if (!doc.RootElement.TryGetProperty("Headings", out var headingsArray))
+            throw new InvalidOperationException("Blueprint JSON does not contain a 'Headings' array");
+
+        foreach (var h in headingsArray.EnumerateArray())
+        {
+            var title = h.TryGetProperty("Title", out var t) ? t.GetString() ?? "" : "";
+            var canonical = h.TryGetProperty("CanonicalTitle", out var c) ? c.GetString() ?? "" : "";
+            var level = h.TryGetProperty("Level", out var l) ? l.GetInt32() : 0;
+            var wordCount = h.TryGetProperty("ContentWordCount", out var w) ? w.GetInt32() : 0;
+
+            if (!string.IsNullOrWhiteSpace(canonical))
+            {
+                headings.Add(new BlueprintHeading
+                {
+                    Title = title,
+                    CanonicalTitle = canonical.ToLowerInvariant(),
+                    Level = level,
+                    ContentWordCount = wordCount
+                });
+            }
+        }
+
+        return headings;
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // Internal Models (private — not exposed in OpenAPI)
+    // ═══════════════════════════════════════════════════════════════
+
+    private class ParsedSection
+    {
+        public int Level { get; set; }
+        public string Title { get; set; } = "";
+        public string CanonicalTitle { get; set; } = "";
+        public string Content { get; set; } = "";
+        public int WordCount { get; set; }
+        [System.Text.Json.Serialization.JsonIgnore]
+        public System.Text.StringBuilder ContentBuilder { get; set; } = new();
+    }
+
+    private class BlueprintHeading
+    {
+        public string Title { get; set; } = "";
+        public string CanonicalTitle { get; set; } = "";
+        public int Level { get; set; }
+        public int ContentWordCount { get; set; }
+    }
+
+    private class PolicyConfig
+    {
+        public string ProfileName { get; set; } = "";
+        public string Version { get; set; } = "";
+        public bool AllowNotApplicableForEmpty { get; set; }
+        public List<string> MustCanonicalTitles { get; set; } = new();
+        public List<string> ShouldCanonicalTitles { get; set; } = new();
+        public List<string> OptionalCanonicalTitles { get; set; } = new();
     }
 }
 }

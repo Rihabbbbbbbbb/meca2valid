@@ -35,3 +35,7 @@ build-output.txt
 # Temporary files
 *.tmp
 *.temp
+
+# Local test artifacts (never deploy)
+validation-report*.json
+build-output.txt

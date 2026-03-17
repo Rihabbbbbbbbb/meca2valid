@@ -425,12 +425,16 @@ namespace TemplateOneShotExtractor
 
             // ── STEP 9: Content depth/thinness check ─────────────────────
             // Compare user section word counts against blueprint expectations
+            // Use GroupBy to handle duplicate canonical titles safely (e.g. "REGULATION AND CONSUMERISM" appears twice)
             var blueprintWordCounts = blueprintHeadings
-                .Where(h => h.ContentWordCount > 10) // Only check sections with meaningful blueprint content
-                .ToDictionary(
+                .Where(h => h.ContentWordCount > 10)
+                .GroupBy(
                     h => Regex.Replace(Regex.Replace(h.Title.ToUpperInvariant().Trim(),
                         @"^\d+(\.\d+)*\s*[-:.)]?\s*", ""), @"\s+", " ").Trim(),
-                    h => h.ContentWordCount,
+                    StringComparer.OrdinalIgnoreCase)
+                .ToDictionary(
+                    g => g.Key,
+                    g => g.First().ContentWordCount,
                     StringComparer.OrdinalIgnoreCase);
 
             var thinSections = new List<(NormalizedSection Section, int UserWords, int ExpectedWords)>();

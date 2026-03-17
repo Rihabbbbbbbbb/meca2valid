@@ -14,7 +14,19 @@ using Microsoft.Extensions.Logging;
 using WordOpenXml.Core;
 using WordOpenXml.Core.Models;
 
-// Entry point for .NET Isolated Worker with OpenAPI support
+// ═══════════════════════════════════════════════════════════════════
+// CDC Validation Engine v4 — Specialist Analysis
+// ═══════════════════════════════════════════════════════════════════
+// Fixes over v3:
+// 1. Smart table matching — groups by distinct signature, compares
+//    counts per unique pattern, not 1-to-N inflation
+// 2. Section-aware table mapping — ties user tables to nearest heading
+// 3. Table-content awareness in emptiness check
+// 4. Placeholder content detection (<<...>>, XXX, <component name>)
+// 5. Content depth check — flags suspiciously thin sections
+// 6. Blueprint-empty section awareness — structural parents excluded
+// ═══════════════════════════════════════════════════════════════════
+
 var host = new HostBuilder()
     .ConfigureFunctionsWorkerDefaults()
     .Build();
@@ -23,17 +35,12 @@ host.Run();
 
 namespace TemplateOneShotExtractor.Models
 {
-    // ═══════════════════════════════════════════════════════════════
-    // REQUEST / RESPONSE DTOs
-    // ═══════════════════════════════════════════════════════════════
+    // ─── REQUEST / RESPONSE DTOs ─────────────────────────────────
 
     public class ValidationRequest
     {
         public string TemplateBlueprint { get; set; } = string.Empty;
         public string User { get; set; } = string.Empty;
-        /// <summary>
-        /// Azure Blob Storage URL (SAS) of the uploaded DOCX document to validate.
-        /// </summary>
         public string? DocumentUrl { get; set; }
     }
 
@@ -51,9 +58,13 @@ namespace TemplateOneShotExtractor.Models
         public int MatchedSections { get; set; }
         public int MissingSections { get; set; }
         public int TrulyEmptySections { get; set; }
+        public int PlaceholderSections { get; set; }
+        public int ThinContentSections { get; set; }
+        public int TotalBlueprintTablePatterns { get; set; }
+        public int MatchedTablePatterns { get; set; }
+        public int MissingTablePatterns { get; set; }
         public int TotalBlueprintTables { get; set; }
-        public int MatchedTables { get; set; }
-        public int MissingTables { get; set; }
+        public int UserTableCount { get; set; }
     }
 
     public class ValidationReport
@@ -82,16 +93,12 @@ namespace TemplateOneShotExtractor.Models
         public string? Details { get; set; }
     }
 
-    // ═══════════════════════════════════════════════════════════════
-    // CHAT REPORT — evaluator-focused, actionable output
-    // Only missing sections, truly empty sections, missing tables,
-    // recommendations. No noise about what already exists.
-    // ═══════════════════════════════════════════════════════════════
+    // ─── CHAT REPORT — evaluator-focused ─────────────────────────
 
     public class ChatMetadata
     {
         public string Tool { get; set; } = "TemplateOneShotExtractor-AzureFunction";
-        public string Version { get; set; } = "3.0.0";
+        public string Version { get; set; } = "4.0.0";
         public string StartedAtUtc { get; set; } = string.Empty;
         public string ValidatedAtUtc { get; set; } = string.Empty;
         public long DurationMs { get; set; }
@@ -104,7 +111,7 @@ namespace TemplateOneShotExtractor.Models
         public double FinalScore { get; set; }
         public double SectionCoverage { get; set; }
         public double SubtitleCoverage { get; set; }
-        public double TableCoverage { get; set; }
+        public double TablePatternCoverage { get; set; }
         public string ConfidenceBand { get; set; } = "LOW";
     }
 
@@ -128,9 +135,10 @@ namespace TemplateOneShotExtractor.Models
 
     public class ChatTableIssue
     {
-        public string SectionTitle { get; set; } = string.Empty;
-        public string ExpectedSignature { get; set; } = string.Empty;
-        public int ExpectedRowCount { get; set; }
+        public string PatternSignature { get; set; } = string.Empty;
+        public int ExpectedCount { get; set; }
+        public int FoundCount { get; set; }
+        public List<string> ExpectedInSections { get; set; } = new();
         public string Status { get; set; } = string.Empty;
     }
 
@@ -140,7 +148,7 @@ namespace TemplateOneShotExtractor.Models
         public ChatSummary Summary { get; set; } = new();
         public List<ChatTopIssue> TopIssues { get; set; } = new();
         public List<ChatPivotHighlight> PivotHighlights { get; set; } = new();
-        public List<ChatTableIssue> MissingTables { get; set; } = new();
+        public List<ChatTableIssue> TableAnalysis { get; set; } = new();
         public List<string> Recommendations { get; set; } = new();
         public string HumanSummary { get; set; } = string.Empty;
     }
@@ -155,6 +163,11 @@ namespace TemplateOneShotExtractor
         private readonly ILogger<ValidateTemplateFunction> _logger;
         private static readonly HttpClient _sharedHttpClient = new() { Timeout = TimeSpan.FromSeconds(60) };
 
+        // Patterns that indicate placeholder/template content
+        private static readonly Regex PlaceholderRegex = new(
+            @"<<[^>]+>>|<[A-Za-z][^>]{2,}>|\bXXX+\b|\bYYY+\b|\bZZZ+\b|\b000X+\b|\bNAME\b|\bYYYY/MM/DD\b|\binsert\s+(here|text|diagram|the)\b",
+            RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
         public ValidateTemplateFunction(ILogger<ValidateTemplateFunction> logger)
         {
             _logger = logger;
@@ -165,7 +178,7 @@ namespace TemplateOneShotExtractor
             operationId: "ValidateTemplate",
             tags: new[] { "Template Validation" },
             Summary = "Validate a CDC document against blueprint specifications",
-            Description = "Downloads a user DOCX, parses sections and tables, compares against the blueprint template, and returns an actionable report focusing on what is MISSING or needs to be changed.",
+            Description = "Downloads a user DOCX, parses sections and tables, compares against the blueprint template with specialist CDC analysis: section coverage, table pattern matching, empty/placeholder/thin section detection.",
             Visibility = OpenApiVisibilityType.Important
         )]
         [OpenApiRequestBody(contentType: "application/json", bodyType: typeof(ValidationRequest), Required = true,
@@ -181,7 +194,7 @@ namespace TemplateOneShotExtractor
             [HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequestData req)
         {
             var correlationId = Guid.NewGuid().ToString("N")[..12];
-            _logger.LogInformation("ValidateTemplate triggered. CId={CId}", correlationId);
+            _logger.LogInformation("ValidateTemplate v4 triggered. CId={CId}", correlationId);
 
             try
             {
@@ -246,19 +259,7 @@ namespace TemplateOneShotExtractor
         }
 
         // ═══════════════════════════════════════════════════════════════
-        // VALIDATION ENGINE v3 — Specialist CDC Analysis
-        // ═══════════════════════════════════════════════════════════════
-        //
-        // Key design decisions:
-        // 1. ALL blueprint sections are REQUIRED — no must/should/optional
-        //    tiers (in CDC domain, everything in the template is mandatory)
-        // 2. Empty section = section has no content AND no child sub-sections
-        //    with content. A parent heading (e.g. "SCOPE" Level 1) that has
-        //    Level 2+ children with content is NOT empty.
-        // 3. Table comparison: extract tables from user DOCX, compare header
-        //    signatures against blueprint TableInventory
-        // 4. Report focuses ONLY on what's MISSING or needs to change — the
-        //    evaluator doesn't need to see what already exists/passes.
+        // VALIDATION ENGINE v4
         // ═══════════════════════════════════════════════════════════════
 
         private async Task<(ValidationReport Report, ChatReport Chat)> PerformValidationAsync(
@@ -294,7 +295,7 @@ namespace TemplateOneShotExtractor
                 return FailFast(report, chat, "documentUrl", "Download timed out (60s)");
             }
 
-            // ── STEP 2: Parse user DOCX — sections (WordParser) ──────────
+            // ── STEP 2: Parse user DOCX — sections ──────────────────────
             IReadOnlyList<Section> rawSections;
             try
             {
@@ -309,16 +310,25 @@ namespace TemplateOneShotExtractor
             if (rawSections.Count == 0)
                 return FailFast(report, chat, "document", "Document has no identifiable headings");
 
-            // ── STEP 3: Parse user DOCX — tables ─────────────────────────
+            // ── STEP 3: Extract tables from user DOCX ────────────────────
+            // Returns tables with section-aware mapping (nearest heading)
             var userTables = ExtractTablesFromDocx(docxBytes);
             _logger.LogInformation("[{CId}] Extracted {N} tables from user DOCX", correlationId, userTables.Count);
 
-            // ── STEP 4: Analyze sections with CdcAnalysisService ─────────
+            // Build a set of section indices that have tables
+            var sectionsWithTableIndices = new HashSet<int>();
+            foreach (var ut in userTables)
+            {
+                if (ut.NearestHeadingIndex >= 0)
+                    sectionsWithTableIndices.Add(ut.NearestHeadingIndex);
+            }
+
+            // ── STEP 4: Analyze user sections ────────────────────────────
             var svc = new CdcAnalysisService();
             var userAnalysis = svc.Analyze("user-document", rawSections);
             _logger.LogInformation("[{CId}] User analysis: {N} normalized sections", correlationId, userAnalysis.Sections.Count);
 
-            // ── STEP 5: Load blueprint JSON ──────────────────────────────
+            // ── STEP 5: Load blueprint ───────────────────────────────────
             string blueprintJson;
             try
             {
@@ -331,69 +341,184 @@ namespace TemplateOneShotExtractor
 
             var blueprintHeadings = ExtractBlueprintHeadings(blueprintJson);
             var blueprintTables = ExtractBlueprintTables(blueprintJson);
-            _logger.LogInformation("[{CId}] Blueprint: {H} headings, {T} tables",
-                correlationId, blueprintHeadings.Count, blueprintTables.Count);
+            var blueprintEmptyOrders = ExtractBlueprintEmptyOrders(blueprintJson);
+            _logger.LogInformation("[{CId}] Blueprint: {H} headings, {T} tables, {E} empty orders",
+                correlationId, blueprintHeadings.Count, blueprintTables.Count, blueprintEmptyOrders.Count);
 
-            // Build reference DocumentAnalysis from blueprint headings
+            // Build reference analysis from blueprint headings
             var refSections = blueprintHeadings.Select(h => new Section
             {
                 Level = h.Level, Title = h.Title, Content = string.Empty
             }).ToList();
             var refAnalysis = svc.Analyze("blueprint", refSections);
 
+            // Build a map: blueprint canonical title → order, for empty-order lookup
+            var canonicalToOrder = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+            foreach (var h in blueprintHeadings)
+            {
+                var canon = h.Title.ToUpperInvariant().Trim();
+                // Use NumberingPrefixRegex equivalent
+                canon = Regex.Replace(canon, @"^\d+(\.\d+)*\s*[-:.)]?\s*", "");
+                canon = Regex.Replace(canon, @"\s+", " ").Trim();
+                if (!canonicalToOrder.ContainsKey(canon))
+                    canonicalToOrder[canon] = h.Order;
+            }
+
             // ── STEP 6: Section comparison ───────────────────────────────
             var comparison = svc.Compare(userAnalysis, refAnalysis);
-            _logger.LogInformation("[{CId}] Sections: {Common} common, {Missing} missing, Coverage={Cov:F1}%",
-                correlationId, comparison.Common.Count, comparison.MissingInUser.Count, comparison.CoveragePercent);
+            _logger.LogInformation("[{CId}] Sections: {Common} common, {Missing} missing, {Extra} extra, Coverage={Cov:F1}%",
+                correlationId, comparison.Common.Count, comparison.MissingInUser.Count,
+                comparison.ExtraInUser.Count, comparison.CoveragePercent);
 
             // ── STEP 7: Truly empty section detection ────────────────────
-            // A section is "truly empty" ONLY if it exists in the user doc,
-            // is also expected in the blueprint, has no own content AND none
-            // of its child sub-sections have content.
-            var allTrulyEmpty = FindTrulyEmptySections(userAnalysis.Sections);
-            // Only flag sections that exist in the blueprint (common sections)
+            // v4 improvement: a section is NOT empty if it has child
+            // sub-sections with content OR if it has tables.
+            var allTrulyEmpty = FindTrulyEmptySections(userAnalysis.Sections, sectionsWithTableIndices);
             var commonSet = new HashSet<string>(comparison.Common, StringComparer.OrdinalIgnoreCase);
-            var trulyEmptySections = allTrulyEmpty
-                .Where(s => commonSet.Contains(s.CanonicalTitle))
-                .ToList();
-            _logger.LogInformation("[{CId}] Truly empty sections (in blueprint): {N}", correlationId, trulyEmptySections.Count);
 
-            // ── STEP 8: Table comparison ─────────────────────────────────
-            // Build set of user table signatures for matching
-            var userSigSet = userTables.Select(t => t.HeaderSignature)
-                .Where(s => !string.IsNullOrWhiteSpace(s))
-                .ToHashSet(StringComparer.OrdinalIgnoreCase);
-
-            var missingTableIssues = new List<ChatTableIssue>();
-            int matchedTableCount = 0;
-            // Only compare tables assigned to a blueprint section
-            var sectionTables = blueprintTables.Where(t => t.SectionOrder.HasValue).ToList();
-            foreach (var bt in sectionTables)
+            // Filter: only flag sections in the blueprint AND not blueprint-empty parents
+            var trulyEmptySections = new List<NormalizedSection>();
+            foreach (var s in allTrulyEmpty)
             {
-                if (userSigSet.Contains(bt.HeaderSignature))
+                if (!commonSet.Contains(s.CanonicalTitle)) continue;
+
+                // If the blueprint itself has this section as empty AND it's a
+                // structural parent (Level 1-2), skip — it's expected to be empty
+                if (canonicalToOrder.TryGetValue(s.CanonicalTitle, out var order)
+                    && blueprintEmptyOrders.Contains(order)
+                    && s.Level <= 2)
                 {
-                    matchedTableCount++;
+                    // Check if this section has children in the blueprint
+                    bool hasChildrenInBlueprint = blueprintHeadings
+                        .Any(h => h.Order > order && h.Level > s.Level
+                             && !blueprintHeadings.Any(h2 => h2.Order > order && h2.Order < h.Order && h2.Level <= s.Level));
+
+                    if (hasChildrenInBlueprint) continue; // Structural parent — skip
+                }
+
+                trulyEmptySections.Add(s);
+            }
+            _logger.LogInformation("[{CId}] Truly empty sections: {N}", correlationId, trulyEmptySections.Count);
+
+            // ── STEP 8: Placeholder content detection ────────────────────
+            // Find sections that exist and have text, but the text is mostly
+            // template placeholder content (<<...>>, XXX, <component name>)
+            var placeholderSections = new List<(NormalizedSection Section, double PlaceholderRatio)>();
+            foreach (var s in userAnalysis.Sections)
+            {
+                if (!commonSet.Contains(s.CanonicalTitle)) continue;
+                if (string.IsNullOrWhiteSpace(s.Content)) continue;
+
+                int totalWords = CountWords(s.Content);
+                if (totalWords < 3) continue; // Too short to judge
+
+                var matches = PlaceholderRegex.Matches(s.Content);
+                int placeholderWords = matches.Sum(m => CountWords(m.Value));
+                double ratio = (double)placeholderWords / totalWords;
+
+                if (ratio > 0.40) // More than 40% placeholder content
+                {
+                    placeholderSections.Add((s, Math.Round(ratio * 100, 1)));
+                }
+            }
+            _logger.LogInformation("[{CId}] Placeholder sections: {N}", correlationId, placeholderSections.Count);
+
+            // ── STEP 9: Content depth/thinness check ─────────────────────
+            // Compare user section word counts against blueprint expectations
+            var blueprintWordCounts = blueprintHeadings
+                .Where(h => h.ContentWordCount > 10) // Only check sections with meaningful blueprint content
+                .ToDictionary(
+                    h => Regex.Replace(Regex.Replace(h.Title.ToUpperInvariant().Trim(),
+                        @"^\d+(\.\d+)*\s*[-:.)]?\s*", ""), @"\s+", " ").Trim(),
+                    h => h.ContentWordCount,
+                    StringComparer.OrdinalIgnoreCase);
+
+            var thinSections = new List<(NormalizedSection Section, int UserWords, int ExpectedWords)>();
+            foreach (var s in userAnalysis.Sections)
+            {
+                if (!commonSet.Contains(s.CanonicalTitle)) continue;
+                if (!blueprintWordCounts.TryGetValue(s.CanonicalTitle, out var expectedWords)) continue;
+
+                int userWords = CountWords(s.Content);
+                // Flag if user has less than 20% of expected content
+                if (userWords < expectedWords * 0.20 && userWords < 20)
+                {
+                    thinSections.Add((s, userWords, expectedWords));
+                }
+            }
+            _logger.LogInformation("[{CId}] Thin-content sections: {N}", correlationId, thinSections.Count);
+
+            // ── STEP 10: Smart table pattern matching ────────────────────
+            // Group blueprint tables by DISTINCT signature (not 1-to-N).
+            // Count how many instances of each pattern exist. Compare
+            // against user table signature counts.
+            var sectionTables = blueprintTables.Where(t => t.SectionOrder.HasValue).ToList();
+
+            // Group by signature → expected count + sections
+            var blueprintSigGroups = sectionTables
+                .GroupBy(t => t.HeaderSignature, StringComparer.OrdinalIgnoreCase)
+                .Select(g => new
+                {
+                    Signature = g.Key,
+                    ExpectedCount = g.Count(),
+                    Sections = g.Select(t => t.SectionTitle).Distinct().ToList()
+                })
+                .ToList();
+
+            // User table signature → count
+            var userSigCounts = userTables
+                .Where(t => !string.IsNullOrWhiteSpace(t.HeaderSignature))
+                .GroupBy(t => t.HeaderSignature, StringComparer.OrdinalIgnoreCase)
+                .ToDictionary(g => g.Key, g => g.Count(), StringComparer.OrdinalIgnoreCase);
+
+            var tableAnalysis = new List<ChatTableIssue>();
+            int matchedPatterns = 0;
+            int totalPatterns = blueprintSigGroups.Count;
+
+            foreach (var group in blueprintSigGroups)
+            {
+                int foundCount = userSigCounts.TryGetValue(group.Signature, out var c) ? c : 0;
+
+                if (foundCount > 0)
+                {
+                    matchedPatterns++;
+                    // Only report if significantly fewer than expected
+                    if (foundCount < group.ExpectedCount * 0.5 && group.ExpectedCount > 2)
+                    {
+                        tableAnalysis.Add(new ChatTableIssue
+                        {
+                            PatternSignature = group.Signature,
+                            ExpectedCount = group.ExpectedCount,
+                            FoundCount = foundCount,
+                            ExpectedInSections = group.Sections,
+                            Status = "partial"
+                        });
+                    }
                 }
                 else
                 {
-                    missingTableIssues.Add(new ChatTableIssue
+                    tableAnalysis.Add(new ChatTableIssue
                     {
-                        SectionTitle = bt.SectionTitle,
-                        ExpectedSignature = bt.HeaderSignature,
-                        ExpectedRowCount = bt.RowCount,
+                        PatternSignature = group.Signature,
+                        ExpectedCount = group.ExpectedCount,
+                        FoundCount = 0,
+                        ExpectedInSections = group.Sections,
                         Status = "missing"
                     });
                 }
             }
-            int missingTableCount = missingTableIssues.Count;
-            double tableCoverage = sectionTables.Count > 0
-                ? Math.Round((double)matchedTableCount / sectionTables.Count * 100, 2) : 100;
 
-            _logger.LogInformation("[{CId}] Tables: {Matched}/{Total} matched, {Missing} missing, Coverage={Cov:F1}%",
-                correlationId, matchedTableCount, sectionTables.Count, missingTableCount, tableCoverage);
+            int missingPatterns = tableAnalysis.Count(t => t.Status == "missing");
+            double tablePatternCoverage = totalPatterns > 0
+                ? Math.Round((double)matchedPatterns / totalPatterns * 100, 2) : 100;
 
-            // ── STEP 9: Build issues list (ONLY missing/actionable) ──────
-            // Missing sections — ALL are required in CDC
+            _logger.LogInformation("[{CId}] Table patterns: {Matched}/{Total} matched, {Missing} missing, Coverage={Cov:F1}%",
+                correlationId, matchedPatterns, totalPatterns, missingPatterns, tablePatternCoverage);
+
+            // ── STEP 11: Build issues list ───────────────────────────────
+            // ONLY actionable items — no noise about what exists
+
+            // Missing sections
             foreach (var missing in comparison.MissingInUser)
             {
                 report.Issues.Add(new ValidationIssue
@@ -412,32 +537,81 @@ namespace TemplateOneShotExtractor
                 {
                     Type = "EmptySection",
                     Field = empty.Title,
-                    Message = $"Section '{empty.Title}' exists but has no content and no sub-sections with content",
+                    Message = $"Section '{empty.Title}' exists but has no content (no text, no sub-sections with content, and no tables)",
                     Severity = "high"
                 });
             }
 
-            // Missing tables
-            foreach (var mt in missingTableIssues)
+            // Placeholder sections
+            foreach (var (sec, ratio) in placeholderSections)
             {
                 report.Issues.Add(new ValidationIssue
                 {
-                    Type = "MissingTable",
-                    Field = mt.SectionTitle,
-                    Message = $"Expected table [{mt.ExpectedSignature}] in section '{mt.SectionTitle}' — not found in document",
+                    Type = "PlaceholderContent",
+                    Field = sec.Title,
+                    Message = $"Section '{sec.Title}' appears to contain ~{ratio}% placeholder/template text (<<...>>, XXX, <name>) — needs real content",
                     Severity = "high"
                 });
             }
 
-            // ── STEP 10: Score calculation ───────────────────────────────
-            // Weighted: 60% section coverage, 20% empty penalty, 20% table coverage
+            // Thin-content sections
+            foreach (var (sec, userWords, expectedWords) in thinSections)
+            {
+                report.Issues.Add(new ValidationIssue
+                {
+                    Type = "ThinContent",
+                    Field = sec.Title,
+                    Message = $"Section '{sec.Title}' has only {userWords} words — blueprint expects ~{expectedWords} words of content",
+                    Severity = "medium"
+                });
+            }
+
+            // Missing table patterns
+            foreach (var mt in tableAnalysis.Where(t => t.Status == "missing"))
+            {
+                string sectionList = mt.ExpectedInSections.Count <= 3
+                    ? string.Join(", ", mt.ExpectedInSections)
+                    : $"{string.Join(", ", mt.ExpectedInSections.Take(3))} (+{mt.ExpectedInSections.Count - 3} more)";
+                report.Issues.Add(new ValidationIssue
+                {
+                    Type = "MissingTablePattern",
+                    Field = sectionList,
+                    Message = $"Table pattern [{mt.PatternSignature}] not found — expected in {mt.ExpectedCount} section(s): {sectionList}",
+                    Severity = "high"
+                });
+            }
+
+            // Partial table patterns
+            foreach (var mt in tableAnalysis.Where(t => t.Status == "partial"))
+            {
+                report.Issues.Add(new ValidationIssue
+                {
+                    Type = "PartialTablePattern",
+                    Field = mt.PatternSignature,
+                    Message = $"Table pattern [{mt.PatternSignature}] found {mt.FoundCount}× but expected {mt.ExpectedCount}× — some sections may be missing their tables",
+                    Severity = "medium"
+                });
+            }
+
+            // ── STEP 12: Score calculation ───────────────────────────────
+            // Weighted: 50% section coverage, 25% table pattern coverage,
+            // 15% content quality (empty + placeholder + thin penalty), 10% depth
             double sectionScore = comparison.CoveragePercent;
-            double emptyPenalty = refAnalysis.Sections.Count > 0
-                ? (double)trulyEmptySections.Count / refAnalysis.Sections.Count * 100 : 0;
-            double tableScore = tableCoverage;
+            double tableScore = tablePatternCoverage;
+
+            int contentIssues = trulyEmptySections.Count + placeholderSections.Count;
+            double contentPenalty = refAnalysis.Sections.Count > 0
+                ? (double)contentIssues / refAnalysis.Sections.Count * 100 : 0;
+
+            double thinPenalty = refAnalysis.Sections.Count > 0
+                ? (double)thinSections.Count / refAnalysis.Sections.Count * 100 : 0;
 
             int finalScore = Math.Max(0, Math.Min(100,
-                (int)Math.Round(sectionScore * 0.6 + tableScore * 0.2 + (100 - emptyPenalty) * 0.2)));
+                (int)Math.Round(
+                    sectionScore * 0.50
+                    + tableScore * 0.25
+                    + (100 - contentPenalty) * 0.15
+                    + (100 - thinPenalty) * 0.10)));
 
             report.Score = finalScore;
             report.Summary = new ValidationSummary
@@ -446,35 +620,40 @@ namespace TemplateOneShotExtractor
                 MatchedSections = comparison.Common.Count,
                 MissingSections = comparison.MissingInUser.Count,
                 TrulyEmptySections = trulyEmptySections.Count,
+                PlaceholderSections = placeholderSections.Count,
+                ThinContentSections = thinSections.Count,
+                TotalBlueprintTablePatterns = totalPatterns,
+                MatchedTablePatterns = matchedPatterns,
+                MissingTablePatterns = missingPatterns,
                 TotalBlueprintTables = sectionTables.Count,
-                MatchedTables = matchedTableCount,
-                MissingTables = missingTableCount
+                UserTableCount = userTables.Count
             };
             report.IsValid = comparison.MissingInUser.Count == 0
                           && trulyEmptySections.Count == 0
-                          && missingTableCount == 0;
+                          && placeholderSections.Count == 0
+                          && missingPatterns == 0;
 
-            // ── STEP 11: Build ChatReport ────────────────────────────────
+            // ── STEP 13: Build ChatReport ────────────────────────────────
             var validatedAt = DateTime.UtcNow;
             chat.Metadata.ValidatedAtUtc = validatedAt.ToString("yyyy-MM-ddTHH:mm:ss.fffZ");
             chat.Metadata.DurationMs = (long)(validatedAt - startedAt).TotalMilliseconds;
 
-            // Pivot highlights (only pivots with missing subtitles)
+            // Pivot highlights
             var pivotHighlights = BuildPivotHighlights(refAnalysis, userAnalysis);
             int totalExpectedSubs = pivotHighlights.Sum(p => p.ExpectedSubtitleCount);
             int totalMatchedSubs = pivotHighlights.Sum(p => p.MatchedSubtitleCount);
             double subtitleCoverage = totalExpectedSubs > 0
                 ? Math.Round((double)totalMatchedSubs / totalExpectedSubs * 100, 2) : 100;
 
-            string band = sectionScore >= 80 && subtitleCoverage >= 70 && tableCoverage >= 70 ? "HIGH"
-                        : sectionScore >= 50 ? "MEDIUM" : "LOW";
+            string band = sectionScore >= 80 && subtitleCoverage >= 70 && tablePatternCoverage >= 70 ? "HIGH"
+                        : sectionScore >= 50 && tablePatternCoverage >= 40 ? "MEDIUM" : "LOW";
 
             chat.Summary = new ChatSummary
             {
                 FinalScore = finalScore,
                 SectionCoverage = comparison.CoveragePercent,
                 SubtitleCoverage = subtitleCoverage,
-                TableCoverage = tableCoverage,
+                TablePatternCoverage = tablePatternCoverage,
                 ConfidenceBand = band
             };
 
@@ -500,13 +679,34 @@ namespace TemplateOneShotExtractor
                     Severity = "High"
                 });
             }
-            if (missingTableCount > 0)
+            if (placeholderSections.Count > 0)
             {
                 chat.TopIssues.Add(new ChatTopIssue
                 {
-                    Type = "MissingTables",
-                    Count = missingTableCount,
-                    Items = missingTableIssues.Select(t => $"[{t.ExpectedSignature}] in '{t.SectionTitle}'").ToList(),
+                    Type = "PlaceholderContent",
+                    Count = placeholderSections.Count,
+                    Items = placeholderSections.Select(p => $"{p.Section.Title} ({p.PlaceholderRatio}% placeholder)").ToList(),
+                    Severity = "High"
+                });
+            }
+            if (thinSections.Count > 0)
+            {
+                chat.TopIssues.Add(new ChatTopIssue
+                {
+                    Type = "ThinContent",
+                    Count = thinSections.Count,
+                    Items = thinSections.Select(t => $"{t.Section.Title} ({t.UserWords}/{t.ExpectedWords} words)").ToList(),
+                    Severity = "Medium"
+                });
+            }
+            if (missingPatterns > 0)
+            {
+                chat.TopIssues.Add(new ChatTopIssue
+                {
+                    Type = "MissingTablePatterns",
+                    Count = missingPatterns,
+                    Items = tableAnalysis.Where(t => t.Status == "missing")
+                        .Select(t => $"[{TruncateSig(t.PatternSignature)}] ×{t.ExpectedCount}").ToList(),
                     Severity = "High"
                 });
             }
@@ -517,41 +717,38 @@ namespace TemplateOneShotExtractor
                 .OrderByDescending(p => p.MissingSubtitles.Count)
                 .ToList();
 
-            // Missing tables detail
-            chat.MissingTables = missingTableIssues;
+            // Table analysis (only issues)
+            chat.TableAnalysis = tableAnalysis;
 
             // Recommendations
             chat.Recommendations = BuildRecommendations(
                 comparison.MissingInUser.Count, trulyEmptySections.Count,
-                missingTableCount, band, comparison.ExtraInUser.Count);
+                placeholderSections.Count, thinSections.Count,
+                missingPatterns, band, comparison.ExtraInUser.Count,
+                userTables.Count, sectionTables.Count);
 
-            // Human summary — evaluator-focused
+            // Human summary
             chat.HumanSummary = BuildHumanSummary(report, chat, comparison);
 
             _logger.LogInformation(
-                "[{CId}] DONE: Score={Score}%, Band={Band}, MissingSections={MS}, EmptySections={ES}, MissingTables={MT}",
+                "[{CId}] DONE: Score={Score}%, Band={Band}, Missing={MS}, Empty={ES}, Placeholder={PS}, Thin={TS}, MissingTablePatterns={MT}",
                 correlationId, finalScore, band, comparison.MissingInUser.Count,
-                trulyEmptySections.Count, missingTableCount);
+                trulyEmptySections.Count, placeholderSections.Count, thinSections.Count, missingPatterns);
 
             return (report, chat);
         }
 
         // ═══════════════════════════════════════════════════════════════
-        // TRULY EMPTY SECTION DETECTION
+        // TRULY EMPTY SECTION DETECTION (v4)
         // ═══════════════════════════════════════════════════════════════
         // A section is "truly empty" ONLY if:
-        //   - It has no direct content (0 words in its own Content field)
-        //   - AND none of its child sub-sections (higher Level values that
-        //     appear before the next section at the same or lower level)
-        //     have any content either.
-        //
-        // Example: "SCOPE" (Level 1) has Content="" but has children:
-        //   "SYSTEM DEVELOPMENT CONTEXT" (Level 2, 176 words)
-        //   "GENERAL DESCRIPTION" (Level 2, ...)
-        //   → SCOPE is NOT truly empty because children have content.
+        //   - No direct text content (0 words)
+        //   - No child sub-sections with content (walk forward)
+        //   - No tables in the section (table-content aware)
         // ═══════════════════════════════════════════════════════════════
 
-        private static List<NormalizedSection> FindTrulyEmptySections(IReadOnlyList<NormalizedSection> sections)
+        private static List<NormalizedSection> FindTrulyEmptySections(
+            IReadOnlyList<NormalizedSection> sections, HashSet<int> sectionsWithTableIndices)
         {
             var result = new List<NormalizedSection>();
 
@@ -560,17 +757,19 @@ namespace TemplateOneShotExtractor
                 var section = sections[i];
                 int ownWords = CountWords(section.Content);
 
-                if (ownWords > 0) continue; // Has direct content — not empty
+                if (ownWords > 0) continue;
 
-                // Check children: all sections after this one that have a higher Level
-                // (deeper nesting) until we hit a section at the same or lower level.
+                // Check if this section has tables
+                if (sectionsWithTableIndices.Contains(i)) continue;
+
+                // Check children
                 bool childrenHaveContent = false;
                 for (int j = i + 1; j < sections.Count; j++)
                 {
                     if (sections[j].Level <= section.Level)
-                        break; // Hit a sibling or parent — stop
+                        break;
 
-                    if (CountWords(sections[j].Content) > 0)
+                    if (CountWords(sections[j].Content) > 0 || sectionsWithTableIndices.Contains(j))
                     {
                         childrenHaveContent = true;
                         break;
@@ -578,22 +777,17 @@ namespace TemplateOneShotExtractor
                 }
 
                 if (!childrenHaveContent)
-                {
-                    // Truly empty: no own content AND no children with content
                     result.Add(section);
-                }
             }
 
             return result;
         }
 
         // ═══════════════════════════════════════════════════════════════
-        // TABLE EXTRACTION FROM USER DOCX
+        // TABLE EXTRACTION FROM USER DOCX (v4)
         // ═══════════════════════════════════════════════════════════════
-        // Parses all <w:tbl> elements from the DOCX body, extracts the
-        // header row cells (first row of each table), and builds a
-        // normalized header signature (lowercase, pipe-separated) for
-        // comparison against the blueprint's TableInventory.
+        // Extracts tables AND maps each table to its nearest preceding
+        // heading for section-aware analysis.
         // ═══════════════════════════════════════════════════════════════
 
         private static List<ExtractedTable> ExtractTablesFromDocx(byte[] docxBytes)
@@ -605,33 +799,70 @@ namespace TemplateOneShotExtractor
             var body = document.MainDocumentPart?.Document?.Body;
             if (body == null) return tables;
 
-            int tableIndex = 0;
-            foreach (var table in body.Descendants<Table>())
+            // First pass: collect heading positions for section mapping
+            var headingPositions = new List<(int ElementIndex, string Title)>();
+            int elementIdx = 0;
+            foreach (var element in body.ChildElements)
             {
-                tableIndex++;
-                var rows = table.Elements<TableRow>().ToList();
-                if (rows.Count == 0) continue;
-
-                // Extract header cells from first row
-                var headerCells = rows[0].Elements<TableCell>()
-                    .Select(cell => NormalizeTableCell(cell.InnerText))
-                    .Where(text => !string.IsNullOrWhiteSpace(text))
-                    .ToList();
-
-                if (headerCells.Count == 0) continue;
-
-                // Build normalized header signature (lowercase, pipe-separated)
-                var signature = string.Join("|", headerCells.Select(c =>
-                    Regex.Replace(c.ToLowerInvariant().Trim(), @"\s+", " ")));
-
-                tables.Add(new ExtractedTable
+                if (element is Paragraph para)
                 {
-                    TableIndex = tableIndex,
-                    RowCount = rows.Count,
-                    ColumnCount = rows.Max(r => r.Elements<TableCell>().Count()),
-                    HeaderCells = headerCells,
-                    HeaderSignature = signature
-                });
+                    var styleId = para.ParagraphProperties?.ParagraphStyleId?.Val?.Value;
+                    var outlineLevel = para.ParagraphProperties?.OutlineLevel?.Val?.Value;
+                    if ((!string.IsNullOrWhiteSpace(styleId)
+                         && styleId.StartsWith("Heading", StringComparison.OrdinalIgnoreCase))
+                        || outlineLevel is not null)
+                    {
+                        headingPositions.Add((elementIdx, para.InnerText?.Trim() ?? ""));
+                    }
+                }
+                elementIdx++;
+            }
+
+            // Second pass: extract tables with section mapping
+            int tableIndex = 0;
+            int bodyElementIndex = 0;
+            foreach (var element in body.ChildElements)
+            {
+                if (element is Table table)
+                {
+                    tableIndex++;
+                    var rows = table.Elements<TableRow>().ToList();
+                    if (rows.Count == 0) { bodyElementIndex++; continue; }
+
+                    // Extract header cells from first row
+                    var headerCells = rows[0].Elements<TableCell>()
+                        .Select(cell => NormalizeTableCell(cell.InnerText))
+                        .Where(text => !string.IsNullOrWhiteSpace(text))
+                        .ToList();
+
+                    if (headerCells.Count == 0) { bodyElementIndex++; continue; }
+
+                    // Build normalized header signature (lowercase, pipe-separated)
+                    var signature = string.Join("|", headerCells.Select(c =>
+                        Regex.Replace(c.ToLowerInvariant().Trim(), @"\s+", " ")));
+
+                    // Find nearest preceding heading
+                    int nearestHeadingIdx = -1;
+                    for (int h = headingPositions.Count - 1; h >= 0; h--)
+                    {
+                        if (headingPositions[h].ElementIndex < bodyElementIndex)
+                        {
+                            nearestHeadingIdx = h;
+                            break;
+                        }
+                    }
+
+                    tables.Add(new ExtractedTable
+                    {
+                        TableIndex = tableIndex,
+                        RowCount = rows.Count,
+                        ColumnCount = rows.Max(r => r.Elements<TableCell>().Count()),
+                        HeaderCells = headerCells,
+                        HeaderSignature = signature,
+                        NearestHeadingIndex = nearestHeadingIdx
+                    });
+                }
+                bodyElementIndex++;
             }
 
             return tables;
@@ -644,9 +875,7 @@ namespace TemplateOneShotExtractor
         }
 
         // ═══════════════════════════════════════════════════════════════
-        // PIVOT HIGHLIGHTS BUILDER
-        // Groups Level 1 headings as pivots, Level 2+ as their subtitles.
-        // Compares user subtitles vs reference subtitles per pivot.
+        // PIVOT HIGHLIGHTS
         // ═══════════════════════════════════════════════════════════════
 
         private static List<ChatPivotHighlight> BuildPivotHighlights(
@@ -706,25 +935,32 @@ namespace TemplateOneShotExtractor
         }
 
         // ═══════════════════════════════════════════════════════════════
-        // RECOMMENDATIONS — heuristic, actionable
+        // RECOMMENDATIONS (v4)
         // ═══════════════════════════════════════════════════════════════
 
         private static List<string> BuildRecommendations(
-            int missingSections, int emptySections, int missingTables,
-            string band, int extraSections)
+            int missingSections, int emptySections, int placeholderSections,
+            int thinSections, int missingTablePatterns,
+            string band, int extraSections, int userTableCount, int blueprintTableCount)
         {
             var rec = new List<string>();
 
             if (missingSections > 0)
                 rec.Add($"Add the {missingSections} missing section(s) — all blueprint sections are mandatory in this CDC type.");
             if (emptySections > 0)
-                rec.Add($"Fill in the {emptySections} empty section(s) with content or add sub-sections — sections with no content at any level are flagged.");
-            if (missingTables > 0)
-                rec.Add($"Add the {missingTables} missing table(s) — each section must contain its expected tables with the correct header structure.");
+                rec.Add($"Fill in the {emptySections} empty section(s) — these have no text content, no sub-sections with content, and no tables.");
+            if (placeholderSections > 0)
+                rec.Add($"Replace placeholder content in {placeholderSections} section(s) — text like '<<Insert here>>', 'XXX', '<component name>' must be replaced with real project data.");
+            if (thinSections > 0)
+                rec.Add($"Expand {thinSections} section(s) with thin content — these have significantly less text than the blueprint expects. Review and add missing details.");
+            if (missingTablePatterns > 0)
+                rec.Add($"Add {missingTablePatterns} missing table pattern(s) — each section must contain its expected tables with the correct header structure.");
+            if (userTableCount > 0 && userTableCount < blueprintTableCount * 0.5)
+                rec.Add($"Document has {userTableCount} tables but blueprint expects ~{blueprintTableCount} — many sections may be missing their requirement/data tables.");
             if (band != "HIGH")
-                rec.Add("Confidence is below HIGH — manually review the highlighted pivot sections for structural alignment.");
-            if (extraSections > 5)
-                rec.Add($"The document has {extraSections} extra sections not in the blueprint — verify they are intentional and not duplicates of expected sections.");
+                rec.Add("Overall confidence is below HIGH — manually review the highlighted pivot sections for structural alignment.");
+            if (extraSections > 10)
+                rec.Add($"The document has {extraSections} extra sections not in the blueprint — verify they are intentional and correctly placed.");
 
             if (rec.Count == 0)
                 rec.Add("All checks passed — document structure matches the blueprint. Consider manual content quality review.");
@@ -733,7 +969,7 @@ namespace TemplateOneShotExtractor
         }
 
         // ═══════════════════════════════════════════════════════════════
-        // HUMAN SUMMARY — evaluator-focused, no noise
+        // HUMAN SUMMARY
         // ═══════════════════════════════════════════════════════════════
 
         private static string BuildHumanSummary(ValidationReport report, ChatReport chat, ComparisonResult comparison)
@@ -745,14 +981,16 @@ namespace TemplateOneShotExtractor
             if (comparison.MissingInUser.Count > 0)
                 parts.Add($"{comparison.MissingInUser.Count} MISSING section(s).");
             if (report.Summary.TrulyEmptySections > 0)
-                parts.Add($"{report.Summary.TrulyEmptySections} EMPTY section(s) needing content.");
-            if (report.Summary.MissingTables > 0)
-                parts.Add($"{report.Summary.MissingTables} MISSING table(s).");
-            if (report.Summary.MissingTables == 0 && report.Summary.TotalBlueprintTables > 0)
-                parts.Add($"Table coverage: {chat.Summary.TableCoverage:0.#}% ({report.Summary.MatchedTables}/{report.Summary.TotalBlueprintTables}).");
+                parts.Add($"{report.Summary.TrulyEmptySections} EMPTY section(s).");
+            if (report.Summary.PlaceholderSections > 0)
+                parts.Add($"{report.Summary.PlaceholderSections} section(s) still contain PLACEHOLDER text.");
+            if (report.Summary.ThinContentSections > 0)
+                parts.Add($"{report.Summary.ThinContentSections} section(s) have THIN content (insufficient depth).");
+            if (report.Summary.MissingTablePatterns > 0)
+                parts.Add($"{report.Summary.MissingTablePatterns} table pattern(s) MISSING ({report.Summary.UserTableCount} user tables vs {report.Summary.TotalBlueprintTables} expected).");
 
             if (report.IsValid)
-                parts.Add("All structural checks passed.");
+                parts.Add("All structural and content checks passed.");
             else
                 parts.Add("Action required — see topIssues and recommendations.");
 
@@ -782,6 +1020,11 @@ namespace TemplateOneShotExtractor
             if (string.IsNullOrWhiteSpace(text)) return 0;
             return text.Split(new[] { ' ', '\n', '\r', '\t' },
                 StringSplitOptions.RemoveEmptyEntries).Length;
+        }
+
+        private static string TruncateSig(string sig, int max = 60)
+        {
+            return sig.Length <= max ? sig : sig[..max] + "…";
         }
 
         private async Task<string> LoadResourceAsync(string pathOrUrl, string correlationId)
@@ -853,6 +1096,23 @@ namespace TemplateOneShotExtractor
             return tables;
         }
 
+        private static HashSet<int> ExtractBlueprintEmptyOrders(string json)
+        {
+            var orders = new HashSet<int>();
+            using var doc = JsonDocument.Parse(json);
+
+            if (!doc.RootElement.TryGetProperty("Quality", out var quality)) return orders;
+            if (!quality.TryGetProperty("EmptySectionOrders", out var arr)) return orders;
+
+            foreach (var item in arr.EnumerateArray())
+            {
+                if (item.ValueKind == JsonValueKind.Number)
+                    orders.Add(item.GetInt32());
+            }
+
+            return orders;
+        }
+
         // ═══════════════════════════════════════════════════════════════
         // INTERNAL MODELS
         // ═══════════════════════════════════════════════════════════════
@@ -880,6 +1140,7 @@ namespace TemplateOneShotExtractor
             public int ColumnCount { get; set; }
             public List<string> HeaderCells { get; set; } = new();
             public string HeaderSignature { get; set; } = "";
+            public int NearestHeadingIndex { get; set; } = -1;
         }
     }
 }

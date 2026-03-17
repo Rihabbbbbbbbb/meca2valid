@@ -1,6 +1,9 @@
 using System.Net;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Text.RegularExpressions;
+using DocumentFormat.OpenXml.Packaging;
+using DocumentFormat.OpenXml.Wordprocessing;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
@@ -20,188 +23,59 @@ host.Run();
 
 namespace TemplateOneShotExtractor.Models
 {
-    /// <summary>
-    /// Request model for template validation
-    /// </summary>
+    // ═══════════════════════════════════════════════════════════════
+    // REQUEST / RESPONSE DTOs
+    // ═══════════════════════════════════════════════════════════════
+
     public class ValidationRequest
     {
-        /// <summary>
-        /// The blueprint template identifier or path
-        /// </summary>
         public string TemplateBlueprint { get; set; } = string.Empty;
-
-        /// <summary>
-        /// The user identifier requesting validation
-        /// </summary>
         public string User { get; set; } = string.Empty;
-
         /// <summary>
         /// Azure Blob Storage URL (SAS) of the uploaded DOCX document to validate.
-        /// Provided by Power Automate after uploading the user's file to Blob Storage.
         /// </summary>
         public string? DocumentUrl { get; set; }
     }
 
-    /// <summary>
-    /// Validation issue (error or warning)
-    /// </summary>
     public class ValidationIssue
     {
-        /// <summary>
-        /// Issue type: error or warning
-        /// </summary>
         public string Type { get; set; } = string.Empty;
-
-        /// <summary>
-        /// Section or field where issue was found
-        /// </summary>
         public string Field { get; set; } = string.Empty;
-
-        /// <summary>
-        /// Detailed message
-        /// </summary>
         public string Message { get; set; } = string.Empty;
-
-        /// <summary>
-        /// Severity: critical, high, medium, low
-        /// </summary>
         public string Severity { get; set; } = string.Empty;
     }
 
-    /// <summary>
-    /// Validation summary statistics
-    /// </summary>
     public class ValidationSummary
     {
-        /// <summary>
-        /// Total number of checks performed
-        /// </summary>
-        public int TotalChecks { get; set; }
-
-        /// <summary>
-        /// Number of checks that passed
-        /// </summary>
-        public int Passed { get; set; }
-
-        /// <summary>
-        /// Number of errors found
-        /// </summary>
-        public int Failed { get; set; }
-
-        /// <summary>
-        /// Number of warnings
-        /// </summary>
-        public int Warnings { get; set; }
+        public int TotalBlueprintSections { get; set; }
+        public int MatchedSections { get; set; }
+        public int MissingSections { get; set; }
+        public int TrulyEmptySections { get; set; }
+        public int TotalBlueprintTables { get; set; }
+        public int MatchedTables { get; set; }
+        public int MissingTables { get; set; }
     }
 
-    /// <summary>
-    /// Section validation details
-    /// </summary>
-    public class SectionDetail
-    {
-        /// <summary>
-        /// Section name
-        /// </summary>
-        public string Section { get; set; } = string.Empty;
-
-        /// <summary>
-        /// Validation status: valid, invalid, warning
-        /// </summary>
-        public string Status { get; set; } = string.Empty;
-
-        /// <summary>
-        /// Checks performed on this section
-        /// </summary>
-        public List<string> Checks { get; set; } = new List<string>();
-    }
-
-    /// <summary>
-    /// Detailed validation report
-    /// </summary>
     public class ValidationReport
     {
-        /// <summary>
-        /// Overall validation status
-        /// </summary>
         public bool IsValid { get; set; }
-
-        /// <summary>
-        /// Validation score (0-100)
-        /// </summary>
         public int Score { get; set; }
-
-        /// <summary>
-        /// Summary statistics
-        /// </summary>
-        public ValidationSummary Summary { get; set; } = new ValidationSummary();
-
-        /// <summary>
-        /// List of errors found
-        /// </summary>
-        public List<ValidationIssue> Errors { get; set; } = new List<ValidationIssue>();
-
-        /// <summary>
-        /// List of warnings
-        /// </summary>
-        public List<ValidationIssue> Warnings { get; set; } = new List<ValidationIssue>();
-
-        /// <summary>
-        /// Section-by-section details
-        /// </summary>
-        public List<SectionDetail> Details { get; set; } = new List<SectionDetail>();
+        public ValidationSummary Summary { get; set; } = new();
+        public List<ValidationIssue> Issues { get; set; } = new();
     }
 
-    /// <summary>
-    /// Response model for successful validation - Optimized for Copilot Studio
-    /// </summary>
     public class ValidationResponse
     {
-        /// <summary>
-        /// Indicates if the operation was successful
-        /// </summary>
         public bool Success { get; set; }
-
-        /// <summary>
-        /// Human-readable status message
-        /// </summary>
         public string Message { get; set; } = string.Empty;
-
-        /// <summary>
-        /// Timestamp of validation (ISO 8601)
-        /// </summary>
         public string ValidatedAt { get; set; } = string.Empty;
-
-        /// <summary>
-        /// User who requested validation
-        /// </summary>
         public string User { get; set; } = string.Empty;
-
-        /// <summary>
-        /// Template blueprint used
-        /// </summary>
         public string Template { get; set; } = string.Empty;
-
-        /// <summary>
-        /// Detailed validation report
-        /// </summary>
-        public ValidationReport Report { get; set; } = new ValidationReport();
-
-        /// <summary>
-        /// Unique correlation ID for this validation request (for tracing)
-        /// </summary>
+        public ValidationReport Report { get; set; } = new();
         public string CorrelationId { get; set; } = string.Empty;
-
-        /// <summary>
-        /// Pre-formatted Copilot Studio display report.
-        /// Use ChatReport.HumanSummary, ChatReport.TopIssues, ChatReport.Recommendations
-        /// directly in Copilot Studio topic messages — no parsing needed.
-        /// </summary>
-        public ChatReport ChatReport { get; set; } = new ChatReport();
+        public ChatReport ChatReport { get; set; } = new();
     }
 
-    /// <summary>
-    /// Error response model
-    /// </summary>
     public class ErrorResponse
     {
         public string Error { get; set; } = string.Empty;
@@ -209,14 +83,15 @@ namespace TemplateOneShotExtractor.Models
     }
 
     // ═══════════════════════════════════════════════════════════════
-    // CHAT REPORT — matches chat-report-template.json format exactly
-    // Copilot Studio display-ready formatted output
+    // CHAT REPORT — evaluator-focused, actionable output
+    // Only missing sections, truly empty sections, missing tables,
+    // recommendations. No noise about what already exists.
     // ═══════════════════════════════════════════════════════════════
 
     public class ChatMetadata
     {
         public string Tool { get; set; } = "TemplateOneShotExtractor-AzureFunction";
-        public string Version { get; set; } = "2.0.0";
+        public string Version { get; set; } = "3.0.0";
         public string StartedAtUtc { get; set; } = string.Empty;
         public string ValidatedAtUtc { get; set; } = string.Empty;
         public long DurationMs { get; set; }
@@ -227,39 +102,17 @@ namespace TemplateOneShotExtractor.Models
     public class ChatSummary
     {
         public double FinalScore { get; set; }
-        public double PivotCoverage { get; set; }
-        public double SubtitleRecall { get; set; }
-        public double SubtitlePrecision { get; set; }
-        public double OrderScore { get; set; }
+        public double SectionCoverage { get; set; }
+        public double SubtitleCoverage { get; set; }
+        public double TableCoverage { get; set; }
         public string ConfidenceBand { get; set; } = "LOW";
-    }
-
-    public class ChatPolicyCompliance
-    {
-        public List<string> MissingSections { get; set; } = new();
-        public int TotalSections { get; set; }
-    }
-
-    public class ChatEmptySectionViolation
-    {
-        public int Order { get; set; }
-        public string Title { get; set; } = string.Empty;
-        public string CanonicalTitle { get; set; } = string.Empty;
-        public string Requirement { get; set; } = string.Empty;
-    }
-
-    public class ChatQualityGates
-    {
-        public bool RequiresNotApplicableForEmptySections { get; set; }
-        public bool RedTextDetected { get; set; }
-        public List<ChatEmptySectionViolation> EmptySectionViolations { get; set; } = new();
     }
 
     public class ChatPivotHighlight
     {
         public string PivotTitle { get; set; } = string.Empty;
-        public int TemplateSubtitleCount { get; set; }
-        public int UserSubtitleCount { get; set; }
+        public int ExpectedSubtitleCount { get; set; }
+        public int FoundSubtitleCount { get; set; }
         public int MatchedSubtitleCount { get; set; }
         public List<string> MissingSubtitles { get; set; } = new();
         public string Severity { get; set; } = "Low";
@@ -273,17 +126,21 @@ namespace TemplateOneShotExtractor.Models
         public string Severity { get; set; } = string.Empty;
     }
 
-    /// <summary>
-    /// Pre-formatted Copilot Studio ready report matching chat-report-template.json.
-    /// </summary>
+    public class ChatTableIssue
+    {
+        public string SectionTitle { get; set; } = string.Empty;
+        public string ExpectedSignature { get; set; } = string.Empty;
+        public int ExpectedRowCount { get; set; }
+        public string Status { get; set; } = string.Empty;
+    }
+
     public class ChatReport
     {
         public ChatMetadata Metadata { get; set; } = new();
         public ChatSummary Summary { get; set; } = new();
-        public ChatPolicyCompliance PolicyCompliance { get; set; } = new();
-        public ChatQualityGates QualityGates { get; set; } = new();
-        public List<ChatPivotHighlight> PivotHighlights { get; set; } = new();
         public List<ChatTopIssue> TopIssues { get; set; } = new();
+        public List<ChatPivotHighlight> PivotHighlights { get; set; } = new();
+        public List<ChatTableIssue> MissingTables { get; set; } = new();
         public List<string> Recommendations { get; set; } = new();
         public string HumanSummary { get; set; } = string.Empty;
     }
@@ -294,682 +151,735 @@ namespace TemplateOneShotExtractor
     using TemplateOneShotExtractor.Models;
 
     public class ValidateTemplateFunction
-{
-    private readonly ILogger<ValidateTemplateFunction> _logger;
-    private static readonly HttpClient _sharedHttpClient = new() { Timeout = TimeSpan.FromSeconds(60) };
-
-    public ValidateTemplateFunction(ILogger<ValidateTemplateFunction> logger)
     {
-        _logger = logger;
-    }
+        private readonly ILogger<ValidateTemplateFunction> _logger;
+        private static readonly HttpClient _sharedHttpClient = new() { Timeout = TimeSpan.FromSeconds(60) };
 
-    [Function("ValidateTemplate")]
-    [OpenApiOperation(
-        operationId: "ValidateTemplate",
-        tags: new[] { "Template Validation" },
-        Summary = "Validate a template against blueprint specifications",
-        Description = "This endpoint validates a user-provided template against predefined blueprint specifications and generates a validation report.",
-        Visibility = OpenApiVisibilityType.Important
-    )]
-    [OpenApiRequestBody(
-        contentType: "application/json",
-        bodyType: typeof(ValidationRequest),
-        Required = true,
-        Description = "Validation request containing template blueprint and user information"
-    )]
-    [OpenApiResponseWithBody(
-        statusCode: HttpStatusCode.OK,
-        contentType: "application/json",
-        bodyType: typeof(ValidationResponse),
-        Summary = "Validation successful",
-        Description = "Template validation completed successfully and report generated"
-    )]
-    [OpenApiResponseWithBody(
-        statusCode: HttpStatusCode.BadRequest,
-        contentType: "application/json",
-        bodyType: typeof(ErrorResponse),
-        Summary = "Bad request",
-        Description = "Invalid request parameters or malformed JSON"
-    )]
-    [OpenApiResponseWithBody(
-        statusCode: HttpStatusCode.InternalServerError,
-        contentType: "application/json",
-        bodyType: typeof(ErrorResponse),
-        Summary = "Internal server error",
-        Description = "An unexpected error occurred during validation"
-    )]
-    [OpenApiSecurity("function_key", SecuritySchemeType.ApiKey, Name = "code", In = OpenApiSecurityLocationType.Query)]
-    public async Task<HttpResponseData> Run(
-        [HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequestData req)
-    {
-        var correlationId = Guid.NewGuid().ToString("N")[..12];
-        _logger.LogInformation("ValidateTemplate function triggered. CorrelationId={CorrelationId}", correlationId);
-
-        try
+        public ValidateTemplateFunction(ILogger<ValidateTemplateFunction> logger)
         {
-            // Parse request body
-            string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-            _logger.LogDebug("[{CorrelationId}] Request body received: {RequestBody}", correlationId, requestBody);
+            _logger = logger;
+        }
 
-            Dictionary<string, string>? argsMap;
+        [Function("ValidateTemplate")]
+        [OpenApiOperation(
+            operationId: "ValidateTemplate",
+            tags: new[] { "Template Validation" },
+            Summary = "Validate a CDC document against blueprint specifications",
+            Description = "Downloads a user DOCX, parses sections and tables, compares against the blueprint template, and returns an actionable report focusing on what is MISSING or needs to be changed.",
+            Visibility = OpenApiVisibilityType.Important
+        )]
+        [OpenApiRequestBody(contentType: "application/json", bodyType: typeof(ValidationRequest), Required = true,
+            Description = "Validation request with documentUrl (REQUIRED — SAS URL to the DOCX)")]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json",
+            bodyType: typeof(ValidationResponse), Summary = "Validation report generated")]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest, contentType: "application/json",
+            bodyType: typeof(ErrorResponse), Summary = "Bad request")]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.InternalServerError, contentType: "application/json",
+            bodyType: typeof(ErrorResponse), Summary = "Internal server error")]
+        [OpenApiSecurity("function_key", SecuritySchemeType.ApiKey, Name = "code", In = OpenApiSecurityLocationType.Query)]
+        public async Task<HttpResponseData> Run(
+            [HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequestData req)
+        {
+            var correlationId = Guid.NewGuid().ToString("N")[..12];
+            _logger.LogInformation("ValidateTemplate triggered. CId={CId}", correlationId);
+
             try
             {
-                argsMap = JsonSerializer.Deserialize<Dictionary<string, string>>(requestBody);
-            }
-            catch (JsonException ex)
-            {
-                _logger.LogError(ex, "Failed to deserialize request body");
-                var badResponse = req.CreateResponse(HttpStatusCode.BadRequest);
-                await badResponse.WriteAsJsonAsync(new ErrorResponse 
-                { 
-                    Error = "Invalid JSON format in request body",
-                    Details = ex.Message
-                });
-                return badResponse;
-            }
+                string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
 
-            // Validate required arguments
-            if (argsMap == null || !argsMap.ContainsKey("templateBlueprint") || !argsMap.ContainsKey("user"))
-            {
-                _logger.LogWarning("Missing required fields in request");
-                var badResponse = req.CreateResponse(HttpStatusCode.BadRequest);
-                await badResponse.WriteAsJsonAsync(new ErrorResponse 
-                { 
-                    Error = "Invalid request body. Required fields: templateBlueprint, user",
-                    Details = "Both 'templateBlueprint' and 'user' fields are mandatory"
-                });
-                return badResponse;
-            }
-
-            // Resolve blueprint from environment or request
-            var blueprintPath = Environment.GetEnvironmentVariable("BLUEPRINT_PATH") ?? argsMap["templateBlueprint"];
-            var userPath = argsMap["user"];
-            var documentUrl = argsMap.ContainsKey("documentUrl") ? argsMap["documentUrl"] : null;
-
-            // documentUrl is REQUIRED for real validation
-            if (string.IsNullOrWhiteSpace(documentUrl))
-            {
-                _logger.LogWarning("[{CorrelationId}] Missing required field: documentUrl", correlationId);
-                var noDocResponse = req.CreateResponse(HttpStatusCode.BadRequest);
-                await noDocResponse.WriteAsJsonAsync(new ErrorResponse
+                Dictionary<string, string>? argsMap;
+                try { argsMap = JsonSerializer.Deserialize<Dictionary<string, string>>(requestBody); }
+                catch (JsonException ex)
                 {
-                    Error = "Missing required field: documentUrl",
-                    Details = "A valid HTTPS URL to a .docx document is required. Upload your document to Azure Blob Storage and provide the URL (with SAS token if needed)."
+                    var bad = req.CreateResponse(HttpStatusCode.BadRequest);
+                    await bad.WriteAsJsonAsync(new ErrorResponse { Error = "Invalid JSON", Details = ex.Message });
+                    return bad;
+                }
+
+                if (argsMap == null || !argsMap.ContainsKey("templateBlueprint") || !argsMap.ContainsKey("user"))
+                {
+                    var bad = req.CreateResponse(HttpStatusCode.BadRequest);
+                    await bad.WriteAsJsonAsync(new ErrorResponse { Error = "Missing required fields: templateBlueprint, user" });
+                    return bad;
+                }
+
+                var blueprintPath = Environment.GetEnvironmentVariable("BLUEPRINT_PATH") ?? argsMap["templateBlueprint"];
+                var userPath = argsMap["user"];
+                var documentUrl = argsMap.ContainsKey("documentUrl") ? argsMap["documentUrl"] : null;
+
+                if (string.IsNullOrWhiteSpace(documentUrl))
+                {
+                    var bad = req.CreateResponse(HttpStatusCode.BadRequest);
+                    await bad.WriteAsJsonAsync(new ErrorResponse
+                    {
+                        Error = "Missing required field: documentUrl",
+                        Details = "Provide a valid HTTPS URL to a .docx document (with SAS token if needed)."
+                    });
+                    return bad;
+                }
+
+                var (report, chatReport) = await PerformValidationAsync(blueprintPath, documentUrl, correlationId);
+
+                var response = req.CreateResponse(HttpStatusCode.OK);
+                await response.WriteAsJsonAsync(new ValidationResponse
+                {
+                    Success = true,
+                    Message = report.IsValid
+                        ? "Template validation passed — no critical issues found"
+                        : "Template validation completed — issues found that need attention",
+                    ValidatedAt = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ssZ"),
+                    User = userPath,
+                    Template = blueprintPath,
+                    Report = report,
+                    CorrelationId = correlationId,
+                    ChatReport = chatReport
                 });
-                return noDocResponse;
+                return response;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Unexpected error during validation");
+                var err = req.CreateResponse(HttpStatusCode.InternalServerError);
+                await err.WriteAsJsonAsync(new ErrorResponse { Error = "Validation error", Details = ex.Message });
+                return err;
+            }
+        }
+
+        // ═══════════════════════════════════════════════════════════════
+        // VALIDATION ENGINE v3 — Specialist CDC Analysis
+        // ═══════════════════════════════════════════════════════════════
+        //
+        // Key design decisions:
+        // 1. ALL blueprint sections are REQUIRED — no must/should/optional
+        //    tiers (in CDC domain, everything in the template is mandatory)
+        // 2. Empty section = section has no content AND no child sub-sections
+        //    with content. A parent heading (e.g. "SCOPE" Level 1) that has
+        //    Level 2+ children with content is NOT empty.
+        // 3. Table comparison: extract tables from user DOCX, compare header
+        //    signatures against blueprint TableInventory
+        // 4. Report focuses ONLY on what's MISSING or needs to change — the
+        //    evaluator doesn't need to see what already exists/passes.
+        // ═══════════════════════════════════════════════════════════════
+
+        private async Task<(ValidationReport Report, ChatReport Chat)> PerformValidationAsync(
+            string blueprintPathOrUrl, string documentUrl, string correlationId)
+        {
+            var startedAt = DateTime.UtcNow;
+            var report = new ValidationReport { Issues = new List<ValidationIssue>() };
+            var chat = new ChatReport
+            {
+                Metadata = new ChatMetadata
+                {
+                    StartedAtUtc = startedAt.ToString("yyyy-MM-ddTHH:mm:ss.fffZ"),
+                    TemplatePath = blueprintPathOrUrl,
+                    UserDocumentPath = documentUrl
+                }
+            };
+
+            // ── STEP 1: Download user DOCX ───────────────────────────────
+            byte[] docxBytes;
+            try
+            {
+                _logger.LogInformation("[{CId}] Downloading DOCX…", correlationId);
+                docxBytes = await _sharedHttpClient.GetByteArrayAsync(documentUrl);
+                _logger.LogInformation("[{CId}] Downloaded {Size} bytes", correlationId, docxBytes.Length);
+            }
+            catch (HttpRequestException ex)
+            {
+                return FailFast(report, chat, "documentUrl",
+                    $"Cannot download document: {ex.StatusCode} — {ex.Message}");
+            }
+            catch (TaskCanceledException)
+            {
+                return FailFast(report, chat, "documentUrl", "Download timed out (60s)");
             }
 
-            _logger.LogInformation("[{CorrelationId}] Processing validation for user: {User}, blueprint: {Blueprint}, documentUrl: {DocUrl}",
-                correlationId, userPath, blueprintPath, documentUrl);
-
-            // Perform REAL template validation using WordOpenXml.Core pipeline
-            var (validationReport, chatReport) = await PerformValidationAsync(blueprintPath, documentUrl, correlationId);
-
-            _logger.LogInformation("[{CorrelationId}] Validation completed for user: {User} - IsValid: {IsValid}, Score: {Score}",
-                correlationId, userPath, validationReport.IsValid, validationReport.Score);
-            
-            var response = req.CreateResponse(HttpStatusCode.OK);
-            await response.WriteAsJsonAsync(new ValidationResponse 
-            { 
-                Success = true,
-                Message = validationReport.IsValid 
-                    ? "Template validation completed successfully" 
-                    : "Template validation completed with errors",
-                ValidatedAt = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ssZ"),
-                User = userPath,
-                Template = blueprintPath,
-                Report = validationReport,
-                CorrelationId = correlationId,
-                ChatReport = chatReport
-            });
-            return response;
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "An unexpected error occurred during validation");
-            var errorResponse = req.CreateResponse(HttpStatusCode.InternalServerError);
-            await errorResponse.WriteAsJsonAsync(new ErrorResponse 
-            { 
-                Error = "An error occurred during validation",
-                Details = ex.Message
-            });
-            return errorResponse;
-        }
-    }
-
-    // ═══════════════════════════════════════════════════════════════
-    // REAL VALIDATION ENGINE — Uses WordOpenXml.Core (proven library)
-    // WordParser.Parse → CdcAnalysisService.Analyze → Compare
-    // Produces chat-report-template.json format output
-    // ═══════════════════════════════════════════════════════════════
-
-    private async Task<(ValidationReport Report, ChatReport Chat)> PerformValidationAsync(
-        string blueprintPathOrUrl, string documentUrl, string correlationId)
-    {
-        var startedAt = DateTime.UtcNow;
-
-        var report = new ValidationReport
-        {
-            Summary = new ValidationSummary(),
-            Errors = new List<ValidationIssue>(),
-            Warnings = new List<ValidationIssue>(),
-            Details = new List<SectionDetail>()
-        };
-
-        var chat = new ChatReport
-        {
-            Metadata = new ChatMetadata
+            // ── STEP 2: Parse user DOCX — sections (WordParser) ──────────
+            IReadOnlyList<Section> rawSections;
+            try
             {
-                StartedAtUtc = startedAt.ToString("yyyy-MM-ddTHH:mm:ss.fffZ"),
-                TemplatePath = blueprintPathOrUrl,
-                UserDocumentPath = documentUrl
+                rawSections = new WordParser().Parse(docxBytes);
+                _logger.LogInformation("[{CId}] WordParser: {N} raw sections", correlationId, rawSections.Count);
             }
-        };
-
-        // ── STEP 1: Download user DOCX from documentUrl ──────────────
-        byte[] docxBytes;
-        try
-        {
-            _logger.LogInformation("[{CId}] Downloading document from: {Url}", correlationId, documentUrl);
-            docxBytes = await _sharedHttpClient.GetByteArrayAsync(documentUrl);
-            _logger.LogInformation("[{CId}] Document downloaded: {Size} bytes", correlationId, docxBytes.Length);
-        }
-        catch (HttpRequestException ex)
-        {
-            _logger.LogError(ex, "[{CId}] Failed to download document from {Url}", correlationId, documentUrl);
-            report.IsValid = false; report.Score = 0;
-            report.Errors.Add(new ValidationIssue { Type = "error", Field = "documentUrl",
-                Message = $"Cannot download document: {ex.StatusCode} — {ex.Message}", Severity = "critical" });
-            report.Summary = new ValidationSummary { TotalChecks = 1, Passed = 0, Failed = 1, Warnings = 0 };
-            chat.HumanSummary = $"Validation failed: cannot download document ({ex.StatusCode}).";
-            return (report, chat);
-        }
-        catch (TaskCanceledException)
-        {
-            report.IsValid = false; report.Score = 0;
-            report.Errors.Add(new ValidationIssue { Type = "error", Field = "documentUrl",
-                Message = "Document download timed out after 60 seconds", Severity = "critical" });
-            report.Summary = new ValidationSummary { TotalChecks = 1, Passed = 0, Failed = 1, Warnings = 0 };
-            chat.HumanSummary = "Validation failed: document download timed out.";
-            return (report, chat);
-        }
-
-        // ── STEP 2: Parse user DOCX with WordParser (proven library) ─
-        IReadOnlyList<Section> rawSections;
-        try
-        {
-            var parser = new WordParser();
-            rawSections = parser.Parse(docxBytes);
-            _logger.LogInformation("[{CId}] WordParser extracted {Count} raw sections", correlationId, rawSections.Count);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "[{CId}] Failed to parse DOCX with WordParser", correlationId);
-            report.IsValid = false; report.Score = 0;
-            report.Errors.Add(new ValidationIssue { Type = "error", Field = "document",
-                Message = $"Cannot parse DOCX file: {ex.Message}", Severity = "critical" });
-            report.Summary = new ValidationSummary { TotalChecks = 1, Passed = 0, Failed = 1, Warnings = 0 };
-            chat.HumanSummary = $"Validation failed: cannot parse DOCX ({ex.Message}).";
-            return (report, chat);
-        }
-
-        if (rawSections.Count == 0)
-        {
-            report.IsValid = false; report.Score = 0;
-            report.Errors.Add(new ValidationIssue { Type = "error", Field = "document",
-                Message = "Document contains no identifiable headings or sections", Severity = "critical" });
-            report.Summary = new ValidationSummary { TotalChecks = 1, Passed = 0, Failed = 1, Warnings = 0 };
-            chat.HumanSummary = "Validation failed: document contains no headings.";
-            return (report, chat);
-        }
-
-        // ── STEP 3: Analyze user document with CdcAnalysisService ────
-        var analysisService = new CdcAnalysisService();
-        var userAnalysis = analysisService.Analyze("user-document", rawSections);
-        _logger.LogInformation("[{CId}] CdcAnalysisService: {Raw} raw → {Filtered} filtered out → {Norm} normalized sections",
-            correlationId, userAnalysis.RawSectionCount, userAnalysis.FilteredOutCount, userAnalysis.Sections.Count);
-
-        // ── STEP 4: Load blueprint JSON and build reference DocumentAnalysis ─
-        DocumentAnalysis referenceAnalysis;
-        List<BlueprintHeading> blueprintHeadings;
-        try
-        {
-            var blueprintJson = await LoadResourceAsync(blueprintPathOrUrl, correlationId);
-            blueprintHeadings = ExtractBlueprintHeadings(blueprintJson);
-            _logger.LogInformation("[{CId}] Blueprint loaded: {Count} headings", correlationId, blueprintHeadings.Count);
-
-            // Convert blueprint headings to Section objects, then let CdcAnalysisService
-            // canonicalize them with the SAME logic used for the user document
-            var blueprintSections = blueprintHeadings.Select(h => new Section
+            catch (Exception ex)
             {
-                Level = h.Level,
-                Title = h.Title,
-                Content = string.Empty
+                return FailFast(report, chat, "document", $"Cannot parse DOCX: {ex.Message}");
+            }
+
+            if (rawSections.Count == 0)
+                return FailFast(report, chat, "document", "Document has no identifiable headings");
+
+            // ── STEP 3: Parse user DOCX — tables ─────────────────────────
+            var userTables = ExtractTablesFromDocx(docxBytes);
+            _logger.LogInformation("[{CId}] Extracted {N} tables from user DOCX", correlationId, userTables.Count);
+
+            // ── STEP 4: Analyze sections with CdcAnalysisService ─────────
+            var svc = new CdcAnalysisService();
+            var userAnalysis = svc.Analyze("user-document", rawSections);
+            _logger.LogInformation("[{CId}] User analysis: {N} normalized sections", correlationId, userAnalysis.Sections.Count);
+
+            // ── STEP 5: Load blueprint JSON ──────────────────────────────
+            string blueprintJson;
+            try
+            {
+                blueprintJson = await LoadResourceAsync(blueprintPathOrUrl, correlationId);
+            }
+            catch (Exception ex)
+            {
+                return FailFast(report, chat, "blueprint", $"Cannot load blueprint: {ex.Message}");
+            }
+
+            var blueprintHeadings = ExtractBlueprintHeadings(blueprintJson);
+            var blueprintTables = ExtractBlueprintTables(blueprintJson);
+            _logger.LogInformation("[{CId}] Blueprint: {H} headings, {T} tables",
+                correlationId, blueprintHeadings.Count, blueprintTables.Count);
+
+            // Build reference DocumentAnalysis from blueprint headings
+            var refSections = blueprintHeadings.Select(h => new Section
+            {
+                Level = h.Level, Title = h.Title, Content = string.Empty
             }).ToList();
-            referenceAnalysis = analysisService.Analyze("blueprint", blueprintSections);
-            _logger.LogInformation("[{CId}] Reference analysis: {Count} normalized sections", correlationId, referenceAnalysis.Sections.Count);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "[{CId}] Failed to load blueprint from {Path}", correlationId, blueprintPathOrUrl);
-            report.IsValid = false; report.Score = 0;
-            report.Errors.Add(new ValidationIssue { Type = "error", Field = "blueprint",
-                Message = $"Cannot load blueprint: {ex.Message}", Severity = "critical" });
-            report.Summary = new ValidationSummary { TotalChecks = 1, Passed = 0, Failed = 1, Warnings = 0 };
-            chat.HumanSummary = $"Validation failed: cannot load blueprint ({ex.Message}).";
-            return (report, chat);
-        }
+            var refAnalysis = svc.Analyze("blueprint", refSections);
 
-        // ── STEP 5: Compare user vs reference using CdcAnalysisService ─
-        var comparison = analysisService.Compare(userAnalysis, referenceAnalysis);
-        _logger.LogInformation("[{CId}] Comparison: {Ref} reference, {User} user, {Common} common, {Missing} missing, Coverage={Cov:F1}%",
-            correlationId, comparison.ReferenceCount, comparison.UserCount,
-            comparison.Common.Count, comparison.MissingInUser.Count, comparison.CoveragePercent);
+            // ── STEP 6: Section comparison ───────────────────────────────
+            var comparison = svc.Compare(userAnalysis, refAnalysis);
+            _logger.LogInformation("[{CId}] Sections: {Common} common, {Missing} missing, Coverage={Cov:F1}%",
+                correlationId, comparison.Common.Count, comparison.MissingInUser.Count, comparison.CoveragePercent);
 
-        // ── STEP 6: Load policy JSON ────────────────────────────────
-        PolicyConfig policy;
-        try
-        {
-            var policyPathOrUrl = Environment.GetEnvironmentVariable("POLICY_PATH") ?? "template-policy.json";
-            var policyJson = await LoadResourceAsync(policyPathOrUrl, correlationId);
-            policy = JsonSerializer.Deserialize<PolicyConfig>(policyJson, new JsonSerializerOptions { PropertyNameCaseInsensitive = true })
-                     ?? new PolicyConfig();
-        }
-        catch (Exception ex)
-        {
-            _logger.LogWarning(ex, "[{CId}] Policy load failed, continuing with blueprint-only comparison", correlationId);
-            policy = new PolicyConfig();
-        }
+            // ── STEP 7: Truly empty section detection ────────────────────
+            // A section is "truly empty" ONLY if it exists in the user doc,
+            // is also expected in the blueprint, has no own content AND none
+            // of its child sub-sections have content.
+            var allTrulyEmpty = FindTrulyEmptySections(userAnalysis.Sections);
+            // Only flag sections that exist in the blueprint (common sections)
+            var commonSet = new HashSet<string>(comparison.Common, StringComparer.OrdinalIgnoreCase);
+            var trulyEmptySections = allTrulyEmpty
+                .Where(s => commonSet.Contains(s.CanonicalTitle))
+                .ToList();
+            _logger.LogInformation("[{CId}] Truly empty sections (in blueprint): {N}", correlationId, trulyEmptySections.Count);
 
-        // Uppercase policy canonical titles to match CdcAnalysisService convention
-        var mustTitles = policy.MustCanonicalTitles.Select(t => t.ToUpperInvariant()).ToList();
-        var shouldTitles = policy.ShouldCanonicalTitles.Select(t => t.ToUpperInvariant()).ToList();
-        var optionalTitles = policy.OptionalCanonicalTitles.Select(t => t.ToUpperInvariant()).ToList();
-        int totalPolicySections = mustTitles.Count + shouldTitles.Count + optionalTitles.Count;
+            // ── STEP 8: Table comparison ─────────────────────────────────
+            // Build set of user table signatures for matching
+            var userSigSet = userTables.Select(t => t.HeaderSignature)
+                .Where(s => !string.IsNullOrWhiteSpace(s))
+                .ToHashSet(StringComparer.OrdinalIgnoreCase);
 
-        // ── STEP 7: Build ValidationReport details ───────────────────
-        var userCanonicalSet = userAnalysis.Sections
-            .Select(s => s.CanonicalTitle)
-            .ToHashSet(StringComparer.OrdinalIgnoreCase);
-
-        int totalChecks = 0;
-        int passedChecks = 0;
-
-        foreach (var refSection in referenceAnalysis.Sections)
-        {
-            totalChecks++;
-            bool found = userCanonicalSet.Contains(refSection.CanonicalTitle);
-
-            if (found)
+            var missingTableIssues = new List<ChatTableIssue>();
+            int matchedTableCount = 0;
+            // Only compare tables assigned to a blueprint section
+            var sectionTables = blueprintTables.Where(t => t.SectionOrder.HasValue).ToList();
+            foreach (var bt in sectionTables)
             {
-                passedChecks++;
-                var userSection = userAnalysis.Sections.FirstOrDefault(s =>
-                    s.CanonicalTitle.Equals(refSection.CanonicalTitle, StringComparison.OrdinalIgnoreCase));
-                int wordCount = CountWords(userSection?.Content ?? "");
-                string status = wordCount >= 5 ? "valid" : "warning";
-
-                report.Details.Add(new SectionDetail
+                if (userSigSet.Contains(bt.HeaderSignature))
                 {
-                    Section = refSection.Title,
-                    Status = status,
-                    Checks = new List<string>
-                    {
-                        "Section found in user document",
-                        wordCount > 0 ? $"Content: {wordCount} words" : "Section is empty (no content)"
-                    }
-                });
-
-                if (wordCount < 5)
+                    matchedTableCount++;
+                }
+                else
                 {
-                    report.Warnings.Add(new ValidationIssue
+                    missingTableIssues.Add(new ChatTableIssue
                     {
-                        Type = "warning", Field = refSection.Title,
-                        Message = $"Section '{refSection.Title}' is present but has insufficient content ({wordCount} words)",
-                        Severity = "low"
+                        SectionTitle = bt.SectionTitle,
+                        ExpectedSignature = bt.HeaderSignature,
+                        ExpectedRowCount = bt.RowCount,
+                        Status = "missing"
                     });
                 }
             }
-            else
-            {
-                report.Details.Add(new SectionDetail
-                {
-                    Section = refSection.Title,
-                    Status = "missing",
-                    Checks = new List<string> { "Section NOT found in user document" }
-                });
-            }
-        }
+            int missingTableCount = missingTableIssues.Count;
+            double tableCoverage = sectionTables.Count > 0
+                ? Math.Round((double)matchedTableCount / sectionTables.Count * 100, 2) : 100;
 
-        // ── STEP 8: Policy compliance ────────────────────────────────
-        var missingMust = new List<string>();
-        var missingShould = new List<string>();
-        foreach (var must in mustTitles)
-        {
-            if (!userCanonicalSet.Contains(must))
+            _logger.LogInformation("[{CId}] Tables: {Matched}/{Total} matched, {Missing} missing, Coverage={Cov:F1}%",
+                correlationId, matchedTableCount, sectionTables.Count, missingTableCount, tableCoverage);
+
+            // ── STEP 9: Build issues list (ONLY missing/actionable) ──────
+            // Missing sections — ALL are required in CDC
+            foreach (var missing in comparison.MissingInUser)
             {
-                missingMust.Add(must);
-                report.Errors.Add(new ValidationIssue
+                report.Issues.Add(new ValidationIssue
                 {
-                    Type = "error", Field = must,
-                    Message = $"REQUIRED section '{must}' is missing (policy: MUST have)",
+                    Type = "MissingSection",
+                    Field = missing,
+                    Message = $"Required section '{missing}' is missing from the document",
                     Severity = "critical"
                 });
             }
-        }
-        foreach (var should in shouldTitles)
-        {
-            if (!userCanonicalSet.Contains(should))
+
+            // Truly empty sections
+            foreach (var empty in trulyEmptySections)
             {
-                missingShould.Add(should);
-                report.Warnings.Add(new ValidationIssue
+                report.Issues.Add(new ValidationIssue
                 {
-                    Type = "warning", Field = should,
-                    Message = $"Recommended section '{should}' is missing (policy: SHOULD have)",
-                    Severity = "medium"
+                    Type = "EmptySection",
+                    Field = empty.Title,
+                    Message = $"Section '{empty.Title}' exists but has no content and no sub-sections with content",
+                    Severity = "high"
                 });
             }
-        }
 
-        // Extra sections in user doc not in blueprint
-        if (comparison.ExtraInUser.Count > 0)
-        {
-            report.Details.Add(new SectionDetail
+            // Missing tables
+            foreach (var mt in missingTableIssues)
             {
-                Section = "Extra Sections (not in blueprint)",
-                Status = "info",
-                Checks = comparison.ExtraInUser.Select(s => $"Extra: {s}").ToList()
-            });
-        }
-
-        // ── STEP 9: Quality gates — empty section violations ─────────
-        var emptySectionViolations = new List<ChatEmptySectionViolation>();
-        int orderIdx = 0;
-        foreach (var refSection in referenceAnalysis.Sections)
-        {
-            orderIdx++;
-            if (userCanonicalSet.Contains(refSection.CanonicalTitle))
-            {
-                var userSection = userAnalysis.Sections.FirstOrDefault(s =>
-                    s.CanonicalTitle.Equals(refSection.CanonicalTitle, StringComparison.OrdinalIgnoreCase));
-                int wc = CountWords(userSection?.Content ?? "");
-                if (wc == 0)
+                report.Issues.Add(new ValidationIssue
                 {
-                    string req = mustTitles.Contains(refSection.CanonicalTitle, StringComparer.OrdinalIgnoreCase) ? "MUST"
-                               : shouldTitles.Contains(refSection.CanonicalTitle, StringComparer.OrdinalIgnoreCase) ? "SHOULD"
-                               : "OPTIONAL";
-                    emptySectionViolations.Add(new ChatEmptySectionViolation
+                    Type = "MissingTable",
+                    Field = mt.SectionTitle,
+                    Message = $"Expected table [{mt.ExpectedSignature}] in section '{mt.SectionTitle}' — not found in document",
+                    Severity = "high"
+                });
+            }
+
+            // ── STEP 10: Score calculation ───────────────────────────────
+            // Weighted: 60% section coverage, 20% empty penalty, 20% table coverage
+            double sectionScore = comparison.CoveragePercent;
+            double emptyPenalty = refAnalysis.Sections.Count > 0
+                ? (double)trulyEmptySections.Count / refAnalysis.Sections.Count * 100 : 0;
+            double tableScore = tableCoverage;
+
+            int finalScore = Math.Max(0, Math.Min(100,
+                (int)Math.Round(sectionScore * 0.6 + tableScore * 0.2 + (100 - emptyPenalty) * 0.2)));
+
+            report.Score = finalScore;
+            report.Summary = new ValidationSummary
+            {
+                TotalBlueprintSections = refAnalysis.Sections.Count,
+                MatchedSections = comparison.Common.Count,
+                MissingSections = comparison.MissingInUser.Count,
+                TrulyEmptySections = trulyEmptySections.Count,
+                TotalBlueprintTables = sectionTables.Count,
+                MatchedTables = matchedTableCount,
+                MissingTables = missingTableCount
+            };
+            report.IsValid = comparison.MissingInUser.Count == 0
+                          && trulyEmptySections.Count == 0
+                          && missingTableCount == 0;
+
+            // ── STEP 11: Build ChatReport ────────────────────────────────
+            var validatedAt = DateTime.UtcNow;
+            chat.Metadata.ValidatedAtUtc = validatedAt.ToString("yyyy-MM-ddTHH:mm:ss.fffZ");
+            chat.Metadata.DurationMs = (long)(validatedAt - startedAt).TotalMilliseconds;
+
+            // Pivot highlights (only pivots with missing subtitles)
+            var pivotHighlights = BuildPivotHighlights(refAnalysis, userAnalysis);
+            int totalExpectedSubs = pivotHighlights.Sum(p => p.ExpectedSubtitleCount);
+            int totalMatchedSubs = pivotHighlights.Sum(p => p.MatchedSubtitleCount);
+            double subtitleCoverage = totalExpectedSubs > 0
+                ? Math.Round((double)totalMatchedSubs / totalExpectedSubs * 100, 2) : 100;
+
+            string band = sectionScore >= 80 && subtitleCoverage >= 70 && tableCoverage >= 70 ? "HIGH"
+                        : sectionScore >= 50 ? "MEDIUM" : "LOW";
+
+            chat.Summary = new ChatSummary
+            {
+                FinalScore = finalScore,
+                SectionCoverage = comparison.CoveragePercent,
+                SubtitleCoverage = subtitleCoverage,
+                TableCoverage = tableCoverage,
+                ConfidenceBand = band
+            };
+
+            // Top Issues — aggregated by type
+            chat.TopIssues = new List<ChatTopIssue>();
+            if (comparison.MissingInUser.Count > 0)
+            {
+                chat.TopIssues.Add(new ChatTopIssue
+                {
+                    Type = "MissingSections",
+                    Count = comparison.MissingInUser.Count,
+                    Items = comparison.MissingInUser.ToList(),
+                    Severity = "Critical"
+                });
+            }
+            if (trulyEmptySections.Count > 0)
+            {
+                chat.TopIssues.Add(new ChatTopIssue
+                {
+                    Type = "EmptySections",
+                    Count = trulyEmptySections.Count,
+                    Items = trulyEmptySections.Select(s => s.Title).ToList(),
+                    Severity = "High"
+                });
+            }
+            if (missingTableCount > 0)
+            {
+                chat.TopIssues.Add(new ChatTopIssue
+                {
+                    Type = "MissingTables",
+                    Count = missingTableCount,
+                    Items = missingTableIssues.Select(t => $"[{t.ExpectedSignature}] in '{t.SectionTitle}'").ToList(),
+                    Severity = "High"
+                });
+            }
+
+            // Pivot highlights (only those with problems)
+            chat.PivotHighlights = pivotHighlights
+                .Where(p => p.MissingSubtitles.Count > 0)
+                .OrderByDescending(p => p.MissingSubtitles.Count)
+                .ToList();
+
+            // Missing tables detail
+            chat.MissingTables = missingTableIssues;
+
+            // Recommendations
+            chat.Recommendations = BuildRecommendations(
+                comparison.MissingInUser.Count, trulyEmptySections.Count,
+                missingTableCount, band, comparison.ExtraInUser.Count);
+
+            // Human summary — evaluator-focused
+            chat.HumanSummary = BuildHumanSummary(report, chat, comparison);
+
+            _logger.LogInformation(
+                "[{CId}] DONE: Score={Score}%, Band={Band}, MissingSections={MS}, EmptySections={ES}, MissingTables={MT}",
+                correlationId, finalScore, band, comparison.MissingInUser.Count,
+                trulyEmptySections.Count, missingTableCount);
+
+            return (report, chat);
+        }
+
+        // ═══════════════════════════════════════════════════════════════
+        // TRULY EMPTY SECTION DETECTION
+        // ═══════════════════════════════════════════════════════════════
+        // A section is "truly empty" ONLY if:
+        //   - It has no direct content (0 words in its own Content field)
+        //   - AND none of its child sub-sections (higher Level values that
+        //     appear before the next section at the same or lower level)
+        //     have any content either.
+        //
+        // Example: "SCOPE" (Level 1) has Content="" but has children:
+        //   "SYSTEM DEVELOPMENT CONTEXT" (Level 2, 176 words)
+        //   "GENERAL DESCRIPTION" (Level 2, ...)
+        //   → SCOPE is NOT truly empty because children have content.
+        // ═══════════════════════════════════════════════════════════════
+
+        private static List<NormalizedSection> FindTrulyEmptySections(IReadOnlyList<NormalizedSection> sections)
+        {
+            var result = new List<NormalizedSection>();
+
+            for (int i = 0; i < sections.Count; i++)
+            {
+                var section = sections[i];
+                int ownWords = CountWords(section.Content);
+
+                if (ownWords > 0) continue; // Has direct content — not empty
+
+                // Check children: all sections after this one that have a higher Level
+                // (deeper nesting) until we hit a section at the same or lower level.
+                bool childrenHaveContent = false;
+                for (int j = i + 1; j < sections.Count; j++)
+                {
+                    if (sections[j].Level <= section.Level)
+                        break; // Hit a sibling or parent — stop
+
+                    if (CountWords(sections[j].Content) > 0)
                     {
-                        Order = orderIdx,
-                        Title = refSection.Title,
-                        CanonicalTitle = refSection.CanonicalTitle,
-                        Requirement = req
-                    });
+                        childrenHaveContent = true;
+                        break;
+                    }
+                }
+
+                if (!childrenHaveContent)
+                {
+                    // Truly empty: no own content AND no children with content
+                    result.Add(section);
                 }
             }
+
+            return result;
         }
 
-        // ── STEP 10: Deterministic score ─────────────────────────────
-        int criticalPenalty = report.Errors.Count(e => e.Severity == "critical") * 15;
-        int mediumPenalty = report.Warnings.Count(w => w.Severity == "medium") * 3;
-        int lowPenalty = report.Warnings.Count(w => w.Severity == "low") * 1;
-        report.Score = Math.Max(0, Math.Min(100, (int)Math.Round(comparison.CoveragePercent) - criticalPenalty - mediumPenalty - lowPenalty));
-        report.Summary = new ValidationSummary
+        // ═══════════════════════════════════════════════════════════════
+        // TABLE EXTRACTION FROM USER DOCX
+        // ═══════════════════════════════════════════════════════════════
+        // Parses all <w:tbl> elements from the DOCX body, extracts the
+        // header row cells (first row of each table), and builds a
+        // normalized header signature (lowercase, pipe-separated) for
+        // comparison against the blueprint's TableInventory.
+        // ═══════════════════════════════════════════════════════════════
+
+        private static List<ExtractedTable> ExtractTablesFromDocx(byte[] docxBytes)
         {
-            TotalChecks = totalChecks,
-            Passed = passedChecks,
-            Failed = report.Errors.Count,
-            Warnings = report.Warnings.Count
-        };
-        report.IsValid = report.Errors.Count == 0 && report.Score >= 70;
+            var tables = new List<ExtractedTable>();
 
-        // ── STEP 11: Build ChatReport (chat-report-template.json format) ─
-        var validatedAt = DateTime.UtcNow;
-        chat.Metadata.ValidatedAtUtc = validatedAt.ToString("yyyy-MM-ddTHH:mm:ss.fffZ");
-        chat.Metadata.DurationMs = (long)(validatedAt - startedAt).TotalMilliseconds;
+            using var stream = new MemoryStream(docxBytes);
+            using var document = WordprocessingDocument.Open(stream, false);
+            var body = document.MainDocumentPart?.Document?.Body;
+            if (body == null) return tables;
 
-        // Summary — subtitle-level metrics computed from pivot analysis
-        var pivotHighlights = BuildPivotHighlights(referenceAnalysis, userAnalysis);
-        int totalTemplateSubtitles = pivotHighlights.Sum(p => p.TemplateSubtitleCount);
-        int totalMatchedSubtitles = pivotHighlights.Sum(p => p.MatchedSubtitleCount);
-        int totalUserSubtitles = pivotHighlights.Sum(p => p.UserSubtitleCount);
-        double subtitleRecall = totalTemplateSubtitles > 0 ? Math.Round((double)totalMatchedSubtitles / totalTemplateSubtitles * 100, 2) : 100;
-        double subtitlePrecision = totalUserSubtitles > 0 ? Math.Round((double)totalMatchedSubtitles / totalUserSubtitles * 100, 2) : 100;
-        double orderScore = 100; // Simplified: full order score needs subtitle-order analysis
-
-        string confidenceBand = comparison.CoveragePercent >= 80 && subtitleRecall >= 70 ? "HIGH"
-                              : comparison.CoveragePercent >= 50 ? "MEDIUM" : "LOW";
-
-        chat.Summary = new ChatSummary
-        {
-            FinalScore = report.Score,
-            PivotCoverage = comparison.CoveragePercent,
-            SubtitleRecall = subtitleRecall,
-            SubtitlePrecision = subtitlePrecision,
-            OrderScore = orderScore,
-            ConfidenceBand = confidenceBand
-        };
-
-        // Policy compliance
-        var allMissing = missingMust.Concat(missingShould).Distinct(StringComparer.OrdinalIgnoreCase).ToList();
-        chat.PolicyCompliance = new ChatPolicyCompliance
-        {
-            MissingSections = allMissing,
-            TotalSections = totalPolicySections
-        };
-
-        // Quality gates
-        chat.QualityGates = new ChatQualityGates
-        {
-            RequiresNotApplicableForEmptySections = policy.AllowNotApplicableForEmpty,
-            RedTextDetected = false,
-            EmptySectionViolations = emptySectionViolations
-        };
-
-        // Pivot highlights — sorted by severity (High first)
-        chat.PivotHighlights = pivotHighlights
-            .Where(p => p.MissingSubtitles.Count > 0 || p.TemplateSubtitleCount != p.MatchedSubtitleCount)
-            .OrderBy(p => p.Severity == "High" ? 0 : p.Severity == "Medium" ? 1 : 2)
-            .ToList();
-
-        // Top issues
-        chat.TopIssues = new List<ChatTopIssue>();
-        if (comparison.MissingInUser.Count > 0)
-        {
-            chat.TopIssues.Add(new ChatTopIssue
+            int tableIndex = 0;
+            foreach (var table in body.Descendants<Table>())
             {
-                Type = "MissingSections",
-                Count = comparison.MissingInUser.Count,
-                Items = comparison.MissingInUser.ToList(),
-                Severity = "High"
-            });
-        }
-        if (emptySectionViolations.Count > 0)
-        {
-            chat.TopIssues.Add(new ChatTopIssue
-            {
-                Type = "EmptySections",
-                Count = emptySectionViolations.Count,
-                Items = emptySectionViolations.Select(v => v.Title).ToList(),
-                Severity = "Medium"
-            });
-        }
+                tableIndex++;
+                var rows = table.Elements<TableRow>().ToList();
+                if (rows.Count == 0) continue;
 
-        // Recommendations (heuristic, matching ReportGeneratorChat logic)
-        chat.Recommendations = new List<string>();
-        if (allMissing.Count > 0)
-            chat.Recommendations.Add("Add the missing sections or explicitly mark them 'Not applicable'.");
-        if (subtitlePrecision < 70)
-            chat.Recommendations.Add("Subtitle precision is low — review extra subtitles and consolidate duplicates.");
-        if (confidenceBand != "HIGH")
-            chat.Recommendations.Add("Low confidence detected — manually review highlighted pivots and ambiguous sections.");
-        if (emptySectionViolations.Count > 0)
-            chat.Recommendations.Add("Fill in empty sections with relevant content or mark as 'N/A' if not applicable.");
-        if (chat.Recommendations.Count == 0)
-            chat.Recommendations.Add("No immediate automated actions detected — consider manual review for quality assurance.");
+                // Extract header cells from first row
+                var headerCells = rows[0].Elements<TableCell>()
+                    .Select(cell => NormalizeTableCell(cell.InnerText))
+                    .Where(text => !string.IsNullOrWhiteSpace(text))
+                    .ToList();
 
-        // Human summary
-        var parts = new List<string>();
-        parts.Add($"Overall score: {report.Score}%.");
-        parts.Add($"Pivot coverage: {comparison.CoveragePercent:0.##}%.");
-        if (chat.TopIssues.Count > 0)
-            parts.Add($"Top issues: {string.Join(", ", chat.TopIssues.Select(i => i.Type))}.");
-        parts.Add("See 'pivotHighlights' for per-section details and 'recommendations' for next steps.");
-        chat.HumanSummary = string.Join(" ", parts);
+                if (headerCells.Count == 0) continue;
 
-        _logger.LogInformation(
-            "[{CId}] Validation complete: Coverage={Cov:F1}%, Score={Score}, Band={Band}, Missing={Miss}, Pivots={Pivots}",
-            correlationId, comparison.CoveragePercent, report.Score, confidenceBand,
-            comparison.MissingInUser.Count, chat.PivotHighlights.Count);
+                // Build normalized header signature (lowercase, pipe-separated)
+                var signature = string.Join("|", headerCells.Select(c =>
+                    Regex.Replace(c.ToLowerInvariant().Trim(), @"\s+", " ")));
 
-        return (report, chat);
-    }
-
-    // ═══════════════════════════════════════════════════════════════
-    // Pivot Highlights Builder — groups Level 1 sections as pivots,
-    // Level 2+ as subtitles, then compares user vs reference
-    // ═══════════════════════════════════════════════════════════════
-
-    private static List<ChatPivotHighlight> BuildPivotHighlights(
-        DocumentAnalysis reference, DocumentAnalysis user)
-    {
-        // Group reference sections into pivots (Level 1) with subtitles (Level 2+)
-        var pivots = new List<(NormalizedSection Pivot, List<NormalizedSection> Subtitles)>();
-        (NormalizedSection Pivot, List<NormalizedSection> Subtitles)? current = null;
-
-        foreach (var section in reference.Sections)
-        {
-            if (section.Level <= 1)
-            {
-                if (current != null) pivots.Add(current.Value);
-                current = (section, new List<NormalizedSection>());
+                tables.Add(new ExtractedTable
+                {
+                    TableIndex = tableIndex,
+                    RowCount = rows.Count,
+                    ColumnCount = rows.Max(r => r.Elements<TableCell>().Count()),
+                    HeaderCells = headerCells,
+                    HeaderSignature = signature
+                });
             }
+
+            return tables;
+        }
+
+        private static string NormalizeTableCell(string text)
+        {
+            if (string.IsNullOrWhiteSpace(text)) return string.Empty;
+            return Regex.Replace(text.Trim(), @"\s+", " ");
+        }
+
+        // ═══════════════════════════════════════════════════════════════
+        // PIVOT HIGHLIGHTS BUILDER
+        // Groups Level 1 headings as pivots, Level 2+ as their subtitles.
+        // Compares user subtitles vs reference subtitles per pivot.
+        // ═══════════════════════════════════════════════════════════════
+
+        private static List<ChatPivotHighlight> BuildPivotHighlights(
+            DocumentAnalysis reference, DocumentAnalysis user)
+        {
+            var pivots = new List<(NormalizedSection Pivot, List<NormalizedSection> Subs)>();
+            (NormalizedSection Pivot, List<NormalizedSection> Subs)? current = null;
+
+            foreach (var section in reference.Sections)
+            {
+                if (section.Level <= 1)
+                {
+                    if (current != null) pivots.Add(current.Value);
+                    current = (section, new List<NormalizedSection>());
+                }
+                else
+                {
+                    if (current == null)
+                    {
+                        current = (new NormalizedSection
+                        {
+                            Level = 1, Title = "(Preamble)",
+                            CanonicalTitle = "PREAMBLE", Content = ""
+                        }, new List<NormalizedSection>());
+                    }
+                    current.Value.Subs.Add(section);
+                }
+            }
+            if (current != null) pivots.Add(current.Value);
+
+            var userCanonicals = user.Sections
+                .Select(s => s.CanonicalTitle)
+                .ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+            var highlights = new List<ChatPivotHighlight>();
+            foreach (var (pivot, subs) in pivots)
+            {
+                var found = subs.Where(s => userCanonicals.Contains(s.CanonicalTitle)).ToList();
+                var missing = subs.Where(s => !userCanonicals.Contains(s.CanonicalTitle)).ToList();
+
+                string severity = missing.Count > 0 ? "High"
+                                : subs.Count > 0 && found.Count < subs.Count ? "Medium"
+                                : "Low";
+
+                highlights.Add(new ChatPivotHighlight
+                {
+                    PivotTitle = pivot.Title,
+                    ExpectedSubtitleCount = subs.Count,
+                    FoundSubtitleCount = found.Count,
+                    MatchedSubtitleCount = found.Count,
+                    MissingSubtitles = missing.Select(s => s.Title).ToList(),
+                    Severity = severity
+                });
+            }
+
+            return highlights;
+        }
+
+        // ═══════════════════════════════════════════════════════════════
+        // RECOMMENDATIONS — heuristic, actionable
+        // ═══════════════════════════════════════════════════════════════
+
+        private static List<string> BuildRecommendations(
+            int missingSections, int emptySections, int missingTables,
+            string band, int extraSections)
+        {
+            var rec = new List<string>();
+
+            if (missingSections > 0)
+                rec.Add($"Add the {missingSections} missing section(s) — all blueprint sections are mandatory in this CDC type.");
+            if (emptySections > 0)
+                rec.Add($"Fill in the {emptySections} empty section(s) with content or add sub-sections — sections with no content at any level are flagged.");
+            if (missingTables > 0)
+                rec.Add($"Add the {missingTables} missing table(s) — each section must contain its expected tables with the correct header structure.");
+            if (band != "HIGH")
+                rec.Add("Confidence is below HIGH — manually review the highlighted pivot sections for structural alignment.");
+            if (extraSections > 5)
+                rec.Add($"The document has {extraSections} extra sections not in the blueprint — verify they are intentional and not duplicates of expected sections.");
+
+            if (rec.Count == 0)
+                rec.Add("All checks passed — document structure matches the blueprint. Consider manual content quality review.");
+
+            return rec;
+        }
+
+        // ═══════════════════════════════════════════════════════════════
+        // HUMAN SUMMARY — evaluator-focused, no noise
+        // ═══════════════════════════════════════════════════════════════
+
+        private static string BuildHumanSummary(ValidationReport report, ChatReport chat, ComparisonResult comparison)
+        {
+            var parts = new List<string>();
+            parts.Add($"Score: {report.Score}% ({chat.Summary.ConfidenceBand}).");
+            parts.Add($"Section coverage: {comparison.CoveragePercent:0.#}% ({comparison.Common.Count}/{comparison.ReferenceCount}).");
+
+            if (comparison.MissingInUser.Count > 0)
+                parts.Add($"{comparison.MissingInUser.Count} MISSING section(s).");
+            if (report.Summary.TrulyEmptySections > 0)
+                parts.Add($"{report.Summary.TrulyEmptySections} EMPTY section(s) needing content.");
+            if (report.Summary.MissingTables > 0)
+                parts.Add($"{report.Summary.MissingTables} MISSING table(s).");
+            if (report.Summary.MissingTables == 0 && report.Summary.TotalBlueprintTables > 0)
+                parts.Add($"Table coverage: {chat.Summary.TableCoverage:0.#}% ({report.Summary.MatchedTables}/{report.Summary.TotalBlueprintTables}).");
+
+            if (report.IsValid)
+                parts.Add("All structural checks passed.");
             else
-            {
-                if (current == null)
-                {
-                    // Subtitle before any pivot — create a synthetic pivot
-                    current = (new NormalizedSection
-                    {
-                        Level = 1, Title = "(Preamble)",
-                        CanonicalTitle = "PREAMBLE", Content = ""
-                    }, new List<NormalizedSection>());
-                }
-                current.Value.Subtitles.Add(section);
-            }
+                parts.Add("Action required — see topIssues and recommendations.");
+
+            return string.Join(" ", parts);
         }
-        if (current != null) pivots.Add(current.Value);
 
-        // Build user subtitle lookup: for each user section, store its canonical title
-        var userCanonicals = user.Sections
-            .Select(s => s.CanonicalTitle)
-            .ToHashSet(StringComparer.OrdinalIgnoreCase);
+        // ═══════════════════════════════════════════════════════════════
+        // HELPERS
+        // ═══════════════════════════════════════════════════════════════
 
-        var highlights = new List<ChatPivotHighlight>();
-        foreach (var (pivot, subtitles) in pivots)
+        private static (ValidationReport, ChatReport) FailFast(
+            ValidationReport report, ChatReport chat, string field, string message)
         {
-            int templateSubCount = subtitles.Count;
-            var matchedSubs = subtitles.Where(s => userCanonicals.Contains(s.CanonicalTitle)).ToList();
-            var missingSubs = subtitles.Where(s => !userCanonicals.Contains(s.CanonicalTitle)).ToList();
-
-            // Count user subtitles under this pivot (approximate: user sections matching any sub)
-            int userSubCount = matchedSubs.Count;
-
-            // Severity heuristic (matching ReportGeneratorChat logic)
-            string severity = missingSubs.Count > 0 ? "High"
-                            : templateSubCount > 0 && matchedSubs.Count < templateSubCount ? "Medium"
-                            : "Low";
-
-            highlights.Add(new ChatPivotHighlight
+            report.IsValid = false;
+            report.Score = 0;
+            report.Issues.Add(new ValidationIssue
             {
-                PivotTitle = pivot.Title,
-                TemplateSubtitleCount = templateSubCount,
-                UserSubtitleCount = userSubCount,
-                MatchedSubtitleCount = matchedSubs.Count,
-                MissingSubtitles = missingSubs.Select(s => s.Title).ToList(),
-                Severity = severity
+                Type = "error", Field = field,
+                Message = message, Severity = "critical"
             });
+            chat.HumanSummary = $"Validation failed: {message}";
+            return (report, chat);
         }
 
-        return highlights;
-    }
-
-    private static int CountWords(string text)
-    {
-        if (string.IsNullOrWhiteSpace(text)) return 0;
-        return text.Split(new[] { ' ', '\n', '\r', '\t' }, StringSplitOptions.RemoveEmptyEntries).Length;
-    }
-
-    // ═══════════════════════════════════════════════════════════════
-    // Resource Loading (URL or local file)
-    // ═══════════════════════════════════════════════════════════════
-
-    private async Task<string> LoadResourceAsync(string pathOrUrl, string correlationId)
-    {
-        if (pathOrUrl.StartsWith("http://", StringComparison.OrdinalIgnoreCase) ||
-            pathOrUrl.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
+        private static int CountWords(string text)
         {
-            _logger.LogDebug("[{CId}] Loading resource from URL: {Url}", correlationId, pathOrUrl);
-            return await _sharedHttpClient.GetStringAsync(pathOrUrl);
+            if (string.IsNullOrWhiteSpace(text)) return 0;
+            return text.Split(new[] { ' ', '\n', '\r', '\t' },
+                StringSplitOptions.RemoveEmptyEntries).Length;
         }
 
-        var fullPath = Path.IsPathFullyQualified(pathOrUrl)
-            ? pathOrUrl
-            : Path.Combine(AppContext.BaseDirectory, pathOrUrl);
-        _logger.LogDebug("[{CId}] Loading resource from file: {Path}", correlationId, fullPath);
-        return await File.ReadAllTextAsync(fullPath);
-    }
-
-    // ═══════════════════════════════════════════════════════════════
-    // Blueprint & Policy JSON Parsing
-    // ═══════════════════════════════════════════════════════════════
-
-    private static List<BlueprintHeading> ExtractBlueprintHeadings(string blueprintJson)
-    {
-        using var doc = JsonDocument.Parse(blueprintJson);
-        var headings = new List<BlueprintHeading>();
-
-        if (!doc.RootElement.TryGetProperty("Headings", out var headingsArray))
-            throw new InvalidOperationException("Blueprint JSON does not contain a 'Headings' array");
-
-        foreach (var h in headingsArray.EnumerateArray())
+        private async Task<string> LoadResourceAsync(string pathOrUrl, string correlationId)
         {
-            var title = h.TryGetProperty("Title", out var t) ? t.GetString() ?? "" : "";
-            var level = h.TryGetProperty("Level", out var l) ? l.GetInt32() : 0;
-            var wordCount = h.TryGetProperty("ContentWordCount", out var w) ? w.GetInt32() : 0;
-
-            if (!string.IsNullOrWhiteSpace(title))
+            if (pathOrUrl.StartsWith("http://", StringComparison.OrdinalIgnoreCase) ||
+                pathOrUrl.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
             {
-                headings.Add(new BlueprintHeading
+                return await _sharedHttpClient.GetStringAsync(pathOrUrl);
+            }
+
+            var fullPath = Path.IsPathFullyQualified(pathOrUrl)
+                ? pathOrUrl
+                : Path.Combine(AppContext.BaseDirectory, pathOrUrl);
+            return await File.ReadAllTextAsync(fullPath);
+        }
+
+        // ═══════════════════════════════════════════════════════════════
+        // BLUEPRINT JSON PARSING
+        // ═══════════════════════════════════════════════════════════════
+
+        private static List<BlueprintHeading> ExtractBlueprintHeadings(string json)
+        {
+            using var doc = JsonDocument.Parse(json);
+            var headings = new List<BlueprintHeading>();
+
+            if (!doc.RootElement.TryGetProperty("Headings", out var arr))
+                throw new InvalidOperationException("Blueprint JSON missing 'Headings' array");
+
+            foreach (var h in arr.EnumerateArray())
+            {
+                var title = h.TryGetProperty("Title", out var t) ? t.GetString() ?? "" : "";
+                var level = h.TryGetProperty("Level", out var l) ? l.GetInt32() : 0;
+                var order = h.TryGetProperty("Order", out var o) ? o.GetInt32() : 0;
+                var wordCount = h.TryGetProperty("ContentWordCount", out var w) ? w.GetInt32() : 0;
+
+                if (!string.IsNullOrWhiteSpace(title))
+                    headings.Add(new BlueprintHeading { Title = title, Level = level, Order = order, ContentWordCount = wordCount });
+            }
+
+            return headings;
+        }
+
+        private static List<BlueprintTable> ExtractBlueprintTables(string json)
+        {
+            using var doc = JsonDocument.Parse(json);
+            var tables = new List<BlueprintTable>();
+
+            if (!doc.RootElement.TryGetProperty("TableInventory", out var inv)) return tables;
+            if (!inv.TryGetProperty("Tables", out var arr)) return tables;
+
+            foreach (var t in arr.EnumerateArray())
+            {
+                var sectionTitle = t.TryGetProperty("SectionTitle", out var st) ? st.GetString() ?? "" : "";
+                var sig = t.TryGetProperty("HeaderSignature", out var hs) ? hs.GetString() ?? "" : "";
+                var rowCount = t.TryGetProperty("RowCount", out var rc) ? rc.GetInt32() : 0;
+                var sectionOrder = t.TryGetProperty("SectionOrder", out var so)
+                    ? (so.ValueKind == JsonValueKind.Number ? (int?)so.GetInt32() : null)
+                    : null;
+
+                tables.Add(new BlueprintTable
                 {
-                    Title = title,
-                    Level = level,
-                    ContentWordCount = wordCount
+                    SectionTitle = sectionTitle,
+                    HeaderSignature = sig,
+                    RowCount = rowCount,
+                    SectionOrder = sectionOrder
                 });
             }
+
+            return tables;
         }
 
-        return headings;
-    }
+        // ═══════════════════════════════════════════════════════════════
+        // INTERNAL MODELS
+        // ═══════════════════════════════════════════════════════════════
 
-    // ═══════════════════════════════════════════════════════════════
-    // Internal Models (private — not exposed in OpenAPI)
-    // ═══════════════════════════════════════════════════════════════
+        private class BlueprintHeading
+        {
+            public string Title { get; set; } = "";
+            public int Level { get; set; }
+            public int Order { get; set; }
+            public int ContentWordCount { get; set; }
+        }
 
-    private class BlueprintHeading
-    {
-        public string Title { get; set; } = "";
-        public int Level { get; set; }
-        public int ContentWordCount { get; set; }
-    }
+        private class BlueprintTable
+        {
+            public string SectionTitle { get; set; } = "";
+            public string HeaderSignature { get; set; } = "";
+            public int RowCount { get; set; }
+            public int? SectionOrder { get; set; }
+        }
 
-    private class PolicyConfig
-    {
-        public string ProfileName { get; set; } = "";
-        public string Version { get; set; } = "";
-        public bool AllowNotApplicableForEmpty { get; set; }
-        public List<string> MustCanonicalTitles { get; set; } = new();
-        public List<string> ShouldCanonicalTitles { get; set; } = new();
-        public List<string> OptionalCanonicalTitles { get; set; } = new();
+        private class ExtractedTable
+        {
+            public int TableIndex { get; set; }
+            public int RowCount { get; set; }
+            public int ColumnCount { get; set; }
+            public List<string> HeaderCells { get; set; } = new();
+            public string HeaderSignature { get; set; } = "";
+        }
     }
-}
 }

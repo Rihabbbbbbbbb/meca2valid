@@ -36,4 +36,13 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+
+  <!-- Exclude publish output folder and temp files from being treated as source -->
+  <ItemGroup>
+    <None Remove="publish\**" />
+    <Content Remove="publish\**" />
+    <Compile Remove="publish\**" />
+    <EmbeddedResource Remove="publish\**" />
+    <None Remove="*.log;*.binlog;*.txt;out.txt;stdout.txt;stderr.txt;build_output.txt;build_err.log;msbuild.log;publish_log.txt" />
+  </ItemGroup>
 </Project>

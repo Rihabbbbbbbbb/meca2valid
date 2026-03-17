@@ -62,6 +62,7 @@ namespace TemplateOneShotExtractor.Models
         public int TotalBlueprintTablePatterns { get; set; }
         public int MatchedTablePatterns { get; set; }
         public int MissingTablePatterns { get; set; }
+        public int EmptyTableBodies { get; set; }
         public int TotalBlueprintTables { get; set; }
         public int UserTableCount { get; set; }
     }
@@ -97,7 +98,7 @@ namespace TemplateOneShotExtractor.Models
     public class ChatMetadata
     {
         public string Tool { get; set; } = "TemplateOneShotExtractor-AzureFunction";
-        public string Version { get; set; } = "4.2.0";
+        public string Version { get; set; } = "5.0.0";
         public string StartedAtUtc { get; set; } = string.Empty;
         public string ValidatedAtUtc { get; set; } = string.Empty;
         public long DurationMs { get; set; }
@@ -429,14 +430,16 @@ namespace TemplateOneShotExtractor
                 .Where(t => t.SectionOrder.HasValue && !IsExplanatoryTable(t.HeaderSignature))
                 .ToList();
 
-            // Group by signature → expected count + sections
+            // Group by signature → expected count + sections + min blueprint row count
             var blueprintSigGroups = sectionTables
                 .GroupBy(t => t.HeaderSignature, StringComparer.OrdinalIgnoreCase)
                 .Select(g => new
                 {
                     Signature = g.Key,
                     ExpectedCount = g.Count(),
-                    Sections = g.Select(t => t.SectionTitle).Distinct().ToList()
+                    Sections = g.Select(t => t.SectionTitle).Distinct().ToList(),
+                    // Average blueprint RowCount: used to decide if an empty user table body is suspicious
+                    AvgBlueprintRowCount = g.Average(t => (double)t.RowCount)
                 })
                 .ToList();
 
@@ -518,6 +521,53 @@ namespace TemplateOneShotExtractor
             _logger.LogInformation("[{CId}] Table patterns: {Matched}/{Total} matched, {Missing} missing, Coverage={Cov:F1}%",
                 correlationId, matchedPatterns, totalPatterns, missingPatterns, tablePatternCoverage);
 
+            // ── STEP 10: Empty table body detection ──────────────────────
+            // A table that exists (correct headers) but has only 1 row (the
+            // header itself — no data rows) is structurally hollow. Engineers
+            // often put the shell in and forget to fill it.
+            // Only flag where the blueprint itself has avg RowCount >= 3,
+            // meaning real data rows are expected (excludes single-row info boxes).
+            var sigToAvgBlueprintRows = blueprintSigGroups
+                .ToDictionary(g => g.Signature, g => g.AvgBlueprintRowCount,
+                    StringComparer.OrdinalIgnoreCase);
+
+            // Build fuzzy-to-sig reverse map so we can look up blueprint avg rows for fuzzy matches
+            var fuzzyKeyToSignature = blueprintSigGroups
+                .GroupBy(g => SigFuzzyKey(g.Signature), StringComparer.OrdinalIgnoreCase)
+                .ToDictionary(g => g.Key, g => g.First().Signature,
+                    StringComparer.OrdinalIgnoreCase);
+
+            var emptyBodyTables = new List<(ExtractedTable Table, string MatchedSection)>();
+            foreach (var ut in userTables)
+            {
+                if (ut.RowCount != 1) continue; // Only interested in header-only tables
+                if (string.IsNullOrWhiteSpace(ut.HeaderSignature)) continue;
+
+                // Find the blueprint avg row count for this signature (exact or fuzzy)
+                double blueprintAvgRows = 0;
+                if (sigToAvgBlueprintRows.TryGetValue(ut.HeaderSignature, out var exactAvg))
+                    blueprintAvgRows = exactAvg;
+                else
+                {
+                    var fk = SigFuzzyKey(ut.HeaderSignature);
+                    if (!string.IsNullOrWhiteSpace(fk) && fuzzyKeyToSignature.TryGetValue(fk, out var matchedSig)
+                        && sigToAvgBlueprintRows.TryGetValue(matchedSig, out var fuzzyAvg))
+                        blueprintAvgRows = fuzzyAvg;
+                }
+
+                // Only flag if blueprint expects >= 3 rows (real data tables)
+                if (blueprintAvgRows < 3) continue;
+
+                // Resolve which section this table belongs to
+                string sectionName = ut.NearestHeadingIndex >= 0
+                    && ut.NearestHeadingIndex < userAnalysis.Sections.Count
+                    ? userAnalysis.Sections[ut.NearestHeadingIndex].Title
+                    : "(unknown section)";
+
+                emptyBodyTables.Add((ut, sectionName));
+            }
+            _logger.LogInformation("[{CId}] Empty table bodies: {N}", correlationId, emptyBodyTables.Count);
+
             // ── STEP 11: Build issues list ───────────────────────────────
             // ONLY actionable items — no noise about what exists
 
@@ -596,9 +646,20 @@ namespace TemplateOneShotExtractor
                 });
             }
 
+            // Empty table bodies — table exists with correct headers but zero data rows
+            foreach (var (tbl, section) in emptyBodyTables)
+            {
+                report.Issues.Add(new ValidationIssue
+                {
+                    Type = "EmptyTableBody",
+                    Field = section,
+                    Message = $"Section '{section}': table [{TruncateSig(tbl.HeaderSignature)}] has no data rows — the table structure is present but no requirements have been entered"
+                });
+            }
+
             // ── STEP 11: Score calculation ───────────────────────────────
-            // Weighted: 55% section coverage, 25% table pattern coverage,
-            // 20% content quality (empty + placeholder penalty)
+            // Weighted: 50% section coverage, 25% table pattern coverage,
+            // 15% content quality (empty + placeholder), 10% table body quality
             double sectionScore = comparison.CoveragePercent;
             double tableScore = tablePatternCoverage;
 
@@ -606,11 +667,20 @@ namespace TemplateOneShotExtractor
             double contentPenalty = refAnalysis.Sections.Count > 0
                 ? (double)contentIssues / refAnalysis.Sections.Count * 100 : 0;
 
+            // Empty table body penalty: relative to total matched tables
+            int totalMatchedUserTables = userTables.Count(ut =>
+                !string.IsNullOrWhiteSpace(ut.HeaderSignature)
+                && (userSigCounts.ContainsKey(ut.HeaderSignature)
+                    || userSigFuzzySet.Contains(SigFuzzyKey(ut.HeaderSignature))));
+            double emptyBodyPenalty = totalMatchedUserTables > 0
+                ? (double)emptyBodyTables.Count / totalMatchedUserTables * 100 : 0;
+
             int finalScore = Math.Max(0, Math.Min(100,
                 (int)Math.Round(
-                    sectionScore * 0.55
+                    sectionScore * 0.50
                     + tableScore * 0.25
-                    + (100 - contentPenalty) * 0.20)));
+                    + (100 - contentPenalty) * 0.15
+                    + (100 - emptyBodyPenalty) * 0.10)));
 
             report.Score = finalScore;
             report.Summary = new ValidationSummary
@@ -623,13 +693,15 @@ namespace TemplateOneShotExtractor
                 TotalBlueprintTablePatterns = totalPatterns,
                 MatchedTablePatterns = matchedPatterns,
                 MissingTablePatterns = missingPatterns,
+                EmptyTableBodies = emptyBodyTables.Count,
                 TotalBlueprintTables = sectionTables.Count,
                 UserTableCount = userTables.Count
             };
             report.IsValid = comparison.MissingInUser.Count == 0
                           && trulyEmptySections.Count == 0
                           && placeholderSections.Count == 0
-                          && missingPatterns == 0;
+                          && missingPatterns == 0
+                          && emptyBodyTables.Count == 0;
 
             // ── STEP 13: Build ChatReport ────────────────────────────────
             var validatedAt = DateTime.UtcNow;
@@ -694,6 +766,20 @@ namespace TemplateOneShotExtractor
                         .Select(t => $"[{TruncateSig(t.PatternSignature)}] ×{t.ExpectedCount}").ToList()
                 });
             }
+            if (emptyBodyTables.Count > 0)
+            {
+                chat.TopIssues.Add(new ChatTopIssue
+                {
+                    Type = "EmptyTableBodies",
+                    Count = emptyBodyTables.Count,
+                    Items = emptyBodyTables
+                        .GroupBy(e => e.MatchedSection)
+                        .Select(g => g.Count() == 1
+                            ? g.First().MatchedSection
+                            : $"{g.First().MatchedSection} (+{g.Count() - 1} more)")
+                        .ToList()
+                });
+            }
 
             // Pivot highlights (only those with problems)
             chat.PivotHighlights = pivotHighlights
@@ -707,7 +793,7 @@ namespace TemplateOneShotExtractor
             // Recommendations
             chat.Recommendations = BuildRecommendations(
                 comparison.MissingInUser.Count, trulyEmptySections.Count,
-                placeholderSections.Count,
+                placeholderSections.Count, emptyBodyTables.Count,
                 missingPatterns, band, comparison.ExtraInUser.Count,
                 userTables.Count, sectionTables.Count);
 
@@ -715,9 +801,9 @@ namespace TemplateOneShotExtractor
             chat.HumanSummary = BuildHumanSummary(report, chat, comparison);
 
             _logger.LogInformation(
-                "[{CId}] DONE: Score={Score}%, Band={Band}, Missing={MS}, Empty={ES}, Placeholder={PS}, MissingTablePatterns={MT}",
+                "[{CId}] DONE: Score={Score}%, Band={Band}, Missing={MS}, Empty={ES}, Placeholder={PS}, MissingTablePatterns={MT}, EmptyTableBodies={ETB}",
                 correlationId, finalScore, band, comparison.MissingInUser.Count,
-                trulyEmptySections.Count, placeholderSections.Count, missingPatterns);
+                trulyEmptySections.Count, placeholderSections.Count, missingPatterns, emptyBodyTables.Count);
 
             return (report, chat);
         }
@@ -919,7 +1005,7 @@ namespace TemplateOneShotExtractor
 
         private static List<string> BuildRecommendations(
             int missingSections, int emptySections, int placeholderSections,
-            int missingTablePatterns,
+            int emptyTableBodies, int missingTablePatterns,
             string band, int extraSections, int userTableCount, int blueprintTableCount)
         {
             var rec = new List<string>();
@@ -930,6 +1016,8 @@ namespace TemplateOneShotExtractor
                 rec.Add($"Fill in the {emptySections} empty section(s) — these have no text content, no sub-sections with content, and no tables.");
             if (placeholderSections > 0)
                 rec.Add($"Replace placeholder content in {placeholderSections} section(s) — text like '<<Insert here>>', 'XXX', '<component name>' must be replaced with real project data.");
+            if (emptyTableBodies > 0)
+                rec.Add($"Fill in {emptyTableBodies} table(s) that have no data rows — the table structure exists but no requirements have been entered yet.");
             if (missingTablePatterns > 0)
                 rec.Add($"Add {missingTablePatterns} missing table pattern(s) — each section must contain its expected tables with the correct header structure.");
             if (userTableCount > 0 && userTableCount < blueprintTableCount * 0.5)
@@ -961,6 +1049,8 @@ namespace TemplateOneShotExtractor
                 parts.Add($"{report.Summary.TrulyEmptySections} EMPTY section(s).");
             if (report.Summary.PlaceholderSections > 0)
                 parts.Add($"{report.Summary.PlaceholderSections} section(s) still contain PLACEHOLDER text.");
+            if (report.Summary.EmptyTableBodies > 0)
+                parts.Add($"{report.Summary.EmptyTableBodies} table(s) exist but have NO DATA ROWS — shell only.");
             if (report.Summary.MissingTablePatterns > 0)
                 parts.Add($"{report.Summary.MissingTablePatterns} table pattern(s) MISSING ({report.Summary.UserTableCount} user tables vs {report.Summary.TotalBlueprintTables} expected).");
 

@@ -2,7 +2,7 @@
   "IsEncrypted": false,
   "Values": {
     "AzureWebJobsStorage": "UseDevelopmentStorage=true",
-    "FUNCTIONS_WORKER_RUNTIME": "dotnet",
-    "BLUEPRINT_PATH": "C:\\path\\template-blueprint.json"
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
+    "BLUEPRINT_PATH": "https://spectemplatestorage.blob.core.windows.net/blueprints/template-blueprint.json"
   }
 }

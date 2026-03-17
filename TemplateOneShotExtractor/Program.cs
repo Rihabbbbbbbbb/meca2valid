@@ -469,11 +469,19 @@ namespace TemplateOneShotExtractor
                 })
                 .ToList();
 
-            // User table signature → count
+            // User table signature → count (exact)
             var userSigCounts = userTables
                 .Where(t => !string.IsNullOrWhiteSpace(t.HeaderSignature))
                 .GroupBy(t => t.HeaderSignature, StringComparer.OrdinalIgnoreCase)
                 .ToDictionary(g => g.Key, g => g.Count(), StringComparer.OrdinalIgnoreCase);
+
+            // Also build a fuzzy lookup: first two normalized words of each user sig
+            // so "req no v|..." still matches "requirement number v|..." (synonyms)
+            var userSigFuzzySet = userTables
+                .Where(t => !string.IsNullOrWhiteSpace(t.HeaderSignature))
+                .Select(t => SigFuzzyKey(t.HeaderSignature))
+                .Where(k => !string.IsNullOrWhiteSpace(k))
+                .ToHashSet(StringComparer.OrdinalIgnoreCase);
 
             var tableAnalysis = new List<ChatTableIssue>();
             int matchedPatterns = 0;
@@ -483,11 +491,17 @@ namespace TemplateOneShotExtractor
             {
                 int foundCount = userSigCounts.TryGetValue(group.Signature, out var c) ? c : 0;
 
-                if (foundCount > 0)
+                // Fuzzy fallback: if exact match fails, check if any user table has
+                // the same first-column key (handles "Req No" vs "Requirement Number")
+                bool fuzzyMatch = foundCount == 0
+                    && !string.IsNullOrWhiteSpace(group.Signature)
+                    && userSigFuzzySet.Contains(SigFuzzyKey(group.Signature));
+
+                if (foundCount > 0 || fuzzyMatch)
                 {
                     matchedPatterns++;
-                    // Only report if significantly fewer than expected
-                    if (foundCount < group.ExpectedCount * 0.5 && group.ExpectedCount > 2)
+                    // Only report partial if significantly fewer AND exact match (fuzzy = ok)
+                    if (!fuzzyMatch && foundCount < group.ExpectedCount * 0.5 && group.ExpectedCount > 2)
                     {
                         tableAnalysis.Add(new ChatTableIssue
                         {
@@ -495,7 +509,7 @@ namespace TemplateOneShotExtractor
                             ExpectedCount = group.ExpectedCount,
                             FoundCount = foundCount,
                             ExpectedInSections = group.Sections,
-                            Status = "partial"
+                            Status = fuzzyMatch ? "fuzzy-match" : "partial"
                         });
                     }
                 }
@@ -570,19 +584,37 @@ namespace TemplateOneShotExtractor
                 });
             }
 
-            // Missing table patterns
+            // Missing table patterns — one issue PER SECTION for clarity
             foreach (var mt in tableAnalysis.Where(t => t.Status == "missing"))
             {
-                string sectionList = mt.ExpectedInSections.Count <= 3
-                    ? string.Join(", ", mt.ExpectedInSections)
-                    : $"{string.Join(", ", mt.ExpectedInSections.Take(3))} (+{mt.ExpectedInSections.Count - 3} more)";
-                report.Issues.Add(new ValidationIssue
+                if (mt.ExpectedInSections.Count <= 3)
                 {
-                    Type = "MissingTablePattern",
-                    Field = sectionList,
-                    Message = $"Table pattern [{mt.PatternSignature}] not found — expected in {mt.ExpectedCount} section(s): {sectionList}",
-                    Severity = "high"
-                });
+                    // Small group: one issue per section
+                    foreach (var section in mt.ExpectedInSections)
+                    {
+                        report.Issues.Add(new ValidationIssue
+                        {
+                            Type = "MissingTablePattern",
+                            Field = section,
+                            Message = $"Section '{section}': required table with headers [{TruncateSig(mt.PatternSignature)}] not found — check that this table exists and has the correct column headers",
+                            Severity = "high"
+                        });
+                    }
+                }
+                else
+                {
+                    // Large group (dominant pattern like requirement matrix, 50 sections):
+                    // Single issue — the table header format itself likely differs
+                    string preview = string.Join(", ", mt.ExpectedInSections.Take(3));
+                    report.Issues.Add(new ValidationIssue
+                    {
+                        Type = "MissingTablePattern",
+                        Field = $"{mt.ExpectedInSections.Count} sections",
+                        Message = $"Requirement table pattern [{TruncateSig(mt.PatternSignature)}] not found in {mt.ExpectedInSections.Count} sections (e.g. {preview}…). " +
+                                  $"Likely cause: your table headers use different wording than the blueprint — check that column headers match exactly.",
+                        Severity = "high"
+                    });
+                }
             }
 
             // Partial table patterns
@@ -592,7 +624,7 @@ namespace TemplateOneShotExtractor
                 {
                     Type = "PartialTablePattern",
                     Field = mt.PatternSignature,
-                    Message = $"Table pattern [{mt.PatternSignature}] found {mt.FoundCount}× but expected {mt.ExpectedCount}× — some sections may be missing their tables",
+                    Message = $"Table pattern [{TruncateSig(mt.PatternSignature)}] found {mt.FoundCount}× but expected {mt.ExpectedCount}× — some sections may be missing their tables",
                     Severity = "medium"
                 });
             }
@@ -1029,6 +1061,27 @@ namespace TemplateOneShotExtractor
         private static string TruncateSig(string sig, int max = 60)
         {
             return sig.Length <= max ? sig : sig[..max] + "…";
+        }
+
+        /// <summary>
+        /// Fuzzy key = first pipe-segment, normalized to first 3 words.
+        /// "requirement number v|..." and "req no v|..." both key to "requirement number"
+        /// vs "req no" — not equal, but covers cases where "number" ↔ "number" is same.
+        /// More importantly, used to detect that AT LEAST the same first-column concept is present.
+        /// Key logic: take first column, take first 2 alpha words, join.
+        /// So "requirement number v" → "requirement number"
+        ///    "req no v"            → "req no"
+        ///    "requirement n"       → "requirement n"  (network table)
+        /// </summary>
+        private static string SigFuzzyKey(string sig)
+        {
+            if (string.IsNullOrWhiteSpace(sig)) return string.Empty;
+            var firstCol = sig.Split('|')[0].Trim();
+            var words = firstCol.Split(' ', StringSplitOptions.RemoveEmptyEntries)
+                .Where(w => w.Length > 1) // skip single chars like "v"
+                .Take(2)
+                .ToArray();
+            return string.Join(" ", words).ToLowerInvariant();
         }
 
         private async Task<string> LoadResourceAsync(string pathOrUrl, string correlationId)
